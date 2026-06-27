@@ -696,9 +696,9 @@ export function hideThreadColorPicker() {
 // ── Pinezki ──────────────────────────────────────────────
 function addPinToCard(cardId) {
   if (state.pins.some(p => p.cardId === cardId)) return;
-  pushHistory();
   const el = canvas.querySelector(`.card[data-id="${cardId}"]`);
   if (!el) return;
+  pushHistory();
   const rect = el.getBoundingClientRect();
   const pinPos = toCanvas(rect.left + rect.width / 2, rect.top);
   const pin = {

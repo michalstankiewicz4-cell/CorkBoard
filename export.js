@@ -45,7 +45,7 @@ export async function exportPNG(boardEl, threadSvg) {
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
     document.head.appendChild(script);
-    await new Promise(resolve => { script.onload = resolve; });
+    await new Promise((resolve, reject) => { script.onload = resolve; script.onerror = () => reject(new Error('Nie można załadować html2canvas')); });
   }
   try {
     const canvas = await window.html2canvas(boardEl, {

@@ -101,6 +101,7 @@ export function updateCardElement(el, card) {
 // ── Budowanie HTML kart ────────────────────────────────
 function buildCardHTML(card) {
   const d = card.data;
+  if (!d) return '<div style="padding:10px;color:#333;font-family:sans-serif">?</div>';
   switch (card.type) {
     case 'person':  return buildPerson(d);
     case 'unknown': return buildUnknown(d);
