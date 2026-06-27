@@ -83,6 +83,9 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
   transform-origin: left center;
   transition: transform .2s cubic-bezier(.4,0,.2,1), opacity .16s;
   min-width: 240px;
+  max-width: calc(100vw - 70px);
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
 }
 #help-panel.open {
   opacity: 1;

@@ -795,19 +795,18 @@ export async function switchView(view) {
     if (el) { el.style.left = pos.x + 'px'; el.style.top = pos.y + 'px'; }
   });
   setTimeout(() => {
-    // Aktualizuj pozycje pinów bezpośrednio z positions (bez getBCR – animacja mogła się skończyć)
-    state.cards.forEach(card => {
+    const tempPins = state.pins.map(pin => {
+      const card = state.cards.find(c => c.id === pin.cardId);
+      if (!card) return pin;
       const pos = positions[card.id];
-      if (!pos) return;
-      const pinCx = pos.x + 75; // środek typowej karty (szer ~130-190px / 2)
-      const pinCy = pos.y + 4;
-      state.pins.filter(p => p.cardId === card.id).forEach(pin => {
-        pin.x = pinCx; pin.y = pinCy;
-        const pel = canvas.querySelector(`.pin[data-id="${pin.id}"]`);
-        if (pel) { pel.style.left = pin.x + 'px'; pel.style.top = pin.y + 'px'; }
-      });
+      if (!pos) return pin;
+      return { ...pin, x: pos.x + 75, y: pos.y + 4 };
     });
-    renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
+    tempPins.forEach(tpin => {
+      const pel = canvas.querySelector(`.pin[data-id="${tpin.id}"]`);
+      if (pel) { pel.style.left = tpin.x + 'px'; pel.style.top = tpin.y + 'px'; }
+    });
+    renderAllThreads(threadSvg, getVisibleThreads(), tempPins, onThreadClick);
     canvas.querySelectorAll('.card').forEach(el => el.classList.remove('view-transition'));
     scheduleMinimap();
   }, 540);
