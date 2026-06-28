@@ -38,8 +38,9 @@ export function importJSON(onLoad) {
   input.click();
 }
 
-// ── PNG Export – pełna tablica (cała zawartość + ramka) ──
-export async function exportPNG(boardEl, threadSvgEl, canvasEl, state) {
+// ── PNG Export – pełna tablica (wywoływana z app.js po przygotowaniu DOM) ──
+export async function exportPNG(boardEl, contentW, contentH) {
+  const SCALE = 1.5;
   if (!window.html2canvas) {
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
@@ -50,84 +51,41 @@ export async function exportPNG(boardEl, threadSvgEl, canvasEl, state) {
     });
   }
 
-  // Oblicz granice zawartości na podstawie pozycji kart
-  const MARGIN = 80, CARD_W = 210, CARD_H = 270;
-  let minX = 0, minY = 0, maxX = 800, maxY = 600;
-  if (state.cards.length > 0) {
-    minX = Math.min(...state.cards.map(c => c.x)) - MARGIN;
-    minY = Math.min(...state.cards.map(c => c.y)) - MARGIN;
-    maxX = Math.max(...state.cards.map(c => c.x + CARD_W)) + MARGIN;
-    maxY = Math.max(...state.cards.map(c => c.y + CARD_H)) + MARGIN;
-  }
-  const contentW = Math.max(maxX - minX, 400);
-  const contentH = Math.max(maxY - minY, 300);
+  const cap = await window.html2canvas(boardEl, {
+    useCORS:      true,
+    backgroundColor: '#C9894E',
+    scale:        SCALE,
+    logging:      false,
+    width:        contentW,
+    height:       contentH,
+    windowWidth:  contentW,
+    windowHeight: contentH,
+    x: 0, y: 0,
+  });
 
-  // Zachowaj obecne style
-  const saved = {
-    canvasT:      canvasEl.style.transform,
-    svgT:         threadSvgEl.style.transform,
-    boardPos:     boardEl.style.position,
-    boardW:       boardEl.style.width,
-    boardH:       boardEl.style.height,
-    boardTop:     boardEl.style.top,
-    boardLeft:    boardEl.style.left,
-    boardOverflow:boardEl.style.overflow,
-  };
+  // Narysuj drewnianą ramkę bezpośrednio na wyniku (CSS pseudo-element nie zawsze renderuje html2canvas)
+  const ctx = cap.getContext('2d');
+  const f = (px) => Math.round(px * SCALE);
+  // Warstwy ramki (od zewnątrz do środka: ciemna → środkowa → najciemniejsza)
+  const layers = [
+    { size: f(22), color: '#4a2a0e' },
+    { size: f(20), color: '#7D4E22' },
+    { size: f(18), color: '#6B3F1A' },
+  ];
+  const W = cap.width, H = cap.height;
+  layers.forEach(({ size: s, color }) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, W, s);           // góra
+    ctx.fillRect(0, H - s, W, s);       // dół
+    ctx.fillRect(0, 0, s, H);           // lewa
+    ctx.fillRect(W - s, 0, s, H);       // prawa
+  });
 
-  // Elementy nakładkowe (fixed) – ukryj podczas zrzutu
-  const overlayIds = ['board-frame', 'minimap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
-  const overlays = overlayIds.map(id => document.getElementById(id)).filter(Boolean);
-  const savedDisplay = overlays.map(el => el.style.display);
-
-  try {
-    // Ustaw transform tak, żeby cała zawartość była widoczna od (0,0) przy zoom=1
-    const t = `translate(${-minX}px,${-minY}px) scale(1)`;
-    canvasEl.style.transform    = t;
-    threadSvgEl.style.transform = t;
-
-    // Zmień board-wrap z fixed na absolute o rozmiarze całej zawartości
-    boardEl.style.position = 'absolute';
-    boardEl.style.width    = contentW + 'px';
-    boardEl.style.height   = contentH + 'px';
-    boardEl.style.top      = '0';
-    boardEl.style.left     = '0';
-    boardEl.style.overflow = 'hidden';
-
-    overlays.forEach(el => { el.style.display = 'none'; });
-
-    // Poczekaj na renderowanie
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-    const cap = await window.html2canvas(boardEl, {
-      useCORS:      true,
-      backgroundColor: '#C9894E',
-      scale:        1.5,
-      logging:      false,
-      width:        contentW,
-      height:       contentH,
-      windowWidth:  contentW,
-      windowHeight: contentH,
-      x: 0, y: 0,
-    });
-
-    const url = cap.toDataURL('image/png');
-    const a   = document.createElement('a');
-    a.href    = url;
-    a.download = `tablica-${dateStamp()}.png`;
-    a.click();
-  } catch (e) {
-    alert('Eksport PNG nieudany: ' + e.message);
-  } finally {
-    canvasEl.style.transform    = saved.canvasT;
-    threadSvgEl.style.transform = saved.svgT;
-    boardEl.style.position      = saved.boardPos;
-    boardEl.style.width         = saved.boardW;
-    boardEl.style.height        = saved.boardH;
-    boardEl.style.top           = saved.boardTop;
-    boardEl.style.left          = saved.boardLeft;
-    boardEl.style.overflow      = saved.boardOverflow;
-    overlays.forEach((el, i) => { el.style.display = savedDisplay[i]; });
-  }
+  const url = cap.toDataURL('image/png');
+  const a   = document.createElement('a');
+  a.href    = url;
+  a.download = `tablica-${dateStamp()}.png`;
+  a.click();
 }
 
 // ── URL Hash ─────────────────────────────────────────────

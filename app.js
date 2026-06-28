@@ -992,7 +992,87 @@ export function doImportJSON() {
     renderAll(); save(); scheduleMinimap();
   });
 }
-export function doExportPNG() { exportPNG(boardWrap, threadSvg, canvas, state); }
+export async function doExportPNG() {
+  const MARGIN = 80, CARD_W = 210, CARD_H = 270;
+  let minX = 0, minY = 0, maxX = 800, maxY = 600;
+  if (state.cards.length > 0) {
+    minX = Math.min(...state.cards.map(c => c.x)) - MARGIN;
+    minY = Math.min(...state.cards.map(c => c.y)) - MARGIN;
+    maxX = Math.max(...state.cards.map(c => c.x + CARD_W)) + MARGIN;
+    maxY = Math.max(...state.cards.map(c => c.y + CARD_H)) + MARGIN;
+  }
+  const contentW = Math.max(maxX - minX, 400);
+  const contentH = Math.max(maxY - minY, 300);
+
+  // Zachowaj style board-wrap i transformy
+  const savedBW = { position: boardWrap.style.position, width: boardWrap.style.width, height: boardWrap.style.height,
+                    top: boardWrap.style.top, left: boardWrap.style.left, overflow: boardWrap.style.overflow };
+  const savedCanvasT  = canvas.style.transform;
+  const savedSvgT     = threadSvg.style.transform;
+
+  // Zachowaj pozycje kart i pinezek w DOM
+  const cardEls = [...canvas.querySelectorAll('.card')];
+  const pinEls  = [...canvas.querySelectorAll('.pin')];
+  const savedCards = cardEls.map(el => ({ left: el.style.left, top: el.style.top }));
+  const savedPins  = pinEls.map( el => ({ left: el.style.left, top: el.style.top }));
+
+  // Ukryj nakładki fixed
+  const overlayIds = ['board-frame', 'minimap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
+  const overlays = overlayIds.map(id => document.getElementById(id)).filter(Boolean);
+  const savedDisplay = overlays.map(el => el.style.display);
+
+  try {
+    // Przesuń karty i pinezki o (-minX, -minY) bezpośrednio w DOM (bez CSS transform)
+    cardEls.forEach(el => {
+      const c = state.cards.find(c2 => c2.id === el.dataset.id);
+      if (c) { el.style.left = (c.x - minX) + 'px'; el.style.top = (c.y - minY) + 'px'; }
+    });
+    const adjustedPins = state.pins.map(p => ({ ...p, x: p.x - minX, y: p.y - minY }));
+    pinEls.forEach(el => {
+      const p = adjustedPins.find(p2 => p2.id === el.dataset.id);
+      if (p) { el.style.left = p.x + 'px'; el.style.top = p.y + 'px'; }
+    });
+
+    // Wyczyść transformy canvas i SVG (pozycje już przeliczone)
+    canvas.style.transform    = '';
+    threadSvg.style.transform = '';
+
+    // Re-renderuj nitki SVG ze zmodyfikowanymi koordynatami (bez transformu na SVG)
+    renderAllThreads(threadSvg, getVisibleThreads(), adjustedPins, null);
+
+    // Nadaj board-wrap rozmiar całej zawartości
+    boardWrap.style.position = 'absolute';
+    boardWrap.style.width    = contentW + 'px';
+    boardWrap.style.height   = contentH + 'px';
+    boardWrap.style.top      = '0';
+    boardWrap.style.left     = '0';
+    boardWrap.style.overflow = 'hidden';
+
+    overlays.forEach(el => { el.style.display = 'none'; });
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    await exportPNG(boardWrap, contentW, contentH);
+  } catch (e) {
+    alert('Eksport PNG nieudany: ' + e.message);
+  } finally {
+    // Przywróć pozycje kart i pinezek
+    cardEls.forEach((el, i) => { el.style.left = savedCards[i].left; el.style.top = savedCards[i].top; });
+    pinEls.forEach( (el, i) => { el.style.left = savedPins[i].left;  el.style.top = savedPins[i].top;  });
+    // Przywróć transformy i nitki
+    canvas.style.transform    = savedCanvasT;
+    threadSvg.style.transform = savedSvgT;
+    renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
+    // Przywróć board-wrap
+    boardWrap.style.position = savedBW.position;
+    boardWrap.style.width    = savedBW.width;
+    boardWrap.style.height   = savedBW.height;
+    boardWrap.style.top      = savedBW.top;
+    boardWrap.style.left     = savedBW.left;
+    boardWrap.style.overflow = savedBW.overflow;
+    // Przywróć nakładki
+    overlays.forEach((el, i) => { el.style.display = savedDisplay[i]; });
+  }
+}
 export function doShareURL()  {
   saveToHash(state);
   navigator.clipboard?.writeText(window.location.href)
