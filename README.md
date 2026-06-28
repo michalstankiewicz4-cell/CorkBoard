@@ -1,4 +1,5 @@
 # 📋 Tablica Korkowa
+Created by vibecoding
 app online -> https://michalstankiewicz4-cell.github.io/CorkBoard/
 
 <img width="1915" height="946" alt="image" src="https://github.com/user-attachments/assets/7d34b93c-0ec4-4d66-b5b5-9cc37e0e66da" />
