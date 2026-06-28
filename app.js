@@ -184,6 +184,10 @@ function bindEvents() {
       hideModal(); hideCtxMenu();
       clearFilter();
       clearMultiSelected();
+      if (state.tool === 'pin' || state.tool === 'thread') {
+        setTool('select');
+        window.setToolUI?.('select');
+      }
     }
     if ((e.key === 'Delete' || e.key === 'Backspace')
         && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
