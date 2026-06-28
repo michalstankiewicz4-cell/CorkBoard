@@ -189,17 +189,18 @@ function extractYtId(url) {
 }
 
 function buildVideo(d) {
-  const ytId  = extractYtId(d.url);
-  const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
-  const href  = esc(d.url || '#');
+  const ytId = extractYtId(d.url);
+  const src  = ytId ? `https://www.youtube.com/embed/${ytId}?rel=0` : '';
   return `
     <div class="card-video">
-      <a class="cv-thumb-wrap" href="${href}" target="_blank" rel="noopener">
-        ${thumb
-          ? `<img class="cv-thumb" src="${thumb}" alt="thumbnail"/>`
-          : `<div class="cv-nothumb">🎬</div>`}
-        <div class="cv-play">▶</div>
-      </a>
-      ${d.title ? `<div class="cv-title">${esc(d.title)}</div>` : ''}
+      <div class="cv-header">
+        <span class="cv-grip">⠿</span>
+        <span class="cv-header-title">${esc(d.title || 'Film YouTube')}</span>
+      </div>
+      ${src
+        ? `<iframe class="cv-iframe" src="${src}"
+             frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+             allowfullscreen></iframe>`
+        : `<div class="cv-placeholder">🎬 Brak linku YouTube</div>`}
     </div>`;
 }
