@@ -84,6 +84,8 @@ export async function exportPNG(boardEl, contentW, contentH) {
 
   // Narysuj drewnianą ramkę gradientową (replika #board-frame::before z CSS)
   const ctx = cap.getContext('2d');
+  // html2canvas zostawia ctx.scale(SCALE, SCALE) — resetujemy do współrzędnych pikselowych
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   const F = Math.round(22 * SCALE); // szerokość ramki w pikselach canvas
   const W = cap.width, H = cap.height;
 
