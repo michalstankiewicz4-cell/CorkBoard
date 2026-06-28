@@ -201,6 +201,8 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
     radial-gradient(ellipse at 80% 65%, #BE7E40 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, #C9894E 0%, #9E5E2E 100%);
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 #board-wrap::before {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
