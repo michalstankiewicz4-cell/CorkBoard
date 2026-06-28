@@ -1,13 +1,32 @@
 // export.js – eksport PNG, JSON; import JSON; URL hash
 
 // ── JSON Export ──────────────────────────────────────────
-export function exportJSON(state) {
-  const data = JSON.stringify({ cards: state.cards, pins: state.pins, threads: state.threads }, null, 2);
-  const blob  = new Blob([data], { type: 'application/json' });
-  const url   = URL.createObjectURL(blob);
-  const a     = document.createElement('a');
-  a.href      = url;
-  a.download  = `tablica-${dateStamp()}.json`;
+export async function exportJSON(state) {
+  const data     = JSON.stringify({ cards: state.cards, pins: state.pins, threads: state.threads }, null, 2);
+  const filename = `tablica-${dateStamp()}.json`;
+
+  // File System Access API — natywny dialog z pamięcią ostatniego folderu
+  if ('showSaveFilePicker' in window) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{ description: 'Plik JSON', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(data);
+      await writable.close();
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // użytkownik anulował
+      // fallback do blob-download
+    }
+  }
+
+  const blob = new Blob([data], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 }

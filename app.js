@@ -982,7 +982,7 @@ function readModalForm(type) {
 }
 
 // ── Eksport / Import ──────────────────────────────────────
-export function doExportJSON() { exportJSON(state); }
+export async function doExportJSON() { await exportJSON(state); }
 export function doImportJSON() {
   importJSON(data => {
     pushHistory();
@@ -1020,6 +1020,7 @@ export async function doExportPNG() {
   const overlayIds = ['board-frame', 'minimap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
   const overlays = overlayIds.map(id => document.getElementById(id)).filter(Boolean);
   const savedDisplay = overlays.map(el => el.style.display);
+  let suppressAfterStyle = null;
 
   try {
     // Przesuń karty i pinezki o (-minX, -minY) bezpośrednio w DOM (bez CSS transform)
@@ -1048,6 +1049,12 @@ export async function doExportPNG() {
     boardWrap.style.left     = '0';
     boardWrap.style.overflow = 'hidden';
 
+    // html2canvas renderuje board-wrap::after box-shadow niespójnie (tylko góra/lewa)
+    // — wyłączamy pseudo-element, ramkę rysujemy ręcznie na canvas w exportPNG
+    suppressAfterStyle = document.createElement('style');
+    suppressAfterStyle.textContent = '#board-wrap::after { display: none !important; }';
+    document.head.appendChild(suppressAfterStyle);
+
     overlays.forEach(el => { el.style.display = 'none'; });
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
@@ -1069,7 +1076,8 @@ export async function doExportPNG() {
     boardWrap.style.top      = savedBW.top;
     boardWrap.style.left     = savedBW.left;
     boardWrap.style.overflow = savedBW.overflow;
-    // Przywróć nakładki
+    // Przywróć board-wrap::after i nakładki
+    if (suppressAfterStyle?.parentNode) document.head.removeChild(suppressAfterStyle);
     overlays.forEach((el, i) => { el.style.display = savedDisplay[i]; });
   }
 }
