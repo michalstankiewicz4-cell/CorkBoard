@@ -72,6 +72,7 @@ export async function exportPNG(boardEl, contentW, contentH) {
 
   const cap = await window.html2canvas(boardEl, {
     useCORS:      true,
+    allowTaint:   true,
     backgroundColor: '#C9894E',
     scale:        SCALE,
     logging:      false,
@@ -82,12 +83,71 @@ export async function exportPNG(boardEl, contentW, contentH) {
     x: 0, y: 0,
   });
 
-  // Narysuj drewnianą ramkę gradientową (replika #board-frame::before z CSS)
   const ctx = cap.getContext('2d');
   // html2canvas zostawia ctx.scale(SCALE, SCALE) — resetujemy do współrzędnych pikselowych
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const F = Math.round(22 * SCALE); // szerokość ramki w pikselach canvas
   const W = cap.width, H = cap.height;
+
+  // ── Ręczne cienie kart (html2canvas nie renderuje box-shadow niezawodnie) ──
+  // Technika: shadow-only canvas → destination-out wymazuje obszar karty → drawImage na główny
+  {
+    const sc = document.createElement('canvas');
+    sc.width = W; sc.height = H;
+    const sx = sc.getContext('2d');
+
+    function rPath(c, x, y, w, h, r) {
+      r = Math.min(r, w / 2, h / 2);
+      if (c.roundRect) { c.beginPath(); c.roundRect(x, y, w, h, r); return; }
+      c.beginPath(); c.moveTo(x + r, y);
+      c.arcTo(x + w, y,     x + w, y + h, r);
+      c.arcTo(x + w, y + h, x,     y + h, r);
+      c.arcTo(x,     y + h, x,     y,     r);
+      c.arcTo(x,     y,     x + w, y,     r);
+      c.closePath();
+    }
+
+    boardEl.querySelectorAll('.card').forEach(el => {
+      const cx = parseFloat(el.style.left) * SCALE;
+      const cy = parseFloat(el.style.top)  * SCALE;
+      const cw = el.offsetWidth  * SCALE;
+      const ch = el.offsetHeight * SCALE;
+      if (!cw || !ch) return;
+      const br = (parseFloat(getComputedStyle(el).borderRadius) || 3) * SCALE;
+      const tf = el.style.transform || getComputedStyle(el).transform;
+      const rm = tf.match(/rotate\(([-\d.]+)deg\)/);
+      const ar = rm ? parseFloat(rm[1]) * Math.PI / 180 : 0;
+
+      const shadow = (color, blur, ox, oy) => {
+        sx.save();
+        sx.translate(cx + cw / 2, cy + ch / 2);
+        sx.rotate(ar);
+        sx.shadowColor = color; sx.shadowBlur = blur * SCALE;
+        sx.shadowOffsetX = ox * SCALE; sx.shadowOffsetY = oy * SCALE;
+        sx.fillStyle = '#000';
+        rPath(sx, -cw / 2, -ch / 2, cw, ch, br);
+        sx.fill();
+        sx.restore();
+      };
+
+      shadow('rgba(0,0,0,.38)', 18, 3, 6);
+      shadow('rgba(0,0,0,.2)',   6, 1, 2);
+
+      // Wymaż obszar karty — zostaje tylko aureola cienia
+      sx.save();
+      sx.globalCompositeOperation = 'destination-out';
+      sx.translate(cx + cw / 2, cy + ch / 2);
+      sx.rotate(ar);
+      sx.fillStyle = '#000';
+      rPath(sx, -cw / 2, -ch / 2, cw, ch, br);
+      sx.fill();
+      sx.restore();
+    });
+
+    ctx.drawImage(sc, 0, 0);
+  }
+
+  // Narysuj drewnianą ramkę gradientową (replika #board-frame::before z CSS)
+  const F = Math.round(22 * SCALE); // szerokość ramki w pikselach canvas
 
   // Przystanki gradientu z #board-frame::before (pozycje CSS px → ułamek 0–1)
   const stops = [

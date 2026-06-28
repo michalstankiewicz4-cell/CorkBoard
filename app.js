@@ -1013,8 +1013,9 @@ export async function doExportPNG() {
   // Zachowaj pozycje kart i pinezek w DOM
   const cardEls = [...canvas.querySelectorAll('.card')];
   const pinEls  = [...canvas.querySelectorAll('.pin')];
-  const savedCards = cardEls.map(el => ({ left: el.style.left, top: el.style.top }));
-  const savedPins  = pinEls.map( el => ({ left: el.style.left, top: el.style.top }));
+  const savedCards      = cardEls.map(el => ({ left: el.style.left, top: el.style.top }));
+  const savedPins       = pinEls.map( el => ({ left: el.style.left, top: el.style.top }));
+  const savedCardShadow = cardEls.map(el => el.style.boxShadow);
 
   // Ukryj nakładki fixed
   const overlayIds = ['board-frame', 'minimap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
@@ -1047,13 +1048,17 @@ export async function doExportPNG() {
     boardWrap.style.height   = contentH + 'px';
     boardWrap.style.top      = '0';
     boardWrap.style.left     = '0';
-    boardWrap.style.overflow = 'hidden';
+    // 'visible' zamiast 'hidden' — html2canvas ucina box-shadow dzieci przy overflow:hidden
+    boardWrap.style.overflow = 'visible';
 
     // html2canvas renderuje board-wrap::after box-shadow niespójnie (tylko góra/lewa)
     // — wyłączamy pseudo-element, ramkę rysujemy ręcznie na canvas w exportPNG
     suppressAfterStyle = document.createElement('style');
     suppressAfterStyle.textContent = '#board-wrap::after { display: none !important; }';
     document.head.appendChild(suppressAfterStyle);
+
+    // Wyłącz box-shadow — rysujemy cienie ręcznie na canvas w exportPNG
+    cardEls.forEach(el => { el.style.boxShadow = 'none'; });
 
     overlays.forEach(el => { el.style.display = 'none'; });
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -1062,8 +1067,8 @@ export async function doExportPNG() {
   } catch (e) {
     alert('Eksport PNG nieudany: ' + e.message);
   } finally {
-    // Przywróć pozycje kart i pinezek
-    cardEls.forEach((el, i) => { el.style.left = savedCards[i].left; el.style.top = savedCards[i].top; });
+    // Przywróć pozycje kart, pinezek i box-shadow
+    cardEls.forEach((el, i) => { el.style.left = savedCards[i].left; el.style.top = savedCards[i].top; el.style.boxShadow = savedCardShadow[i]; });
     pinEls.forEach( (el, i) => { el.style.left = savedPins[i].left;  el.style.top = savedPins[i].top;  });
     // Przywróć transformy i nitki
     canvas.style.transform    = savedCanvasT;
