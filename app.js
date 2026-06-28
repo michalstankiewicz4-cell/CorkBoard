@@ -184,10 +184,10 @@ function bindEvents() {
       hideModal(); hideCtxMenu();
       clearFilter();
       clearMultiSelected();
-      if (state.tool === 'pin' || state.tool === 'thread') {
-        setTool('select');
-        window.setToolUI?.('select');
-      }
+      hidePinColorPicker(); hideThreadColorPicker();
+      document.querySelectorAll('.lp-drop.open').forEach(el => el.classList.remove('open'));
+      document.getElementById('help-panel')?.classList.remove('open');
+      if (state.tool !== 'select') { setTool('select'); window.setToolUI?.('select'); }
     }
     if ((e.key === 'Delete' || e.key === 'Backspace')
         && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
