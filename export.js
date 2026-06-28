@@ -181,11 +181,16 @@ export async function exportPNG(boardEl, contentW, contentH) {
   ctx.fillStyle = makeGrad(0, H, 0, H - F);
   ctx.fillRect(0, H - F, W, F);
 
-  const url = cap.toDataURL('image/png');
-  const a   = document.createElement('a');
-  a.href    = url;
-  a.download = `tablica-${dateStamp()}.png`;
+  const pageUrl = window.location.href;
+  const pngBlob = await new Promise(res => cap.toBlob(res, 'image/png'));
+  const src     = new Uint8Array(await pngBlob.arrayBuffer());
+  const patched = pngInjectText(src, 'Source-URL', pageUrl);
+  const dlUrl   = URL.createObjectURL(new Blob([patched], { type: 'image/png' }));
+  const a       = document.createElement('a');
+  a.href        = dlUrl;
+  a.download    = `tablica-${dateStamp()}.png`;
   a.click();
+  URL.revokeObjectURL(dlUrl);
 }
 
 // ── URL Hash ─────────────────────────────────────────────
@@ -225,6 +230,90 @@ export function loadFromHash() {
   } catch {
     return null;
   }
+}
+
+// ── PNG Metadata ─────────────────────────────────────────
+function makeCrc32Table() {
+  const t = new Uint32Array(256);
+  for (let i = 0; i < 256; i++) {
+    let c = i;
+    for (let j = 0; j < 8; j++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[i] = c;
+  }
+  return t;
+}
+const _CRC = makeCrc32Table();
+
+function crc32(buf) {
+  let crc = 0xFFFFFFFF;
+  for (let i = 0; i < buf.length; i++) crc = _CRC[(crc ^ buf[i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+function pngInjectText(src, keyword, text) {
+  const enc  = new TextEncoder();
+  const kw   = enc.encode(keyword);
+  const tx   = enc.encode(text);
+  const data = new Uint8Array(kw.length + 1 + tx.length);
+  data.set(kw); data[kw.length] = 0; data.set(tx, kw.length + 1);
+  const type   = enc.encode('tEXt');
+  const crcBuf = new Uint8Array(4 + data.length);
+  crcBuf.set(type); crcBuf.set(data, 4);
+  const chunk = new Uint8Array(12 + data.length);
+  new DataView(chunk.buffer).setUint32(0, data.length, false);
+  chunk.set(type, 4); chunk.set(data, 8);
+  new DataView(chunk.buffer).setUint32(8 + data.length, crc32(crcBuf), false);
+  // Wstaw po IHDR (sygnatura 8 bajtów + chunk IHDR 25 bajtów = offset 33)
+  const ins = 33;
+  const out = new Uint8Array(src.length + chunk.length);
+  out.set(src.subarray(0, ins)); out.set(chunk, ins); out.set(src.subarray(ins), ins + chunk.length);
+  return out;
+}
+
+function pngReadTextChunks(src) {
+  const result = {}, dec = new TextDecoder();
+  let off = 8;
+  const view = new DataView(src.buffer, src.byteOffset);
+  while (off + 12 <= src.length) {
+    const len  = view.getUint32(off, false);
+    const type = String.fromCharCode(src[off+4], src[off+5], src[off+6], src[off+7]);
+    if (type === 'IEND') break;
+    if (type === 'tEXt') {
+      const data = src.subarray(off + 8, off + 8 + len);
+      const nul  = data.indexOf(0);
+      if (nul !== -1) result[dec.decode(data.subarray(0, nul))] = dec.decode(data.subarray(nul + 1));
+    }
+    off += 12 + len;
+  }
+  return result;
+}
+
+export function importPNG(onLoad) {
+  const input    = document.createElement('input');
+  input.type     = 'file';
+  input.accept   = '.png,image/png';
+  input.onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    const bytes  = new Uint8Array(await file.arrayBuffer());
+    const chunks = pngReadTextChunks(bytes);
+    const srcUrl = chunks['Source-URL'];
+    if (!srcUrl) { alert('Ten plik PNG nie zawiera danych tablicy.'); return; }
+    const hashIdx = srcUrl.indexOf('#');
+    if (hashIdx === -1) { alert('Brak danych stanu w metadanych PNG.'); return; }
+    const hash = srcUrl.slice(hashIdx + 1);
+    try {
+      const bin = atob(hash);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const raw = JSON.parse(new TextDecoder().decode(arr));
+      onLoad({
+        cards:   raw.c.map(c => ({ id:c.i, type:c.t, x:c.x, y:c.y, angle:parseFloat(c.a||0), data:c.d })),
+        pins:    raw.p.map(p => ({ id:p.i, x:p.x, y:p.y, color:p.c, cardId:p.ci })),
+        threads: raw.th.map(t => ({ id:t.i, fromPin:t.f, toPin:t.t2, color:t.c, striped:t.s, stripeColor2:t.c2, label:t.l, width:t.w })),
+      });
+    } catch { alert('Błąd odczytu danych z PNG.'); }
+  };
+  input.click();
 }
 
 function dateStamp() {

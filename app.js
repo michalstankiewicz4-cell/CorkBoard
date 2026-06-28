@@ -6,7 +6,7 @@ import { computeViewPositions } from './views.js';
 import { saveState, loadState } from './storage.js';
 import { SAMPLE_DATA } from './data-sample.js';
 import { Minimap } from './minimap.js';
-import { exportJSON, importJSON, exportPNG, saveToHash, loadFromHash } from './export.js';
+import { exportJSON, importJSON, exportPNG, importPNG, saveToHash, loadFromHash } from './export.js';
 
 // ── Stan ────────────────────────────────────────────────
 let state = {
@@ -1014,6 +1014,15 @@ export function doImportJSON() {
     renderAll(); save(); scheduleMinimap();
   });
 }
+export function doImportPNG() {
+  importPNG(data => {
+    pushHistory();
+    state.cards=data.cards; state.pins=data.pins; state.threads=data.threads;
+    const numIds = data.cards.map(c => { const n = parseInt((c.id.match(/\d+$/) || [0])[0]); return isNaN(n) ? 0 : n; });
+    state.nextId = Math.max(300, ...numIds) + 1;
+    renderAll(); save(); scheduleMinimap();
+  });
+}
 export async function doExportPNG() {
   const MARGIN = 80, CARD_W = 210, CARD_H = 270;
   let minX = 0, minY = 0, maxX = 800, maxY = 600;
@@ -1085,6 +1094,7 @@ export async function doExportPNG() {
     overlays.forEach(el => { el.style.display = 'none'; });
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
+    saveToHash(state);
     await exportPNG(boardWrap, contentW, contentH);
   } catch (e) {
     alert('Eksport PNG nieudany: ' + e.message);
