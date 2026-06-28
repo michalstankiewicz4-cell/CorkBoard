@@ -110,6 +110,7 @@ function buildCardHTML(card) {
     case 'news':    return buildNews(d);
     case 'note':    return buildNote(d);
     case 'date':    return buildDate(d);
+    case 'video':   return buildVideo(d);
     default:        return '<div style="padding:10px;color:#333">?</div>';
   }
 }
@@ -178,5 +179,27 @@ function buildDate(d) {
     <div class="card-date" style="background:${noteColor(d.color)}">
       <div class="cd-label">${esc(d.label, 'Data')}</div>
       <div class="cd-date">${esc(d.date)}</div>
+    </div>`;
+}
+
+function extractYtId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function buildVideo(d) {
+  const ytId  = extractYtId(d.url);
+  const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '';
+  const href  = esc(d.url || '#');
+  return `
+    <div class="card-video">
+      <a class="cv-thumb-wrap" href="${href}" target="_blank" rel="noopener">
+        ${thumb
+          ? `<img class="cv-thumb" src="${thumb}" alt="thumbnail"/>`
+          : `<div class="cv-nothumb">🎬</div>`}
+        <div class="cv-play">▶</div>
+      </a>
+      ${d.title ? `<div class="cv-title">${esc(d.title)}</div>` : ''}
     </div>`;
 }

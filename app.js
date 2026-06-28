@@ -959,7 +959,12 @@ function buildModalHTML(type, d) {
       <div class="modal-field"><label>Data *</label><input id="mf-date" value="${esc(d?.date)}"/></div>
       <div class="modal-field"><label>Kolor</label><select id="mf-color">${noteOpts}</select></div>`;
   }
-  const titles={person:'Osoba',unknown:'Nieznana osoba',party:'Partia',law:'Ustawa',news:'News',note:'Notatka',date:'Data'};
+  if (type==='video') {
+    fields=`
+      <div class="modal-field"><label>Link YouTube *</label><input id="mf-url" placeholder="https://youtu.be/..." value="${esc(d?.url)}"/></div>
+      <div class="modal-field"><label>Tytuł (opcjonalny)</label><input id="mf-title" value="${esc(d?.title)}"/></div>`;
+  }
+  const titles={person:'Osoba',unknown:'Nieznana osoba',party:'Partia',law:'Ustawa',news:'News',note:'Notatka',date:'Data',video:'Film YouTube'};
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
       <button class="modal-btn cancel">Anuluj</button>
@@ -990,6 +995,10 @@ function readModalForm(type) {
   if (type==='date') {
     const date=v('mf-date'); if(!date) return alert('Podaj datę'),null;
     return { label:v('mf-label')||'Data', date, color:sel('mf-color') };
+  }
+  if (type==='video') {
+    const url=v('mf-url'); if(!url) return alert('Podaj link YouTube'),null;
+    return { url, title:v('mf-title') };
   }
   return null;
 }
