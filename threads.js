@@ -26,6 +26,22 @@ function resolveColor(c) {
 // ── Renderowanie wszystkich nitek ─────────────────────
 export function renderAllThreads(svg, threads, pins, onThreadClick) {
   [...svg.querySelectorAll('.thread-group')].forEach(el => el.remove());
+
+  // Dodaj filtr cienia do <defs> raz
+  const defs = svg.querySelector('defs');
+  if (defs && !defs.querySelector('#thread-shadow')) {
+    const filter = svgEl('filter');
+    filter.id = 'thread-shadow';
+    filter.setAttribute('x', '-30%'); filter.setAttribute('y', '-30%');
+    filter.setAttribute('width', '160%'); filter.setAttribute('height', '160%');
+    const ds = svgEl('feDropShadow');
+    ds.setAttribute('dx', '1'); ds.setAttribute('dy', '2.5');
+    ds.setAttribute('stdDeviation', '2.5');
+    ds.setAttribute('flood-color', '#000'); ds.setAttribute('flood-opacity', '0.38');
+    filter.appendChild(ds);
+    defs.appendChild(filter);
+  }
+
   // DRY: zbuduj pinMap raz
   const pinMap = buildPinMap(pins);
   threads.forEach(t => {
@@ -67,15 +83,19 @@ export function renderThread(svg, thread, fromPin, toPin, onThreadClick) {
   }
   g.appendChild(hitPath);
 
-  // Linia(e) nitki
+  // Linia(e) nitki – w grupie z filtrem cienia
   const dash = `${8 * width / 1.8},${8 * width / 1.8}`;
+  const strokeG = svgEl('g');
+  strokeG.setAttribute('filter', 'url(#thread-shadow)');
+  strokeG.style.pointerEvents = 'none';
   if (thread.striped && thread.stripeColor2) {
     const color2 = resolveColor(thread.stripeColor2);
-    g.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color,  width, dash));
-    g.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color2, width, dash, 8 * width / 1.8));
+    strokeG.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color,  width, dash));
+    strokeG.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color2, width, dash, 8 * width / 1.8));
   } else {
-    g.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color, width));
+    strokeG.appendChild(makeStrokePath(x1, y1, cpX, cpY, x2, y2, color, width));
   }
+  g.appendChild(strokeG);
 
   // Etykieta
   if (thread.label?.trim()) {
