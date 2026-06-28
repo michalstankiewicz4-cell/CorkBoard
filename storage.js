@@ -20,6 +20,3 @@ export function loadState() {
   }
 }
 
-export function clearState() {
-  localStorage.removeItem(STORAGE_KEY);
-}

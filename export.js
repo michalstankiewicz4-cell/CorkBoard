@@ -18,7 +18,7 @@ export async function exportJSON(state) {
       return;
     } catch (e) {
       if (e.name === 'AbortError') return; // użytkownik anulował
-      // fallback do blob-download
+      console.warn('showSaveFilePicker nie powiodło się, używam blob-download:', e);
     }
   }
 

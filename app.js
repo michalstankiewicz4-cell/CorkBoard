@@ -94,7 +94,6 @@ function renderAll() {
   canvas.querySelectorAll('.card, .pin').forEach(el => el.remove());
   [...threadSvg.querySelectorAll('.thread-group')].forEach(el => el.remove());
 
-  // Cache connectedSet raz – używane przez getVisibleCards i getVisibleThreads
   const connectedSet = state.filterCardId ? getConnectedCards(state.filterCardId) : null;
   if (connectedSet && state.filterCardId) connectedSet.add(state.filterCardId);
   const visible = connectedSet
@@ -372,7 +371,6 @@ function onWheel(e) {
   zoom  = newZoom;
   applyTransform();
   scheduleMinimap();
-  const zl = document.getElementById('zoom-label'); if (zl) zl.textContent = Math.round(zoom * 100) + '%';
 }
 
 function onContextMenu(e) {
@@ -404,7 +402,6 @@ function applyTransform() {
   checkCardsVisible();
 }
 
-// PERF: RAF throttle dla rerenderowania nitek podczas drag
 let rafThreadId = null;
 function scheduleThreadRender() {
   if (rafThreadId) return;
@@ -451,7 +448,6 @@ function fitToCards() {
   pan.x = (bw - (maxX - minX) * zoom) / 2 - minX * zoom;
   pan.y = (bh - (maxY - minY) * zoom) / 2 - minY * zoom;
   applyTransform();
-  const zl2 = document.getElementById('zoom-label'); if (zl2) zl2.textContent = Math.round(zoom * 100) + '%';
   scheduleMinimap();
   const btn = document.getElementById('back-to-cards');
   if (btn) btn.style.display = 'none';
@@ -463,7 +459,6 @@ export function getPanZoom() { return { panX: pan.x, panY: pan.y, zoom }; }
 export function resetView() {
   pan = { x: 0, y: 0 }; zoom = 1;
   applyTransform();
-  const zl3 = document.getElementById('zoom-label'); if (zl3) zl3.textContent = '100%';
   scheduleMinimap();
 }
 
@@ -830,7 +825,6 @@ function updateToolBtns() {
 }
 
 export function setPinColor(c)        { state.selectedPinColor = c; }
-export function setThreadColor(c, w)  { if(w===1) state.selectedThreadColor=c; else state.selectedThreadColor2=c; }
 export function setThreadStriped(v)   { state.selectedThreadStriped = v; }
 export function setThreadWidth(v)     { state.selectedThreadWidth = parseFloat(v); }
 export function setNoteColor(c)       { state.selectedNoteColor = c; }
@@ -1018,7 +1012,7 @@ export async function doExportPNG() {
   const savedCardShadow = cardEls.map(el => el.style.boxShadow);
 
   // Ukryj nakładki fixed
-  const overlayIds = ['board-frame', 'minimap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
+  const overlayIds = ['board-frame', 'minimap-wrap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
   const overlays = overlayIds.map(id => document.getElementById(id)).filter(Boolean);
   const savedDisplay = overlays.map(el => el.style.display);
   let suppressAfterStyle = null;

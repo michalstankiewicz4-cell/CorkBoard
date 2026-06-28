@@ -1,4 +1,5 @@
 // minimap.js – miniaturka tablicy
+import { buildPinMap } from './threads.js';
 
 export class Minimap {
   constructor(containerEl) {
@@ -46,7 +47,7 @@ export class Minimap {
 
     // Nitki
     ctx.globalAlpha = 0.55;
-    const pinMap = Object.fromEntries(pins.map(p => [p.id, p]));
+    const pinMap = buildPinMap(pins);
     threads.forEach(t => {
       const from = pinMap[t.fromPin];
       const to   = pinMap[t.toPin];
