@@ -168,14 +168,14 @@ function getConnectedCards(cardId, depth = 3) {
 
 // ── Events ──────────────────────────────────────────────
 function bindEvents() {
-  canvas.addEventListener('mousedown', onMouseDown);
+  boardWrap.addEventListener('mousedown', onMouseDown);
   boardWrap.addEventListener('mousedown', onMiddleDown);
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup',   onMouseUp);
   boardWrap.addEventListener('auxclick', e => e.preventDefault());
   boardWrap.addEventListener('wheel', onWheel, { passive: false });
-  canvas.addEventListener('contextmenu', onContextMenu);
-  canvas.addEventListener('dblclick', onDblClick);
+  boardWrap.addEventListener('contextmenu', onContextMenu);
+  boardWrap.addEventListener('dblclick', onDblClick);
   document.addEventListener('click', e => {
     if (!ctxMenu.contains(e.target)) hideCtxMenu();
   });
