@@ -146,6 +146,20 @@
   <div id="minimap-container"></div>
 </div>
 
+<!-- Przycisk centrowania widoku -->
+<button id="center-btn" class="ci-tool" onclick="App.resetView()" title="Przywróć widok początkowy (Ctrl+0)">
+  <span class="ci-ico">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18">
+      <circle cx="10" cy="10" r="2.5" fill="currentColor" stroke="none"/>
+      <line x1="10" y1="2" x2="10" y2="6.5" stroke-linecap="round"/>
+      <line x1="10" y1="13.5" x2="10" y2="18" stroke-linecap="round"/>
+      <line x1="2" y1="10" x2="6.5" y2="10" stroke-linecap="round"/>
+      <line x1="13.5" y1="10" x2="18" y2="10" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span class="ci-lbl">Centrum</span>
+</button>
+
 <!-- Context menu -->
 <div id="ctx-menu"></div>
 <!-- Modal -->
