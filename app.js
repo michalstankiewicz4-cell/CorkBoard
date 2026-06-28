@@ -469,6 +469,28 @@ export function resetView() {
   scheduleMinimap();
 }
 
+export function zoomIn() {
+  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const mx = bw / 2, my = bh / 2;
+  const newZoom = Math.min(ZOOM_MAX, +(zoom + ZOOM_STEP).toFixed(2));
+  if (newZoom === zoom) return;
+  pan.x = mx - (mx - pan.x) * (newZoom / zoom);
+  pan.y = my - (my - pan.y) * (newZoom / zoom);
+  zoom = newZoom;
+  applyTransform(); scheduleMinimap();
+}
+
+export function zoomOut() {
+  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const mx = bw / 2, my = bh / 2;
+  const newZoom = Math.max(ZOOM_MIN, +(zoom - ZOOM_STEP).toFixed(2));
+  if (newZoom === zoom) return;
+  pan.x = mx - (mx - pan.x) * (newZoom / zoom);
+  pan.y = my - (my - pan.y) * (newZoom / zoom);
+  zoom = newZoom;
+  applyTransform(); scheduleMinimap();
+}
+
 // ── Helpers ──────────────────────────────────────────────
 function pinCanvasPos(pinEl) {
   const pr = pinEl.getBoundingClientRect();

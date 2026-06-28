@@ -173,17 +173,35 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
   margin: 2px 0;
 }
 
-/* ══ PRZYCISK CENTROWANIA – góra środek ═══════════════ */
-#center-btn {
+/* ══ PASEK ZOOM + CENTRUM – góra środek ══════════════ */
+#zoom-bar {
   position: fixed;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(18,10,3,.55);
+  border: 1px solid rgba(180,130,60,.25);
+  border-radius: 12px;
+  padding: 4px 8px;
+  backdrop-filter: blur(4px);
+}
+#zoom-bar .ci-tool {
+  color: rgba(255,255,255,.85);
+  padding: 2px 4px;
+}
+#zoom-bar .ci-tool:hover  { transform: scale(1.12); }
+#zoom-bar .ci-tool:active { transform: scale(.93); }
+#center-btn {
+  position: static;
+  left: unset;
+  transform: translateX(-50%);
+  z-index: 1100;
   color: rgba(255,255,255,.85);
 }
-#center-btn:hover  { transform: translateX(-50%) scale(1.1); }
-#center-btn:active { transform: translateX(-50%) scale(.95); }
 
 /* Przyciski narzędzi w karuzeli */
 .ci-tool {
