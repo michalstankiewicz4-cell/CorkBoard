@@ -86,13 +86,14 @@
         <span class="ci-lbl">Plik</span>
       </button>
       <div class="lp-drop" id="lp-drop-plik">
-        <button class="lp-item" onclick="App.doExportJSON()">⬇ Eksportuj JSON</button>
-        <button class="lp-item" onclick="App.doImportJSON()">⬆ Importuj JSON</button>
-        <button class="lp-item" onclick="App.doExportPNG()">🖼 Zapisz PNG</button>
+        <button class="lp-item lp-danger" onclick="App.clearBoard()">📄 Nowa tablica</button>
+        <div class="lp-sep"></div>
+        <button class="lp-item" onclick="App.doImportJSON()">📂 Otwórz JSON</button>
+        <button class="lp-item" onclick="App.doExportJSON()">💾 Zapisz JSON</button>
+        <button class="lp-item" onclick="App.doExportPNG()">📸 Screen PNG</button>
         <button class="lp-item" onclick="App.doShareURL()">🔗 Kopiuj URL</button>
         <div class="lp-sep"></div>
         <button class="lp-item lp-danger" onclick="App.resetToSample()">↺ Reset do przykładu</button>
-        <button class="lp-item lp-danger" onclick="App.clearBoard()">🗑 Wyczyść tablicę</button>
       </div>
     </div>
     <!-- Widok -->

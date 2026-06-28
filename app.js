@@ -992,7 +992,7 @@ export function doImportJSON() {
     renderAll(); save(); scheduleMinimap();
   });
 }
-export function doExportPNG() { exportPNG(boardWrap, threadSvg); }
+export function doExportPNG() { exportPNG(boardWrap, threadSvg, canvas, state); }
 export function doShareURL()  {
   saveToHash(state);
   navigator.clipboard?.writeText(window.location.href)
@@ -1020,7 +1020,7 @@ export function resetToSample() {
   renderAll(); save(); scheduleMinimap();
 }
 export function clearBoard() {
-  if (!confirm('Wyczyścić całą tablicę?')) return;
+  if (!confirm('Utworzyć nową tablicę? Niezapisane zmiany zostaną utracone.')) return;
   pushHistory();
   state.cards=[];state.pins=[];state.threads=[];state.groups=[];state.nextId=1;
   renderAll(); save(); scheduleMinimap();
