@@ -21,7 +21,7 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 }
 #left-inner {
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px; padding: 12px 4px;
+  gap: 5px; padding: 7px 4px;
   pointer-events: all;
 }
 .lp-q {
@@ -128,7 +128,7 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 }
 #carousel-inner {
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px; padding: 12px 4px;
+  gap: 5px; padding: 7px 4px;
   background: none;
   pointer-events: all;
   overflow-y: auto;
@@ -415,3 +415,22 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 }
 .tcp-wbtn:hover { background: rgba(255,255,255,.1); }
 .tcp-wbtn.tcp-wbtn-active { background: rgba(120,80,10,.7); color: #ffd878; border-color: #c8971c; }
+
+/* ── Okienko Autora ─── */
+#autor-overlay {
+  display: none; position: fixed; inset: 0; z-index: 6500;
+  background: rgba(0,0,0,.6); align-items: center; justify-content: center;
+}
+#autor-overlay.open { display: flex; }
+#autor-panel {
+  background: #1c1208; border: 1px solid rgba(180,130,60,.35);
+  border-radius: 14px; padding: 26px 28px 24px; max-width: 430px; width: 92%;
+  box-shadow: 0 14px 44px rgba(0,0,0,.8); font-family: var(--font-ui);
+  color: #c8a870; position: relative; line-height: 1.55;
+}
+#autor-panel .ap-title { font-size: 1.05rem; font-weight: 700; color: #ffd878; margin-bottom: 14px; }
+#autor-panel p { font-size: .82rem; margin-bottom: 10px; }
+#autor-panel strong { color: #f0d090; }
+#autor-panel a { color: #f0d090; text-decoration: underline; }
+#autor-panel a:hover { color: #ffd878; }
+#autor-panel .hp-close { position: absolute; top: 12px; right: 14px; }

@@ -78,12 +78,6 @@
 <!-- ══ LEWA KARUZELA – pionowa, po lewej, na tablicy ══ -->
 <div id="left-panel">
   <div id="left-inner">
-    <!-- Pomoc -->
-    <button class="ci-tool lp-help-btn" onclick="toggleHelpPanel()">
-      <span class="ci-ico lp-q">?</span>
-      <span class="ci-lbl">Pomoc</span>
-    </button>
-    <div class="ci-sep"></div>
     <!-- Plik -->
     <div class="lp-group">
       <button class="ci-tool" onclick="toggleLeftMenu('plik')">
@@ -116,6 +110,16 @@
         <button class="lp-item view-btn" data-view="force" onclick="App.switchView('force')">🕸️ Sieć</button>
       </div>
     </div>
+    <!-- Autor -->
+    <button class="ci-tool lp-autor-btn" onclick="toggleAutorPanel()">
+      <span class="ci-ico">🌟</span>
+      <span class="ci-lbl">Autor</span>
+    </button>
+    <!-- Pomoc -->
+    <button class="ci-tool lp-help-btn" onclick="toggleHelpPanel()">
+      <span class="ci-ico lp-q">?</span>
+      <span class="ci-lbl">Pomoc</span>
+    </button>
   </div>
 </div>
 
@@ -166,6 +170,23 @@
   <span class="ci-lbl">Centrum</span>
 </button>
 
+<!-- Okienko Autora -->
+<div id="autor-overlay" onclick="if(event.target===this)toggleAutorPanel()">
+  <div id="autor-panel">
+    <button class="hp-close" onclick="toggleAutorPanel()">✕</button>
+    <div class="ap-title">🌟 Podoba Ci się to, co robię?</div>
+    <p>Jeśli moja praca była dla Ciebie inspiracją lub realną pomocą, możesz wesprzeć moje dalsze działania:</p>
+    <p>☕ <strong>Szybkie wsparcie:</strong> Przelew tradycyjny lub BLIK na numer telefonu: <strong>+48 797 486 355</strong></p>
+    <p>📱 <strong>Bądźmy w kontakcie:</strong> Facebook – <a href="https://facebook.com/MajkelMajkel" target="_blank" rel="noopener">facebook.com/MajkelMajkel</a></p>
+    <p><strong>Dane do przelewu:</strong><br>
+    Michał Stankiewicz<br>
+    02-585 Warszawa<br>
+    PKO BP<br>
+    IBAN: PL55 1020 1097 0000 7902 0226 5353<br>
+    Tytułem: „inspiracja"</p>
+  </div>
+</div>
+
 <!-- Context menu -->
 <div id="ctx-menu"></div>
 <!-- Modal -->
@@ -187,6 +208,9 @@ window.toggleLeftMenu = (id) => {
 window.toggleHelpPanel = () => {
   document.getElementById('help-panel').classList.toggle('open');
   if (openLpMenu) { openLpMenu.classList.remove('open'); openLpMenu = null; }
+};
+window.toggleAutorPanel = () => {
+  document.getElementById('autor-overlay').classList.toggle('open');
 };
 document.addEventListener('click', e => {
   if (openLpMenu && !e.target.closest('.lp-group')) {
