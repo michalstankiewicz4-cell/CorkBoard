@@ -228,8 +228,11 @@ function onMouseDown(e) {
     threadStart = { pinId: pin.dataset.id, x, y };
     e.preventDefault(); return;
   }
-  if (state.tool === 'pin' && card) {
-    addPinToCard(card.dataset.id);
+  if (state.tool === 'pin') {
+    if (card)      addPinToCard(card.dataset.id);
+    else if (!pin) { const { x, y } = toCanvas(e.clientX, e.clientY); addPinAtPosition(x, y); }
+    setTool('select');
+    window.setToolUI?.('select');
     e.preventDefault(); return;
   }
   if (state.tool === 'delete') {
@@ -700,6 +703,18 @@ function addPinToCard(cardId) {
     id: 'pin-' + (state.nextId++), cardId,
     x: pinPos.x,
     y: pinPos.y + 4,
+    color: state.selectedPinColor,
+  };
+  state.pins.push(pin);
+  canvas.appendChild(makePinEl(pin));
+  save();
+}
+
+function addPinAtPosition(x, y) {
+  pushHistory();
+  const pin = {
+    id: 'pin-' + (state.nextId++), cardId: null,
+    x, y,
     color: state.selectedPinColor,
   };
   state.pins.push(pin);
