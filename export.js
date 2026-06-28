@@ -63,23 +63,42 @@ export async function exportPNG(boardEl, contentW, contentH) {
     x: 0, y: 0,
   });
 
-  // Narysuj drewnianą ramkę bezpośrednio na wyniku (CSS pseudo-element nie zawsze renderuje html2canvas)
+  // Narysuj drewnianą ramkę gradientową (replika #board-frame::before z CSS)
   const ctx = cap.getContext('2d');
-  const f = (px) => Math.round(px * SCALE);
-  // Warstwy ramki (od zewnątrz do środka: ciemna → środkowa → najciemniejsza)
-  const layers = [
-    { size: f(22), color: '#4a2a0e' },
-    { size: f(20), color: '#7D4E22' },
-    { size: f(18), color: '#6B3F1A' },
-  ];
+  const F = Math.round(22 * SCALE); // szerokość ramki w pikselach canvas
   const W = cap.width, H = cap.height;
-  layers.forEach(({ size: s, color }) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, W, s);           // góra
-    ctx.fillRect(0, H - s, W, s);       // dół
-    ctx.fillRect(0, 0, s, H);           // lewa
-    ctx.fillRect(W - s, 0, s, H);       // prawa
-  });
+
+  // Przystanki gradientu z #board-frame::before (pozycje CSS px → ułamek 0–1)
+  const stops = [
+    [0,      '#8B5225'],
+    [2/22,   '#A0632E'],
+    [4/22,   '#7D4E22'],
+    [6/22,   '#C4884A'],
+    [8/22,   '#9B6030'],
+    [10/22,  '#B87840'],
+    [12/22,  '#7D4E22'],
+    [14/22,  '#8B5225'],
+    [16/22,  '#6B3F1A'],
+    [18/22,  '#5a3214'],
+    [1,      'rgba(90,50,20,0)'],
+  ];
+  function makeGrad(x1, y1, x2, y2) {
+    const g = ctx.createLinearGradient(x1, y1, x2, y2);
+    stops.forEach(([t, c]) => g.addColorStop(t, c));
+    return g;
+  }
+
+  // Lewa i prawa (pełna wysokość) — pod narożnikami
+  ctx.fillStyle = makeGrad(0, 0, F, 0);
+  ctx.fillRect(0, 0, F, H);
+  ctx.fillStyle = makeGrad(W, 0, W - F, 0);
+  ctx.fillRect(W - F, 0, F, H);
+
+  // Góra i dół (pełna szerokość) — na wierzchu narożników jak w CSS
+  ctx.fillStyle = makeGrad(0, 0, 0, F);
+  ctx.fillRect(0, 0, W, F);
+  ctx.fillStyle = makeGrad(0, H, 0, H - F);
+  ctx.fillRect(0, H - F, W, F);
 
   const url = cap.toDataURL('image/png');
   const a   = document.createElement('a');
