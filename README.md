@@ -179,6 +179,17 @@ corkboard/
 
 ---
 
+## W przygotowaniu
+
+- 🃏 Kreator kartek — własne szablony kart do przyczepienia na tablicy
+- 🎨 Zmiana stylu / wyglądu tablicy
+- 🧭 Nawigacja (breadcrumbs, historia widoków)
+- ⚙️ Przełącznik Simple / Pro
+- 🔌 Integracja z programami zewnętrznymi
+- 🤖 A być może integracja z AI 😅
+
+---
+
 ## Uruchomienie
 
 Żadnych dependencji, żadnych kroków budowania.
