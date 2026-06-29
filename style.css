@@ -73,6 +73,8 @@ body.no-thread-shadow #thread-svg g[filter]              { filter: none !importa
 body.no-card-shadow   .card                              { box-shadow: none !important; }
 body.no-drag-shadow   .card.dragging                     { box-shadow: none !important; }
 body.no-drag-shadow.card-dragging #thread-svg g[filter]  { filter: none !important; }
+body.no-pan-shadow.is-panning     .card                  { box-shadow: none !important; }
+body.no-pan-shadow.is-panning     #thread-svg g[filter]  { filter: none !important; }
 body.ghost-drag .card.dragging                           { background: rgba(200,168,100,.06) !important; box-shadow: none !important; outline: 2px dashed rgba(200,168,100,.5) !important; outline-offset: 2px; }
 body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 

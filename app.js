@@ -308,6 +308,7 @@ function onMouseDown(e) {
   } else if (!pin && e.button === 0 && state.tool === 'select') {
     clearMultiSelected();
     panning = { startX: e.clientX, startY: e.clientY, panX0: pan.x, panY0: pan.y };
+    document.body.classList.add('is-panning');
     boardWrap.style.cursor = 'grabbing';
     e.preventDefault();
   }
@@ -370,7 +371,7 @@ function applyMove() {
 
 function onMouseUp(e) {
   if (moveRafId) { cancelAnimationFrame(moveRafId); moveRafId = null; applyMove(); }
-  if (panning) { panning = null; boardWrap.style.cursor = ''; checkCardsVisible(); return; }
+  if (panning) { panning = null; document.body.classList.remove('is-panning'); boardWrap.style.cursor = ''; checkCardsVisible(); return; }
   if (multiDragOffsets) {
     multiDragOffsets.forEach(off => off.el.classList.remove('dragging'));
     multiDragOffsets = null;
