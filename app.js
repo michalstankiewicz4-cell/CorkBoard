@@ -272,8 +272,12 @@ function onMouseDown(e) {
       multiSelected.forEach(id => {
         const c  = state.cards.find(c => c.id === id);
         const el = canvas.querySelector(`.card[data-id="${id}"]`);
-        if (c && el) multiDragOffsets.set(id, { dx: c.x - mx, dy: c.y - my, card: c, el, cardW: el.offsetWidth });
+        if (c && el) {
+          multiDragOffsets.set(id, { dx: c.x - mx, dy: c.y - my, card: c, el, cardW: el.offsetWidth });
+          el.classList.add('dragging');
+        }
       });
+      document.body.classList.add('card-dragging');
       e.preventDefault(); return;
     }
 
@@ -367,7 +371,12 @@ function applyMove() {
 function onMouseUp(e) {
   if (moveRafId) { cancelAnimationFrame(moveRafId); moveRafId = null; applyMove(); }
   if (panning) { panning = null; boardWrap.style.cursor = ''; checkCardsVisible(); return; }
-  if (multiDragOffsets) { multiDragOffsets = null; save(); scheduleMinimap(); return; }
+  if (multiDragOffsets) {
+    multiDragOffsets.forEach(off => off.el.classList.remove('dragging'));
+    multiDragOffsets = null;
+    document.body.classList.remove('card-dragging');
+    save(); scheduleMinimap(); return;
+  }
   if (dragging) {
     dragging.el.classList.remove('dragging');
     document.body.classList.remove('card-dragging');
