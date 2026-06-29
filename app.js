@@ -1154,9 +1154,12 @@ export async function doExportPNG() {
 }
 export function doShareURL()  {
   saveToHash(state);
-  navigator.clipboard?.writeText(window.location.href)
+  const shareURL = window.location.href;
+  // Wyczyść hash z paska adresu – link jest już w schowku, hash przy F5 nadpisywałby localStorage
+  history.replaceState(null, '', location.pathname + location.search);
+  navigator.clipboard?.writeText(shareURL)
     .then(() => showToast('📋 Link skopiowany do schowka!'))
-    .catch(() => showToast('🔗 URL zaktualizowany w pasku adresu'));
+    .catch(() => { showToast('🔗 Skopiuj link ręcznie'); prompt('Link do tablicy:', shareURL); });
 }
 
 function showToast(msg) {
