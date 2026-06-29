@@ -1,4 +1,4 @@
-// app.js – główna logika aplikacji
+// app.js – main application logic
 
 import { createCardElement, updateCardElement, renderPinSvg, PIN_COLORS, NOTE_COLORS, esc } from './cards.js';
 import { renderAllThreads, drawTempThread, removeTempThread, buildPinMap } from './threads.js';
@@ -7,8 +7,9 @@ import { saveState, loadState } from './storage.js';
 import { SAMPLE_DATA } from './data-sample.js';
 import { Minimap } from './minimap.js';
 import { exportJSON, importJSON, exportPNG, importPNG, saveToHash, loadFromHash } from './export.js';
+import { t } from './i18n.js';
 
-// ── Stan ────────────────────────────────────────────────
+// ── State ────────────────────────────────────────────────
 let state = {
   cards: [], pins: [], threads: [],
   nextId: 1, currentView: 'basic',
@@ -17,8 +18,8 @@ let state = {
   selectedThreadStriped: false, selectedThreadWidth: 1.8,
   selectedNoteColor: 'y',
   tool: 'select',
-  filterCardId: null,   // filtrowanie powiązań
-  groups: [],           // [{id, name, color, cardIds[]}]
+  filterCardId: null,
+  groups: [],
 };
 
 // ── DOM ─────────────────────────────────────────────────
@@ -43,7 +44,7 @@ let zoom   = 1.0;
 const ZOOM_MIN = 0.25, ZOOM_MAX = 4.0, ZOOM_STEP = 0.1;
 let panning = null;
 
-// Viewport cache (aktualizowany przez ResizeObserver – brak clientWidth w RAF)
+// Viewport cache (updated by ResizeObserver – avoids clientWidth in RAF)
 let vpW = window.innerWidth, vpH = window.innerHeight;
 
 // Minimap
@@ -54,8 +55,8 @@ const MAX_HISTORY = 50;
 const undoStack = [];
 const redoStack = [];
 
-// DRY: konwersja współrzędnych ekran → przestrzeń canvas
-// boardWrap ma position:fixed; left:0; top:0 – brak potrzeby getBoundingClientRect
+// Screen → canvas coordinate conversion
+// boardWrap has position:fixed; left:0; top:0 – no getBoundingClientRect needed
 function toCanvas(clientX, clientY) {
   return {
     x: (clientX - pan.x) / zoom,
@@ -65,7 +66,7 @@ function toCanvas(clientX, clientY) {
 
 // ── Init ────────────────────────────────────────────────
 export function init() {
-  // Próba wczytania: hash → localStorage → przykładowe dane
+  // Load order: hash → localStorage → sample data
   const fromHash = loadFromHash();
   const saved    = loadState();
   if (fromHash && fromHash.cards.length) {
@@ -78,11 +79,10 @@ export function init() {
   } else {
     state.cards   = SAMPLE_DATA.cards.map(c => ({...c, data:{...c.data}}));
     state.pins    = SAMPLE_DATA.pins.map(p => ({...p}));
-    state.threads = SAMPLE_DATA.threads.map(t => ({...t}));
+    state.threads = SAMPLE_DATA.threads.map(th => ({...th}));
     state.nextId  = 300;
   }
 
-  // Minimap
   const mmEl = document.getElementById('minimap-container');
   if (mmEl) minimap = new Minimap(mmEl);
 
@@ -108,7 +108,7 @@ function renderAll() {
     const card = state.cards.find(c => c.id === pin.cardId);
     if (!card || visible.includes(card)) canvas.appendChild(makePinEl(pin));
   });
-  // Nitki z pre-built pinMap
+  // Threads with pre-built pinMap
   const pinMap = buildPinMap(state.pins);
   const visThreads = getVisibleThreadsWithMap(connectedSet, pinMap);
   renderAllThreads(threadSvg, visThreads, state.pins, onThreadClick);
@@ -124,7 +124,7 @@ function makePinEl(pin) {
   return el;
 }
 
-// Filtrowanie widoczności
+// Visibility filtering
 function getVisibleThreads() {
   const connected = state.filterCardId ? getConnectedCards(state.filterCardId) : null;
   if (connected && state.filterCardId) connected.add(state.filterCardId);
@@ -133,9 +133,9 @@ function getVisibleThreads() {
 
 function getVisibleThreadsWithMap(connectedSet, pinMap) {
   if (!connectedSet) return state.threads;
-  return state.threads.filter(t => {
-    const a = pinMap[t.fromPin]?.cardId;
-    const b = pinMap[t.toPin]?.cardId;
+  return state.threads.filter(th => {
+    const a = pinMap[th.fromPin]?.cardId;
+    const b = pinMap[th.toPin]?.cardId;
     return connectedSet.has(a) || connectedSet.has(b);
   });
 }
@@ -155,9 +155,9 @@ function getConnectedCards(cardId, depth = 3) {
       if (visited.has(cid)) return;
       visited.add(cid);
       (cardPins[cid] || []).forEach(pid => {
-        state.threads.forEach(t => {
-          const other = t.fromPin === pid ? pinMap[t.toPin]?.cardId
-                      : t.toPin   === pid ? pinMap[t.fromPin]?.cardId
+        state.threads.forEach(th => {
+          const other = th.fromPin === pid ? pinMap[th.toPin]?.cardId
+                      : th.toPin   === pid ? pinMap[th.fromPin]?.cardId
                       : null;
           if (other && !visited.has(other)) next.push(other);
         });
@@ -199,13 +199,13 @@ function bindEvents() {
         pushHistory();
         [...multiSelected].forEach(id => {
           state.pins.filter(p => p.cardId === id).forEach(p => {
-            state.threads = state.threads.filter(t => t.fromPin !== p.id && t.toPin !== p.id);
+            state.threads = state.threads.filter(th => th.fromPin !== p.id && th.toPin !== p.id);
             canvas.querySelector(`.pin[data-id="${p.id}"]`)?.remove();
           });
           state.pins  = state.pins.filter(p => p.cardId !== id);
           state.cards = state.cards.filter(c => c.id !== id);
           canvas.querySelector(`.card[data-id="${id}"]`)?.remove();
-          if (selectedCardId   === id) selectedCardId   = null;
+          if (selectedCardId     === id) selectedCardId     = null;
           if (state.filterCardId === id) state.filterCardId = null;
         });
         multiSelected.clear();
@@ -252,9 +252,9 @@ function onMouseDown(e) {
   if (card) {
     const cid = card.dataset.id;
 
-    // Shift+klik → zaznacz/odznacz do multi-select
+    // Shift+click → toggle multi-select
     if (e.shiftKey && state.tool === 'select') {
-      // Przy pierwszym shift+kliku wciągnij aktualnie wybraną kartę do zaznaczenia
+      // On first Shift+click, pull current selected card into the set
       if (multiSelected.size === 0 && selectedCardId) {
         multiSelected.add(selectedCardId);
         canvas.querySelector(`.card[data-id="${selectedCardId}"]`)?.classList.add('multi-selected');
@@ -264,7 +264,7 @@ function onMouseDown(e) {
       e.preventDefault(); return;
     }
 
-    // Klik na zaznaczoną kartę → przesuń wszystkie zaznaczone
+    // Click on selected card → drag all selected cards together
     if (multiSelected.size > 0 && multiSelected.has(cid) && state.tool === 'select') {
       pushHistory();
       const { x: mx, y: my } = toCanvas(e.clientX, e.clientY);
@@ -281,14 +281,14 @@ function onMouseDown(e) {
       e.preventDefault(); return;
     }
 
-    // Klik bez shift → wyczyść zaznaczenie, zwykły drag
+    // Regular click without Shift → clear multi-select, normal drag
     if (multiSelected.size > 0) clearMultiSelected();
     pushHistory();
     const cardRect  = card.getBoundingClientRect();
     const cardData  = state.cards.find(c => c.id === cid);
     const pinnedPin = state.pins.find(p => p.cardId === cid) || null;
     const hasThreads = pinnedPin
-      ? state.threads.some(t => t.fromPin === pinnedPin.id || t.toPin === pinnedPin.id)
+      ? state.threads.some(th => th.fromPin === pinnedPin.id || th.toPin === pinnedPin.id)
       : false;
     dragging = {
       cardId:     cid,
@@ -316,7 +316,7 @@ function onMouseDown(e) {
 
 function onMiddleDown(e) {
   if (e.button !== 1) return;
-  e.preventDefault(); // blokuj autoscroll przeglądarki
+  e.preventDefault(); // block browser autoscroll
 }
 
 let moveRafId = null;
@@ -397,10 +397,9 @@ function onMouseUp(e) {
 function onDblClick(e) {
   const card = e.target.closest('.card');
   if (card) { openEditModal(card.dataset.id); return; }
-  // Podwójny klik na pustej tablicy = szybka notatka
+  // Double-click on empty board = quick note
   const { x, y } = toCanvas(e.clientX, e.clientY);
   const id = addCard('note', { text: '', color: state.selectedNoteColor }, x, y);
-  // Otwórz od razu edytor
   setTimeout(() => openEditModal(id), 80);
 }
 
@@ -410,7 +409,7 @@ function onWheel(e) {
   const delta   = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
   const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(zoom + delta).toFixed(2)));
   if (newZoom === zoom) return;
-  // Math akumuluje się synchronicznie; DOM-write odkładamy na jeden RAF
+  // Math accumulates synchronously; DOM write deferred to one RAF
   pan.x = e.clientX - (e.clientX - pan.x) * (newZoom / zoom);
   pan.y = e.clientY - (e.clientY - pan.y) * (newZoom / zoom);
   zoom  = newZoom;
@@ -443,11 +442,11 @@ function onThreadClick(threadId) {
 
 // ── Transform ────────────────────────────────────────────
 function applyTransform(checkVisible = false) {
-  const t = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`;
-  canvas.style.transform         = t;
-  canvas.style.transformOrigin   = '0 0';
-  threadSvg.style.transform      = t;
-  threadSvg.style.transformOrigin= '0 0';
+  const tf = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`;
+  canvas.style.transform          = tf;
+  canvas.style.transformOrigin    = '0 0';
+  threadSvg.style.transform       = tf;
+  threadSvg.style.transformOrigin = '0 0';
   if (checkVisible) checkCardsVisible();
 }
 
@@ -463,7 +462,6 @@ function scheduleThreadRender() {
 function checkCardsVisible() {
   if (!state.cards.length) return;
   const bw = vpW, bh = vpH;
-  // Sprawdź czy choć jedna karta jest w viewport
   const anyVisible = state.cards.some(c => {
     const sx = c.x * zoom + pan.x;
     const sy = c.y * zoom + pan.y;
@@ -474,7 +472,7 @@ function checkCardsVisible() {
     if (!btn) {
       btn = document.createElement('button');
       btn.id = 'back-to-cards';
-      btn.textContent = '🎯 Wróć do kart';
+      btn.textContent = t('btn.backToCards');
       btn.onclick = fitToCards;
       document.body.appendChild(btn);
     }
@@ -502,7 +500,7 @@ function fitToCards() {
   if (btn) btn.style.display = 'none';
 }
 
-// Eksport pan/zoom dla drag&drop z karuzeli
+// Export pan/zoom for carousel drag-and-drop
 export function getPanZoom() { return { panX: pan.x, panY: pan.y, zoom }; }
 
 export function resetView() {
@@ -540,7 +538,7 @@ function pinCanvasPos(pinEl) {
 }
 
 function syncPinsOfCard(cardId, cardData, cardW) {
-  // cardData i cardW mogą być przekazane z cache dragging (bez querySelector/getBoundingClientRect)
+  // cardData and cardW may come from dragging cache (avoids querySelector/getBoundingClientRect)
   const card = cardData || state.cards.find(c => c.id === cardId);
   if (!card) return;
   const w = cardW ?? (() => {
@@ -592,7 +590,7 @@ function scheduleMinimap() {
   minimapTimer = setTimeout(() => {
     if (!minimap) return;
     const bw = vpW, bh = vpH;
-    // Dynamiczny bounding box – uwzględnia karty daleko poza centrum
+    // Dynamic bounding box – accounts for cards far from the center
     const xs = state.cards.map(c => c.x).concat([0, bw]);
     const ys = state.cards.map(c => c.y).concat([0, bh]);
     const boardW = Math.max(1800, Math.max(...xs) + 300);
@@ -601,7 +599,7 @@ function scheduleMinimap() {
   }, 80);
 }
 
-// ── Karty ───────────────────────────────────────────────
+// ── Cards ────────────────────────────────────────────────
 export function addCard(type, data, x, y) {
   pushHistory();
   const id    = 'card-' + (state.nextId++);
@@ -634,10 +632,9 @@ function selectCard(id) {
   canvas.querySelector(`.card[data-id="${id}"]`)?.classList.add('selected');
 }
 
-// ── Filtrowanie powiązań ─────────────────────────────────
+// ── Connection filter ────────────────────────────────────
 export function filterByCard(cardId) {
   state.filterCardId = state.filterCardId === cardId ? null : cardId;
-
   renderAll();
 }
 
@@ -647,7 +644,7 @@ function clearFilter() {
   renderAll();
 }
 
-// ── Multi-select (Shift+klik) ────────────────────────────
+// ── Multi-select (Shift+click) ───────────────────────────
 function clearMultiSelected() {
   multiSelected.forEach(cid => {
     canvas.querySelector(`.card[data-id="${cid}"]`)?.classList.remove('multi-selected');
@@ -655,10 +652,9 @@ function clearMultiSelected() {
   multiSelected.clear();
 }
 
-
 window.hideModalUI = hideModal;
 
-// ── Color picker pinezki (otwierany z karuzeli) ──────────
+// ── Pin color picker (opened from carousel) ──────────────
 export function showPinColorPicker(anchorEl) {
   hidePinColorPicker(); hideThreadColorPicker();
 
@@ -692,7 +688,7 @@ export function hidePinColorPicker() {
   document.getElementById('pin-color-picker')?.remove();
 }
 
-// ── Color picker nitki (otwierany z karuzeli) ─────────────
+// ── Thread color picker (opened from carousel) ───────────
 const THREAD_PALETTE = [
   ['r','#e63946'], ['g','#2e7d32'], ['b','#1565c0'],
   ['y','#f9c811'], ['m','#c2185b'], ['c','#0097a7'],
@@ -716,14 +712,14 @@ export function showThreadColorPicker(anchorEl) {
   ).join('');
 
   picker.innerHTML = `
-    <div class="tcp-label">Kolor nitki</div>
+    <div class="tcp-label">${t('tcp.threadColor')}</div>
     <div class="pcp-colors" id="tcp-row1">${mkRow(state.selectedThreadColor, 1)}</div>
     <div class="tcp-row2-hdr">
-      <span class="tcp-label">Kolor paska</span>
-      <label class="tcp-check"><input type="checkbox" id="tcp-striped"${state.selectedThreadStriped?' checked':''}> paskowana</label>
+      <span class="tcp-label">${t('tcp.stripeColor')}</span>
+      <label class="tcp-check"><input type="checkbox" id="tcp-striped"${state.selectedThreadStriped?' checked':''}> ${t('tcp.striped')}</label>
     </div>
     <div class="pcp-colors${state.selectedThreadStriped?'':' tcp-dim'}" id="tcp-row2">${mkRow(state.selectedThreadColor2, 2)}</div>
-    <div class="tcp-row2-hdr"><span class="tcp-label">Grubość</span><div class="tcp-widths" id="tcp-widths">${mkWidths()}</div></div>`;
+    <div class="tcp-row2-hdr"><span class="tcp-label">${t('tcp.thickness')}</span><div class="tcp-widths" id="tcp-widths">${mkWidths()}</div></div>`;
 
   const ar = anchorEl.getBoundingClientRect();
   picker.style.right     = (window.innerWidth - ar.left + 8) + 'px';
@@ -762,7 +758,7 @@ export function hideThreadColorPicker() {
   document.getElementById('thread-color-picker')?.remove();
 }
 
-// ── Pinezki ──────────────────────────────────────────────
+// ── Pins ─────────────────────────────────────────────────
 function addPinToCard(cardId) {
   if (state.pins.some(p => p.cardId === cardId)) return;
   const el = canvas.querySelector(`.card[data-id="${cardId}"]`);
@@ -795,17 +791,17 @@ function addPinAtPosition(x, y) {
 
 function deletePin(pinId, rerender = true) {
   if (rerender) pushHistory();
-  state.threads = state.threads.filter(t => t.fromPin !== pinId && t.toPin !== pinId);
+  state.threads = state.threads.filter(th => th.fromPin !== pinId && th.toPin !== pinId);
   state.pins    = state.pins.filter(p => p.id !== pinId);
   canvas.querySelector(`.pin[data-id="${pinId}"]`)?.remove();
   if (rerender) { renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick); save(); }
 }
 
-// ── Nitki ────────────────────────────────────────────────
+// ── Threads ──────────────────────────────────────────────
 function addThread(fromPinId, toPinId) {
-  const dup = state.threads.find(t =>
-    (t.fromPin===fromPinId && t.toPin===toPinId) ||
-    (t.fromPin===toPinId   && t.toPin===fromPinId));
+  const dup = state.threads.find(th =>
+    (th.fromPin===fromPinId && th.toPin===toPinId) ||
+    (th.fromPin===toPinId   && th.toPin===fromPinId));
   if (dup) return;
   pushHistory();
   state.threads.push({
@@ -823,30 +819,30 @@ function addThread(fromPinId, toPinId) {
 
 function deleteThread(threadId) {
   pushHistory();
-  state.threads = state.threads.filter(t => t.id !== threadId);
+  state.threads = state.threads.filter(th => th.id !== threadId);
   renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
   save();
 }
 
 function openThreadEditModal(threadId) {
-  const t = state.threads.find(th => th.id === threadId);
-  if (!t) return;
+  const thd = state.threads.find(th => th.id === threadId);
+  if (!thd) return;
   modal.innerHTML = `
-    <h3>✏️ Edytuj nitkę</h3>
-    <div class="modal-field"><label>Etykieta (opis połączenia)</label>
-      <input id="tf-label" value="${esc(t.label)}" placeholder="np. finansuje, głosował za…"/></div>
-    <div class="modal-field"><label>Grubość</label>
+    <h3>${t('thread.edit')}</h3>
+    <div class="modal-field"><label>${t('thread.label')}</label>
+      <input id="tf-label" value="${esc(thd.label)}" placeholder="${t('thread.placeholder')}"/></div>
+    <div class="modal-field"><label>${t('thread.thickness')}</label>
       <select id="tf-width">
-        <option value="1" ${t.width==1?'selected':''}>Cienka</option>
-        <option value="1.8" ${(t.width==1.8||!t.width)?'selected':''}>Normalna</option>
-        <option value="3" ${t.width==3?'selected':''}>Gruba</option>
-        <option value="5" ${t.width==5?'selected':''}>Bardzo gruba</option>
+        <option value="1"   ${thd.width==1  ?'selected':''}>${t('thread.thin')}</option>
+        <option value="1.8" ${(thd.width==1.8||!thd.width)?'selected':''}>${t('thread.normal')}</option>
+        <option value="3"   ${thd.width==3  ?'selected':''}>${t('thread.thick')}</option>
+        <option value="5"   ${thd.width==5  ?'selected':''}>${t('thread.veryThick')}</option>
       </select></div>
     <div class="modal-btns">
       <button class="modal-btn cancel" id="tf-delete" data-tid="${threadId}"
-        style="background:rgba(230,57,70,.15);color:#e63946;border-color:rgba(230,57,70,.3)">🗑 Usuń nitkę</button>
-      <button class="modal-btn cancel" onclick="hideModalUI()">Anuluj</button>
-      <button class="modal-btn primary" id="tf-ok">Zapisz</button>
+        style="background:rgba(230,57,70,.15);color:#e63946;border-color:rgba(230,57,70,.3)">${t('thread.delete')}</button>
+      <button class="modal-btn cancel" onclick="hideModalUI()">${t('btn.cancel')}</button>
+      <button class="modal-btn primary" id="tf-ok">${t('btn.save')}</button>
     </div>`;
   modalOverlay.classList.add('visible');
   modal.querySelector('#tf-delete').onclick = e => {
@@ -854,8 +850,8 @@ function openThreadEditModal(threadId) {
   };
   modal.querySelector('#tf-ok').onclick = () => {
     pushHistory();
-    t.label = modal.querySelector('#tf-label').value.trim();
-    t.width = parseFloat(modal.querySelector('#tf-width').value);
+    thd.label = modal.querySelector('#tf-label').value.trim();
+    thd.width = parseFloat(modal.querySelector('#tf-width').value);
     renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
     hideModal(); save();
   };
@@ -863,7 +859,7 @@ function openThreadEditModal(threadId) {
 
 window.deleteThreadUI = (id) => { deleteThread(id); hideModal(); };
 
-// ── Widoki ───────────────────────────────────────────────
+// ── Views ────────────────────────────────────────────────
 export async function switchView(view) {
   state.currentView = view;
   updateViewBtns();
@@ -898,7 +894,7 @@ function updateViewBtns() {
     b.classList.toggle('active', b.dataset.view === state.currentView));
 }
 
-// ── Narzędzia ─────────────────────────────────────────────
+// ── Tools ────────────────────────────────────────────────
 export function setTool(tool) {
   state.tool = tool;
   canvas.style.cursor = { select:'default', pin:'cell', thread:'crosshair', delete:'not-allowed' }[tool] || 'default';
@@ -919,13 +915,13 @@ export function setNoteColor(c)       { state.selectedNoteColor = c; }
 function showCtxMenu(x, y) {
   ctxMenu.innerHTML = '';
   if (contextTarget.type === 'card') {
-    addCtxItem('✏️', 'Edytuj kartę',         () => openEditModal(contextTarget.id));
-    addCtxItem('📌', 'Wbij pinezkę',          () => addPinToCard(contextTarget.id));
-    addCtxItem('🔍', 'Filtruj powiązania',    () => { filterByCard(contextTarget.id); setTool('select'); });
+    addCtxItem('✏️', t('ctx.editCard'),          () => openEditModal(contextTarget.id));
+    addCtxItem('📌', t('ctx.addPin'),             () => addPinToCard(contextTarget.id));
+    addCtxItem('🔍', t('ctx.filterConnections'),  () => { filterByCard(contextTarget.id); setTool('select'); });
     addCtxSep();
-    addCtxItem('🗑️', 'Usuń kartę',            () => deleteCard(contextTarget.id));
+    addCtxItem('🗑️', t('ctx.deleteCard'),         () => deleteCard(contextTarget.id));
   } else {
-    addCtxItem('🗑️', 'Usuń pinezkę',         () => deletePin(contextTarget.id));
+    addCtxItem('🗑️', t('ctx.deletePin'),          () => deletePin(contextTarget.id));
   }
   ctxMenu.style.left = x + 'px'; ctxMenu.style.top = y + 'px';
   ctxMenu.classList.add('visible');
@@ -943,11 +939,11 @@ function addCtxSep() {
 }
 function hideCtxMenu() { ctxMenu.classList.remove('visible'); }
 
-// Otwórz modal edycji dla nowo dodanej karty (po drag z karuzeli)
+// Open edit modal for a card just added via drag-and-drop
 export function openAddModalForId(cardId) {
   const card = state.cards.find(c => c.id === cardId);
   if (!card) return;
-  // Dla note/date nie otwieramy – mają sensowne defaults
+  // Note and date cards have sensible defaults – skip the modal
   if (card.type === 'note' || card.type === 'date') return;
   openEditModal(cardId);
 }
@@ -985,57 +981,62 @@ function submitModal() {
 }
 
 function buildModalHTML(type, d) {
-  const noteOpts = Object.entries(NOTE_COLORS)
-    .map(([k,v]) => `<option value="${k}"${d?.color===k?' selected':''}>${v.label}</option>`).join('');
+  const noteOpts = Object.keys(NOTE_COLORS)
+    .map(k => `<option value="${k}"${d?.color===k?' selected':''}>${t('color.' + k)}</option>`).join('');
   const newsAccents = ['#e63946','#1565c0','#2e7d32','#9b59b6','#f4511e','#0097a7','#c8971c']
-    .map(c=>`<option value="${c}"${d?.accentColor===c?' selected':''}>${c}</option>`).join('');
+    .map(c => `<option value="${c}"${d?.accentColor===c?' selected':''}>${c}</option>`).join('');
   let fields = '';
   if (type==='person'||type==='unknown') {
     fields=`
-      <div class="modal-field"><label>Imię i nazwisko *</label><input id="mf-name" value="${esc(d?.name)}"/></div>
-      <div class="modal-field"><label>Funkcja / rola</label><input id="mf-role" value="${esc(d?.role)}"/></div>
-      <div class="modal-field"><label>Partia</label><input id="mf-party" value="${esc(d?.party)}"/></div>
-      <div class="modal-field"><label>Kolor partii</label><input id="mf-partyColor" value="${esc(d?.partyColor,'#666666')}"/></div>
-      <div class="modal-field"><label>Emoji (avatar)</label><input id="mf-emoji" value="${esc(d?.emoji,'👤')}"/></div>
-      <div class="modal-field"><label>URL zdjęcia</label><input id="mf-photo" value="${esc(d?.photo)}"/></div>`;
+      <div class="modal-field"><label>${t('field.name')}</label><input id="mf-name" value="${esc(d?.name)}"/></div>
+      <div class="modal-field"><label>${t('field.role')}</label><input id="mf-role" value="${esc(d?.role)}"/></div>
+      <div class="modal-field"><label>${t('field.party')}</label><input id="mf-party" value="${esc(d?.party)}"/></div>
+      <div class="modal-field"><label>${t('field.partyColor')}</label><input id="mf-partyColor" value="${esc(d?.partyColor,'#666666')}"/></div>
+      <div class="modal-field"><label>${t('field.emoji')}</label><input id="mf-emoji" value="${esc(d?.emoji,'👤')}"/></div>
+      <div class="modal-field"><label>${t('field.photo')}</label><input id="mf-photo" value="${esc(d?.photo)}"/></div>`;
   } else if (type==='party') {
     fields=`
-      <div class="modal-field"><label>Nazwa partii *</label><input id="mf-name" value="${esc(d?.name)}"/></div>
-      <div class="modal-field"><label>Logo (emoji)</label><input id="mf-logo" value="${esc(d?.logo,'🏛️')}"/></div>
-      <div class="modal-field"><label>Kolor (hex)</label><input id="mf-color" value="${esc(d?.color,'#666666')}"/></div>
-      <div class="modal-field"><label>Opis</label><textarea id="mf-desc">${esc(d?.desc)}</textarea></div>`;
+      <div class="modal-field"><label>${t('field.partyName')}</label><input id="mf-name" value="${esc(d?.name)}"/></div>
+      <div class="modal-field"><label>${t('field.logo')}</label><input id="mf-logo" value="${esc(d?.logo,'🏛️')}"/></div>
+      <div class="modal-field"><label>${t('field.color')}</label><input id="mf-color" value="${esc(d?.color,'#666666')}"/></div>
+      <div class="modal-field"><label>${t('field.desc')}</label><textarea id="mf-desc">${esc(d?.desc)}</textarea></div>`;
   } else if (type==='law') {
     fields=`
-      <div class="modal-field"><label>Tytuł ustawy *</label><input id="mf-title" value="${esc(d?.title)}"/></div>
-      <div class="modal-field"><label>Data</label><input id="mf-date" value="${esc(d?.date)}"/></div>
-      <div class="modal-field"><label>Opis</label><textarea id="mf-desc">${esc(d?.desc)}</textarea></div>`;
+      <div class="modal-field"><label>${t('field.actTitle')}</label><input id="mf-title" value="${esc(d?.title)}"/></div>
+      <div class="modal-field"><label>${t('field.date')}</label><input id="mf-date" value="${esc(d?.date)}"/></div>
+      <div class="modal-field"><label>${t('field.desc')}</label><textarea id="mf-desc">${esc(d?.desc)}</textarea></div>`;
   } else if (type==='news') {
     fields=`
-      <div class="modal-field"><label>Źródło</label><input id="mf-source" value="${esc(d?.source)}"/></div>
-      <div class="modal-field"><label>Nagłówek *</label><input id="mf-title" value="${esc(d?.title)}"/></div>
-      <div class="modal-field"><label>Treść</label><textarea id="mf-body">${esc(d?.body)}</textarea></div>
-      <div class="modal-field"><label>Link URL</label><input id="mf-url" value="${esc(d?.url)}"/></div>
-      <div class="modal-field"><label>Kolor akcentu</label><select id="mf-accent">${newsAccents}</select></div>`;
+      <div class="modal-field"><label>${t('field.source')}</label><input id="mf-source" value="${esc(d?.source)}"/></div>
+      <div class="modal-field"><label>${t('field.headline')}</label><input id="mf-title" value="${esc(d?.title)}"/></div>
+      <div class="modal-field"><label>${t('field.content')}</label><textarea id="mf-body">${esc(d?.body)}</textarea></div>
+      <div class="modal-field"><label>${t('field.linkURL')}</label><input id="mf-url" value="${esc(d?.url)}"/></div>
+      <div class="modal-field"><label>${t('field.accentColor')}</label><select id="mf-accent">${newsAccents}</select></div>`;
   } else if (type==='note') {
     fields=`
-      <div class="modal-field"><label>Treść notatki</label><textarea id="mf-text">${esc(d?.text)}</textarea></div>
-      <div class="modal-field"><label>Kolor</label><select id="mf-color">${noteOpts}</select></div>`;
+      <div class="modal-field"><label>${t('field.noteText')}</label><textarea id="mf-text">${esc(d?.text)}</textarea></div>
+      <div class="modal-field"><label>${t('field.noteColor')}</label><select id="mf-color">${noteOpts}</select></div>`;
   } else if (type==='date') {
     fields=`
-      <div class="modal-field"><label>Etykieta</label><input id="mf-label" value="${esc(d?.label,'Data')}"/></div>
-      <div class="modal-field"><label>Data *</label><input id="mf-date" value="${esc(d?.date)}"/></div>
-      <div class="modal-field"><label>Kolor</label><select id="mf-color">${noteOpts}</select></div>`;
+      <div class="modal-field"><label>${t('field.label')}</label><input id="mf-label" value="${esc(d?.label)}"/></div>
+      <div class="modal-field"><label>${t('field.date')} *</label><input id="mf-date" value="${esc(d?.date)}"/></div>
+      <div class="modal-field"><label>${t('field.noteColor')}</label><select id="mf-color">${noteOpts}</select></div>`;
   }
   if (type==='video') {
     fields=`
-      <div class="modal-field"><label>Link YouTube *</label><input id="mf-url" placeholder="https://youtu.be/..." value="${esc(d?.url)}"/></div>
-      <div class="modal-field"><label>Tytuł (opcjonalny)</label><input id="mf-title" value="${esc(d?.title)}"/></div>`;
+      <div class="modal-field"><label>${t('field.ytLink')}</label><input id="mf-url" placeholder="https://youtu.be/..." value="${esc(d?.url)}"/></div>
+      <div class="modal-field"><label>${t('field.title')}</label><input id="mf-title" value="${esc(d?.title)}"/></div>`;
   }
-  const titles={person:'Osoba',unknown:'Nieznana osoba',party:'Partia',law:'Ustawa',news:'News',note:'Notatka',date:'Data',video:'Film YouTube'};
+  const titles = {
+    person:  t('modal.person'),  unknown: t('modal.unknown'),
+    party:   t('modal.party'),   law:     t('modal.law'),
+    news:    t('modal.news'),    note:    t('modal.note'),
+    date:    t('modal.date'),    video:   t('modal.video'),
+  };
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
-      <button class="modal-btn cancel">Anuluj</button>
-      <button class="modal-btn primary">Zapisz</button>
+      <button class="modal-btn cancel">${t('btn.cancel')}</button>
+      <button class="modal-btn primary">${t('btn.save')}</button>
     </div>`;
 }
 
@@ -1043,34 +1044,34 @@ function readModalForm(type) {
   const v   = id => (document.getElementById(id)?.value??'').trim();
   const sel = id => document.getElementById(id)?.value||'y';
   if (type==='person'||type==='unknown') {
-    const name=v('mf-name'); if(!name) return alert('Podaj imię'),null;
+    const name=v('mf-name'); if(!name) return alert(t('alert.enterName')),null;
     return { name, role:v('mf-role'), party:v('mf-party'), partyColor:v('mf-partyColor')||'#666', emoji:v('mf-emoji')||'👤', photo:v('mf-photo') };
   }
   if (type==='party') {
-    const name=v('mf-name'); if(!name) return alert('Podaj nazwę'),null;
+    const name=v('mf-name'); if(!name) return alert(t('alert.enterPartyName')),null;
     return { name, logo:v('mf-logo')||'🏛️', color:v('mf-color')||'#666', desc:v('mf-desc') };
   }
   if (type==='law') {
-    const title=v('mf-title'); if(!title) return alert('Podaj tytuł'),null;
+    const title=v('mf-title'); if(!title) return alert(t('alert.enterTitle')),null;
     return { title, date:v('mf-date'), desc:v('mf-desc') };
   }
   if (type==='news') {
-    const title=v('mf-title'); if(!title) return alert('Podaj nagłówek'),null;
+    const title=v('mf-title'); if(!title) return alert(t('alert.enterHeadline')),null;
     return { source:v('mf-source'), title, body:v('mf-body'), url:v('mf-url'), accentColor:sel('mf-accent') };
   }
   if (type==='note') return { text:v('mf-text'), color:sel('mf-color') };
   if (type==='date') {
-    const date=v('mf-date'); if(!date) return alert('Podaj datę'),null;
-    return { label:v('mf-label')||'Data', date, color:sel('mf-color') };
+    const date=v('mf-date'); if(!date) return alert(t('alert.enterDate')),null;
+    return { label:v('mf-label'), date, color:sel('mf-color') };
   }
   if (type==='video') {
-    const url=v('mf-url'); if(!url) return alert('Podaj link YouTube'),null;
+    const url=v('mf-url'); if(!url) return alert(t('alert.enterYTLink')),null;
     return { url, title:v('mf-title') };
   }
   return null;
 }
 
-// ── Eksport / Import ──────────────────────────────────────
+// ── Export / Import ───────────────────────────────────────
 export async function doExportJSON() { await exportJSON(state); }
 function maxIdFromData(data) {
   const all = [...data.cards, ...data.pins, ...data.threads];
@@ -1105,27 +1106,27 @@ export async function doExportPNG() {
   const contentW = Math.max(maxX - minX, 400);
   const contentH = Math.max(maxY - minY, 300);
 
-  // Zachowaj style board-wrap i transformy
+  // Save board-wrap styles and transforms
   const savedBW = { position: boardWrap.style.position, width: boardWrap.style.width, height: boardWrap.style.height,
                     top: boardWrap.style.top, left: boardWrap.style.left, overflow: boardWrap.style.overflow };
   const savedCanvasT  = canvas.style.transform;
   const savedSvgT     = threadSvg.style.transform;
 
-  // Zachowaj pozycje kart i pinezek w DOM
+  // Save card and pin DOM positions
   const cardEls = [...canvas.querySelectorAll('.card')];
   const pinEls  = [...canvas.querySelectorAll('.pin')];
   const savedCards      = cardEls.map(el => ({ left: el.style.left, top: el.style.top }));
   const savedPins       = pinEls.map( el => ({ left: el.style.left, top: el.style.top }));
   const savedCardShadow = cardEls.map(el => el.style.boxShadow);
 
-  // Ukryj nakładki fixed
+  // Hide fixed overlays
   const overlayIds = ['board-frame', 'minimap-wrap', 'left-panel', 'carousel-wrap', 'help-panel', 'back-to-cards'];
   const overlays = overlayIds.map(id => document.getElementById(id)).filter(Boolean);
   const savedDisplay = overlays.map(el => el.style.display);
   let suppressAfterStyle = null;
 
   try {
-    // Przesuń karty i pinezki o (-minX, -minY) bezpośrednio w DOM (bez CSS transform)
+    // Shift cards and pins by (-minX, -minY) directly in DOM (no CSS transform)
     cardEls.forEach(el => {
       const c = state.cards.find(c2 => c2.id === el.dataset.id);
       if (c) { el.style.left = (c.x - minX) + 'px'; el.style.top = (c.y - minY) + 'px'; }
@@ -1136,29 +1137,29 @@ export async function doExportPNG() {
       if (p) { el.style.left = p.x + 'px'; el.style.top = p.y + 'px'; }
     });
 
-    // Wyczyść transformy canvas i SVG (pozycje już przeliczone)
+    // Clear transforms (positions already adjusted)
     canvas.style.transform    = '';
     threadSvg.style.transform = '';
 
-    // Re-renderuj nitki SVG ze zmodyfikowanymi koordynatami (bez transformu na SVG)
+    // Re-render threads with adjusted coordinates (no SVG transform)
     renderAllThreads(threadSvg, getVisibleThreads(), adjustedPins, null);
 
-    // Nadaj board-wrap rozmiar całej zawartości
+    // Size board-wrap to fit content exactly
     boardWrap.style.position = 'absolute';
     boardWrap.style.width    = contentW + 'px';
     boardWrap.style.height   = contentH + 'px';
     boardWrap.style.top      = '0';
     boardWrap.style.left     = '0';
-    // 'visible' zamiast 'hidden' — html2canvas ucina box-shadow dzieci przy overflow:hidden
+    // 'visible' instead of 'hidden' – html2canvas clips box-shadow children at overflow:hidden
     boardWrap.style.overflow = 'visible';
 
-    // html2canvas renderuje board-wrap::after box-shadow niespójnie (tylko góra/lewa)
-    // — wyłączamy pseudo-element, ramkę rysujemy ręcznie na canvas w exportPNG
+    // html2canvas renders board-wrap::after box-shadow inconsistently (top/left only)
+    // – disable the pseudo-element, redraw the frame manually in exportPNG
     suppressAfterStyle = document.createElement('style');
     suppressAfterStyle.textContent = '#board-wrap::after { display: none !important; }';
     document.head.appendChild(suppressAfterStyle);
 
-    // Wyłącz box-shadow — rysujemy cienie ręcznie na canvas w exportPNG
+    // Disable box-shadow – redrawn manually in exportPNG
     cardEls.forEach(el => { el.style.boxShadow = 'none'; });
 
     overlays.forEach(el => { el.style.display = 'none'; });
@@ -1167,64 +1168,65 @@ export async function doExportPNG() {
     saveToHash(state);
     await exportPNG(boardWrap, contentW, contentH);
   } catch (e) {
-    alert('Eksport PNG nieudany: ' + e.message);
+    alert(t('alert.exportFailed') + e.message);
   } finally {
-    // Przywróć pozycje kart, pinezek i box-shadow
+    // Restore card positions, pin positions, and box-shadows
     cardEls.forEach((el, i) => { el.style.left = savedCards[i].left; el.style.top = savedCards[i].top; el.style.boxShadow = savedCardShadow[i]; });
     pinEls.forEach( (el, i) => { el.style.left = savedPins[i].left;  el.style.top = savedPins[i].top;  });
-    // Przywróć transformy i nitki
+    // Restore transforms and threads
     canvas.style.transform    = savedCanvasT;
     threadSvg.style.transform = savedSvgT;
     renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
-    // Przywróć board-wrap
+    // Restore board-wrap
     boardWrap.style.position = savedBW.position;
     boardWrap.style.width    = savedBW.width;
     boardWrap.style.height   = savedBW.height;
     boardWrap.style.top      = savedBW.top;
     boardWrap.style.left     = savedBW.left;
     boardWrap.style.overflow = savedBW.overflow;
-    // Przywróć board-wrap::after i nakładki
+    // Restore board-wrap::after and overlays
     if (suppressAfterStyle?.parentNode) document.head.removeChild(suppressAfterStyle);
     overlays.forEach((el, i) => { el.style.display = savedDisplay[i]; });
   }
 }
-export function doShareURL()  {
+
+export function doShareURL() {
   saveToHash(state);
   const shareURL = window.location.href;
-  // Wyczyść hash z paska adresu – link jest już w schowku, hash przy F5 nadpisywałby localStorage
+  // Clear hash from address bar – link is already in clipboard, hash on F5 would overwrite localStorage
   history.replaceState(null, '', location.pathname + location.search);
   navigator.clipboard?.writeText(shareURL)
-    .then(() => showToast('📋 Link skopiowany do schowka!'))
-    .catch(() => { showToast('🔗 Skopiuj link ręcznie'); prompt('Link do tablicy:', shareURL); });
+    .then(() => showToast(t('toast.linkCopied')))
+    .catch(() => { showToast(t('toast.copyManual')); prompt(t('toast.linkPrompt'), shareURL); });
 }
 
 function showToast(msg) {
-  let t = document.getElementById('app-toast');
-  if (!t) { t=document.createElement('div'); t.id='app-toast'; document.body.appendChild(t); }
-  t.textContent = msg;
-  t.className = 'app-toast show';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  let el = document.getElementById('app-toast');
+  if (!el) { el = document.createElement('div'); el.id='app-toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.className = 'app-toast show';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
 // ── Reset / Clear ─────────────────────────────────────────
 export function resetToSample() {
-  if (!confirm('Przywrócić przykładowe dane?')) return;
+  if (!confirm(t('confirm.reset'))) return;
   pushHistory();
   state.cards=SAMPLE_DATA.cards.map(c=>({...c,data:{...c.data}}));
   state.pins=SAMPLE_DATA.pins.map(p=>({...p}));
-  state.threads=SAMPLE_DATA.threads.map(t=>({...t}));
+  state.threads=SAMPLE_DATA.threads.map(th=>({...th}));
   state.nextId=300; state.groups=[];
   renderAll(); save(); scheduleMinimap();
 }
 export function clearBoard() {
-  if (!confirm('Utworzyć nową tablicę? Niezapisane zmiany zostaną utracone.')) return;
+  if (!confirm(t('confirm.clear'))) return;
   pushHistory();
   state.cards=[];state.pins=[];state.threads=[];state.groups=[];state.nextId=1;
   renderAll(); save(); scheduleMinimap();
 }
 
-// ── Zapis ─────────────────────────────────────────────────
+// ── Save ─────────────────────────────────────────────────
 function save() {
   saveState({ cards:state.cards, pins:state.pins, threads:state.threads, nextId:state.nextId, groups:state.groups });
 }

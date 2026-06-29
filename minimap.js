@@ -1,4 +1,4 @@
-// minimap.js – miniaturka tablicy
+// minimap.js – board thumbnail (bottom-left corner)
 import { buildPinMap } from './threads.js';
 
 export class Minimap {
@@ -13,24 +13,23 @@ export class Minimap {
     this.visible = true;
   }
 
-
   update(cards, pins, threads, pan, zoom, boardW, boardH, viewW, viewH) {
     if (!this.visible) return;
     const ctx = this.ctx;
     const cw = this.canvas.width, ch = this.canvas.height;
 
-    // Tło – kolor korka
+    // Background – cork color
     ctx.fillStyle = '#C9894E';
     ctx.fillRect(0, 0, cw, ch);
 
-    // Ramka
+    // Border
     ctx.strokeStyle = '#7D4E22';
     ctx.lineWidth = 1;
     ctx.strokeRect(0, 0, cw, ch);
 
     const scale = cw / boardW;
 
-    // Karty
+    // Cards
     const TYPE_COLORS = {
       person: '#3a7bd5', unknown: '#aaa', party: '#2e7d32',
       law: '#c8a000', news: '#e63946', note: '#f9c811',
@@ -45,12 +44,12 @@ export class Minimap {
       ctx.fillRect(mx, my, 10, 7);
     });
 
-    // Nitki
+    // Threads
     ctx.globalAlpha = 0.55;
     const pinMap = buildPinMap(pins);
-    threads.forEach(t => {
-      const from = pinMap[t.fromPin];
-      const to   = pinMap[t.toPin];
+    threads.forEach(th => {
+      const from = pinMap[th.fromPin];
+      const to   = pinMap[th.toPin];
       if (!from || !to) return;
       const x1 = 4 + (from.x / boardW) * (cw - 8);
       const y1 = 4 + (from.y / boardH) * (ch - 8);

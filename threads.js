@@ -1,12 +1,12 @@
-// threads.js – rysowanie nitek SVG między pinezkami
+// threads.js – SVG thread drawing between pins
 
 import { THREAD_COLORS } from './cards.js';
 
-// DRY: helper tworzący element SVG
+// SVG element factory
 const NS = 'http://www.w3.org/2000/svg';
 function svgEl(tag) { return document.createElementNS(NS, tag); }
 
-// DRY: bezier path z atrybutami stroke
+// Bezier path with stroke attributes
 function makeStrokePath(x1, y1, cpX, cpY, x2, y2, stroke, width, dasharray, dashoffset) {
   const p = svgEl('path');
   p.setAttribute('d', `M ${x1} ${y1} Q ${cpX} ${cpY} ${x2} ${y2}`);
@@ -23,11 +23,11 @@ function resolveColor(c) {
   return THREAD_COLORS[c] || c || '#cc3333';
 }
 
-// ── Renderowanie wszystkich nitek ─────────────────────
+// ── Render all threads ────────────────────────────────
 export function renderAllThreads(svg, threads, pins, onThreadClick) {
   [...svg.querySelectorAll('.thread-group')].forEach(el => el.remove());
 
-  // Dodaj filtr cienia do <defs> raz
+  // Add drop-shadow filter to <defs> once
   const defs = svg.querySelector('defs');
   if (defs && !defs.querySelector('#thread-shadow')) {
     const filter = svgEl('filter');
@@ -42,17 +42,17 @@ export function renderAllThreads(svg, threads, pins, onThreadClick) {
     defs.appendChild(filter);
   }
 
-  // DRY: zbuduj pinMap raz
+  // Build pinMap once and reuse for all threads
   const pinMap = buildPinMap(pins);
-  threads.forEach(t => {
-    const from = pinMap[t.fromPin];
-    const to   = pinMap[t.toPin];
+  threads.forEach(th => {
+    const from = pinMap[th.fromPin];
+    const to   = pinMap[th.toPin];
     if (!from || !to) return;
-    renderThread(svg, t, from, to, onThreadClick);
+    renderThread(svg, th, from, to, onThreadClick);
   });
 }
 
-// DRY: helper pinMap – używany też przez minimap przez import
+// Build pinMap – also used by minimap via import
 export function buildPinMap(pins) {
   const map = {};
   pins.forEach(p => { map[p.id] = p; });
@@ -74,7 +74,7 @@ export function renderThread(svg, thread, fromPin, toPin, onThreadClick) {
   const color  = resolveColor(thread.color);
   const width  = thread.width || 1.8;
 
-  // Niewidoczna szeroka linia hit-area
+  // Invisible wide hit-area for easier clicking
   const hitPath = makeStrokePath(x1, y1, cpX, cpY, x2, y2, 'transparent', 12);
   hitPath.style.pointerEvents = 'stroke';
   hitPath.style.cursor = 'pointer';
@@ -83,7 +83,7 @@ export function renderThread(svg, thread, fromPin, toPin, onThreadClick) {
   }
   g.appendChild(hitPath);
 
-  // Linia(e) nitki – w grupie z filtrem cienia
+  // Visible stroke(s) inside a group with drop-shadow filter
   const dash = `${8 * width / 1.8},${8 * width / 1.8}`;
   const strokeG = svgEl('g');
   strokeG.setAttribute('filter', 'url(#thread-shadow)');
@@ -97,7 +97,7 @@ export function renderThread(svg, thread, fromPin, toPin, onThreadClick) {
   }
   g.appendChild(strokeG);
 
-  // Etykieta
+  // Label
   if (thread.label?.trim()) {
     const labelX  = cpX;
     const labelY  = (y1 + y2) / 2 + sag * 0.5;
@@ -133,7 +133,7 @@ export function renderThread(svg, thread, fromPin, toPin, onThreadClick) {
   svg.appendChild(g);
 }
 
-// ── Tymczasowa nitka podczas rysowania ────────────────
+// ── Temporary thread drawn during drag ───────────────
 export function drawTempThread(svg, x1, y1, x2, y2, color) {
   let temp = svg.querySelector('#temp-thread');
   if (!temp) {

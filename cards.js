@@ -1,13 +1,15 @@
-// cards.js – renderowanie kart
+// cards.js – card rendering
+
+import { t } from './i18n.js';
 
 export const NOTE_COLORS = {
-  r: { bg: '#ffcdd2', label: 'Czerwona' },
-  g: { bg: '#c8e6c9', label: 'Zielona' },
-  b: { bg: '#bbdefb', label: 'Niebieska' },
-  y: { bg: '#fff9c4', label: 'Żółta' },
-  c: { bg: '#b2ebf2', label: 'Cyjan' },
-  m: { bg: '#f8bbd0', label: 'Różowa' },
-  w: { bg: '#fafafa', label: 'Biała' },
+  r: { bg: '#ffcdd2' },
+  g: { bg: '#c8e6c9' },
+  b: { bg: '#bbdefb' },
+  y: { bg: '#fff9c4' },
+  c: { bg: '#b2ebf2' },
+  m: { bg: '#f8bbd0' },
+  w: { bg: '#fafafa' },
 };
 
 export const PIN_COLORS = {
@@ -36,7 +38,7 @@ export const THREAD_COLORS = {
 };
 
 // ── DRY helpers ────────────────────────────────────────
-// Escape HTML – używany wszędzie gdzie dane użytkownika idą do innerHTML
+// Escape HTML – used everywhere user data goes into innerHTML
 export function esc(s, fb = '') {
   if (s == null) return fb;
   return String(s)
@@ -46,12 +48,12 @@ export function esc(s, fb = '') {
     .replace(/>/g, '&gt;');
 }
 
-// Kolor tła karteczki notatki/daty
+// Note / date card background color
 function noteColor(color) {
   return NOTE_COLORS[color]?.bg || '#fff9c4';
 }
 
-// Wspólne stylowanie elementu karty (DRY: createCardElement + updateCardElement)
+// Shared card element styling (DRY: createCardElement + updateCardElement)
 function applyCardStyles(el, card) {
   const angle     = card.angle ?? 0;
   const skewX     = angle * 0.1;
@@ -68,7 +70,7 @@ function applyCardStyles(el, card) {
   }
 }
 
-// ── Pinezka ────────────────────────────────────────────
+// ── Pin SVG ────────────────────────────────────────────
 export function renderPinSvg(color) {
   const c = PIN_COLORS[color] || PIN_COLORS.red;
   return `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -79,26 +81,25 @@ export function renderPinSvg(color) {
   </svg>`;
 }
 
-// ── Karta – tworzenie ──────────────────────────────────
+// ── Card element – create ──────────────────────────────
 export function createCardElement(card) {
   const el = document.createElement('div');
   el.className    = 'card';
   el.dataset.id   = card.id;
   el.dataset.type = card.type;
-  // Ustal kąt przy pierwszym stworzeniu
   if (card.angle == null) card.angle = parseFloat((Math.random() * 10 - 5).toFixed(1));
   applyCardStyles(el, card);
   el.innerHTML = buildCardHTML(card);
   return el;
 }
 
-// ── Karta – aktualizacja (DRY: applyCardStyles) ────────
+// ── Card element – update ──────────────────────────────
 export function updateCardElement(el, card) {
   applyCardStyles(el, card);
   el.innerHTML = buildCardHTML(card);
 }
 
-// ── Budowanie HTML kart ────────────────────────────────
+// ── Card HTML builders ─────────────────────────────────
 function buildCardHTML(card) {
   const d = card.data;
   if (!d) return '<div style="padding:10px;color:#333;font-family:sans-serif">?</div>';
@@ -135,7 +136,7 @@ function buildUnknown(d) {
     <div class="card-person card-unknown">
       <div class="cp-photo" style="background:linear-gradient(135deg,#ccc,#999);font-size:3rem;color:#555">?</div>
       <div class="cp-body">
-        <div class="cp-name" style="color:#888;font-style:italic">${esc(d.name, 'Nieznana osoba')}</div>
+        <div class="cp-name" style="color:#888;font-style:italic">${esc(d.name) || t('card.unknownDefault')}</div>
         <div class="cp-role">${esc(d.role)}</div>
       </div>
     </div>`;
@@ -177,7 +178,7 @@ function buildNote(d) {
 function buildDate(d) {
   return `
     <div class="card-date" style="background:${noteColor(d.color)}">
-      <div class="cd-label">${esc(d.label, 'Data')}</div>
+      <div class="cd-label">${esc(d.label) || t('card.dateDefault')}</div>
       <div class="cd-date">${esc(d.date)}</div>
     </div>`;
 }
@@ -195,12 +196,12 @@ function buildVideo(d) {
     <div class="card-video">
       <div class="cv-header">
         <span class="cv-grip">⠿</span>
-        <span class="cv-header-title">${esc(d.title || 'Film YouTube')}</span>
+        <span class="cv-header-title">${esc(d.title) || t('card.videoTitle')}</span>
       </div>
       ${src
         ? `<iframe class="cv-iframe" src="${src}"
              frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
              allowfullscreen></iframe>`
-        : `<div class="cv-placeholder">🎬 Brak linku YouTube</div>`}
+        : `<div class="cv-placeholder">🎬 ${t('card.noYTLink')}</div>`}
     </div>`;
 }

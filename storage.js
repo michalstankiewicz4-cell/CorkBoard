@@ -6,7 +6,7 @@ export function saveState(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
-    console.warn('Zapis nieudany:', e);
+    console.warn('Save failed:', e);
   }
 }
 
@@ -15,8 +15,7 @@ export function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch (e) {
-    console.warn('Odczyt nieudany:', e);
+    console.warn('Load failed:', e);
     return null;
   }
 }
-

@@ -74,6 +74,17 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 .lp-item.lp-soon:hover { background: none !important; color: rgba(200,168,100,.9) !important; }
 .lp-item.lp-chk { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
 .lp-item.lp-chk input[type="checkbox"] { accent-color: #ffd878; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
+.lp-item.lp-lang { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: default; }
+.lp-lang-btns { display: flex; gap: 4px; }
+.lp-lang-btn {
+  padding: 2px 8px; border-radius: 5px;
+  border: 1px solid rgba(180,130,60,.3);
+  background: none; color: rgba(200,168,100,.7);
+  font-family: var(--font-ui); font-size: .65rem; font-weight: 600;
+  cursor: pointer; transition: color .13s, background .13s, border-color .13s;
+}
+.lp-lang-btn:hover { color: #ffd878; border-color: rgba(180,130,60,.6); }
+.lp-lang-btn.lp-lang-active { background: rgba(120,80,10,.7); color: #ffd878; border-color: #c8971c; }
 
 /* ── Ustawienia – body-class overrides ───────────── */
 body.no-thread-shadow #thread-svg g[filter]              { filter: none !important; }

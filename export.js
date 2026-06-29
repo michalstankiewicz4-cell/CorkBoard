@@ -1,24 +1,26 @@
-// export.js – eksport PNG, JSON; import JSON; URL hash
+// export.js – PNG, JSON export/import; URL hash encoding
+
+import { t } from './i18n.js';
 
 // ── JSON Export ──────────────────────────────────────────
 export async function exportJSON(state) {
   const data     = JSON.stringify({ cards: state.cards, pins: state.pins, threads: state.threads }, null, 2);
-  const filename = `tablica-${dateStamp()}.json`;
+  const filename = `board-${dateStamp()}.json`;
 
-  // File System Access API — natywny dialog z pamięcią ostatniego folderu
+  // File System Access API – native dialog with last-folder memory
   if ('showSaveFilePicker' in window) {
     try {
       const handle = await window.showSaveFilePicker({
         suggestedName: filename,
-        types: [{ description: 'Plik JSON', accept: { 'application/json': ['.json'] } }],
+        types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }],
       });
       const writable = await handle.createWritable();
       await writable.write(data);
       await writable.close();
       return;
     } catch (e) {
-      if (e.name === 'AbortError') return; // użytkownik anulował
-      console.warn('showSaveFilePicker nie powiodło się, używam blob-download:', e);
+      if (e.name === 'AbortError') return; // user cancelled
+      console.warn('showSaveFilePicker failed, falling back to blob-download:', e);
     }
   }
 
@@ -46,10 +48,10 @@ export function importJSON(onLoad) {
         if (data.cards && data.pins && data.threads) {
           onLoad(data);
         } else {
-          alert('Nieprawidłowy format pliku.');
+          alert(t('alert.invalidJSON'));
         }
       } catch {
-        alert('Błąd parsowania JSON.');
+        alert(t('alert.jsonParseError'));
       }
     };
     reader.readAsText(file);
@@ -57,7 +59,7 @@ export function importJSON(onLoad) {
   input.click();
 }
 
-// ── PNG Export – pełna tablica (wywoływana z app.js po przygotowaniu DOM) ──
+// ── PNG Export – full board (called from app.js after DOM preparation) ──
 export async function exportPNG(boardEl, contentW, contentH) {
   const SCALE = 1.5;
   if (!window.html2canvas) {
@@ -66,7 +68,7 @@ export async function exportPNG(boardEl, contentW, contentH) {
     document.head.appendChild(script);
     await new Promise((resolve, reject) => {
       script.onload = resolve;
-      script.onerror = () => reject(new Error('Nie można załadować html2canvas'));
+      script.onerror = () => reject(new Error(t('alert.html2canvasError')));
     });
   }
 
@@ -84,12 +86,12 @@ export async function exportPNG(boardEl, contentW, contentH) {
   });
 
   const ctx = cap.getContext('2d');
-  // html2canvas zostawia ctx.scale(SCALE, SCALE) — resetujemy do współrzędnych pikselowych
+  // html2canvas leaves ctx.scale(SCALE, SCALE) – reset to pixel coordinates
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const W = cap.width, H = cap.height;
 
-  // ── Ręczne cienie kart (html2canvas nie renderuje box-shadow niezawodnie) ──
-  // Technika: shadow-only canvas → destination-out wymazuje obszar karty → drawImage na główny
+  // ── Manual card shadows (html2canvas doesn't render box-shadow reliably) ──
+  // Technique: shadow-only canvas → destination-out erases the card area → drawImage onto main
   {
     const sc = document.createElement('canvas');
     sc.width = W; sc.height = H;
@@ -132,7 +134,7 @@ export async function exportPNG(boardEl, contentW, contentH) {
       shadow('rgba(0,0,0,.38)', 18, 3, 6);
       shadow('rgba(0,0,0,.2)',   6, 1, 2);
 
-      // Wymaż obszar karty — zostaje tylko aureola cienia
+      // Erase the card area – only the shadow halo remains
       sx.save();
       sx.globalCompositeOperation = 'destination-out';
       sx.translate(cx + cw / 2, cy + ch / 2);
@@ -146,10 +148,10 @@ export async function exportPNG(boardEl, contentW, contentH) {
     ctx.drawImage(sc, 0, 0);
   }
 
-  // Narysuj drewnianą ramkę gradientową (replika #board-frame::before z CSS)
-  const F = Math.round(22 * SCALE); // szerokość ramki w pikselach canvas
+  // Draw wooden gradient frame (replica of #board-frame::before from CSS)
+  const F = Math.round(22 * SCALE); // frame width in canvas pixels
 
-  // Przystanki gradientu z #board-frame::before (pozycje CSS px → ułamek 0–1)
+  // Gradient stops from #board-frame::before (CSS px positions → fraction 0–1)
   const stops = [
     [0,      '#8B5225'],
     [2/22,   '#A0632E'],
@@ -165,17 +167,17 @@ export async function exportPNG(boardEl, contentW, contentH) {
   ];
   function makeGrad(x1, y1, x2, y2) {
     const g = ctx.createLinearGradient(x1, y1, x2, y2);
-    stops.forEach(([t, c]) => g.addColorStop(t, c));
+    stops.forEach(([pos, c]) => g.addColorStop(pos, c));
     return g;
   }
 
-  // Lewa i prawa (pełna wysokość) — pod narożnikami
+  // Left and right (full height) – under corners
   ctx.fillStyle = makeGrad(0, 0, F, 0);
   ctx.fillRect(0, 0, F, H);
   ctx.fillStyle = makeGrad(W, 0, W - F, 0);
   ctx.fillRect(W - F, 0, F, H);
 
-  // Góra i dół (pełna szerokość) — na wierzchu narożników jak w CSS
+  // Top and bottom (full width) – on top of corners like in CSS
   ctx.fillStyle = makeGrad(0, 0, 0, F);
   ctx.fillRect(0, 0, W, F);
   ctx.fillStyle = makeGrad(0, H, 0, H - F);
@@ -188,7 +190,7 @@ export async function exportPNG(boardEl, contentW, contentH) {
   const dlUrl   = URL.createObjectURL(new Blob([patched], { type: 'image/png' }));
   const a       = document.createElement('a');
   a.href        = dlUrl;
-  a.download    = `tablica-${dateStamp()}.png`;
+  a.download    = `board-${dateStamp()}.png`;
   a.click();
   URL.revokeObjectURL(dlUrl);
 }
@@ -199,11 +201,11 @@ export function saveToHash(state) {
     const compact = {
       c: state.cards.map(c => ({ i:c.id, t:c.type, x:Math.round(c.x), y:Math.round(c.y), a:c.angle?.toFixed(1), d:c.data })),
       p: state.pins.map(p => ({ i:p.id, x:Math.round(p.x), y:Math.round(p.y), c:p.color, ci:p.cardId })),
-      th: state.threads.map(t => ({ i:t.id, f:t.fromPin, t2:t.toPin, c:t.color, s:t.striped, c2:t.stripeColor2, l:t.label, w:t.width })),
+      th: state.threads.map(th => ({ i:th.id, f:th.fromPin, t2:th.toPin, c:th.color, s:th.striped, c2:th.stripeColor2, l:th.label, w:th.width })),
     };
     const json = JSON.stringify(compact);
     const bytes = new TextEncoder().encode(json);
-    // Chunk aby uniknąć RangeError przy spread >65536 elementów
+    // Chunk to avoid RangeError when spread > 65536 elements
     let binary = '';
     for (let i = 0; i < bytes.length; i += 8192) {
       binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
@@ -211,7 +213,7 @@ export function saveToHash(state) {
     const encoded = btoa(binary);
     history.replaceState(null, '', '#' + encoded);
   } catch {
-    // Zbyt duże – ignoruj
+    // Too large – ignore silently
   }
 }
 
@@ -225,7 +227,7 @@ export function loadFromHash() {
     return {
       cards:   raw.c.map(c => ({ id:c.i, type:c.t, x:c.x, y:c.y, angle:parseFloat(c.a||0), data:c.d })),
       pins:    raw.p.map(p => ({ id:p.i, x:p.x, y:p.y, color:p.c, cardId:p.ci })),
-      threads: raw.th.map(t => ({ id:t.i, fromPin:t.f, toPin:t.t2, color:t.c, striped:t.s, stripeColor2:t.c2, label:t.l, width:t.w })),
+      threads: raw.th.map(th => ({ id:th.i, fromPin:th.f, toPin:th.t2, color:th.c, striped:th.s, stripeColor2:th.c2, label:th.l, width:th.w })),
     };
   } catch {
     return null;
@@ -234,13 +236,13 @@ export function loadFromHash() {
 
 // ── PNG Metadata ─────────────────────────────────────────
 function makeCrc32Table() {
-  const t = new Uint32Array(256);
+  const tbl = new Uint32Array(256);
   for (let i = 0; i < 256; i++) {
     let c = i;
     for (let j = 0; j < 8; j++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-    t[i] = c;
+    tbl[i] = c;
   }
-  return t;
+  return tbl;
 }
 const _CRC = makeCrc32Table();
 
@@ -263,7 +265,7 @@ function pngInjectText(src, keyword, text) {
   new DataView(chunk.buffer).setUint32(0, data.length, false);
   chunk.set(type, 4); chunk.set(data, 8);
   new DataView(chunk.buffer).setUint32(8 + data.length, crc32(crcBuf), false);
-  // Wstaw po IHDR (sygnatura 8 bajtów + chunk IHDR 25 bajtów = offset 33)
+  // Insert after IHDR (8-byte signature + 25-byte IHDR chunk = offset 33)
   const ins = 33;
   const out = new Uint8Array(src.length + chunk.length);
   out.set(src.subarray(0, ins)); out.set(chunk, ins); out.set(src.subarray(ins), ins + chunk.length);
@@ -297,9 +299,9 @@ export function importPNG(onLoad) {
     const bytes  = new Uint8Array(await file.arrayBuffer());
     const chunks = pngReadTextChunks(bytes);
     const srcUrl = chunks['Source-URL'];
-    if (!srcUrl) { alert('Ten plik PNG nie zawiera danych tablicy.'); return; }
+    if (!srcUrl) { alert(t('alert.noPNGData')); return; }
     const hashIdx = srcUrl.indexOf('#');
-    if (hashIdx === -1) { alert('Brak danych stanu w metadanych PNG.'); return; }
+    if (hashIdx === -1) { alert(t('alert.noPNGHash')); return; }
     const hash = srcUrl.slice(hashIdx + 1);
     try {
       const bin = atob(hash);
@@ -309,9 +311,9 @@ export function importPNG(onLoad) {
       onLoad({
         cards:   raw.c.map(c => ({ id:c.i, type:c.t, x:c.x, y:c.y, angle:parseFloat(c.a||0), data:c.d })),
         pins:    raw.p.map(p => ({ id:p.i, x:p.x, y:p.y, color:p.c, cardId:p.ci })),
-        threads: raw.th.map(t => ({ id:t.i, fromPin:t.f, toPin:t.t2, color:t.c, striped:t.s, stripeColor2:t.c2, label:t.l, width:t.w })),
+        threads: raw.th.map(th => ({ id:th.i, fromPin:th.f, toPin:th.t2, color:th.c, striped:th.s, stripeColor2:th.c2, label:th.l, width:th.w })),
       });
-    } catch { alert('Błąd odczytu danych z PNG.'); }
+    } catch { alert(t('alert.pngReadError')); }
   };
   input.click();
 }

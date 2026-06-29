@@ -1,4 +1,4 @@
-// views.js – widoki automatyczne + force-directed graph
+// views.js – auto views + force-directed graph
 
 export async function computeViewPositions(cards, view, threads, pins) {
   if (view === 'basic')  return basicPositions(cards);
@@ -30,7 +30,7 @@ function computePartyView(cards) {
 
   const personsByParty = {};
   cards.filter(c => c.type === 'person' || c.type === 'unknown').forEach(c => {
-    const pn = c.data.party || '__brak__';
+    const pn = c.data.party || '__none__';
     if (!personsByParty[pn]) personsByParty[pn] = [];
     personsByParty[pn].push(c);
   });
@@ -41,7 +41,7 @@ function computePartyView(cards) {
       positions[p.id] = { x: cx + (i % 3) * 145, y: 220 + Math.floor(i / 3) * 200 };
     });
   });
-  (personsByParty['__brak__'] || []).forEach((p, i) => {
+  (personsByParty['__none__'] || []).forEach((p, i) => {
     positions[p.id] = { x: 80 + i * 145, y: 580 };
   });
 
@@ -95,7 +95,7 @@ function computeLawView(cards) {
   return positions;
 }
 
-// Force-directed layout (symulacja sprężyn) – async z batchowaniem po RAF
+// Force-directed layout (spring simulation) – async with RAF batching
 async function computeForceView(cards, threads, pins) {
   if (!cards.length) return {};
 
@@ -110,9 +110,9 @@ async function computeForceView(cards, threads, pins) {
   const pinToCard = {};
   pins.forEach(p => { if (p.cardId) pinToCard[p.id] = p.cardId; });
   const edges = [];
-  threads.forEach(t => {
-    const a = pinToCard[t.fromPin];
-    const b = pinToCard[t.toPin];
+  threads.forEach(th => {
+    const a = pinToCard[th.fromPin];
+    const b = pinToCard[th.toPin];
     if (a && b && a !== b) edges.push([a, b]);
   });
 
@@ -147,12 +147,12 @@ async function computeForceView(cards, threads, pins) {
       force[bid].y -= (dy / d) * f;
     });
 
-    const t = C * (1 - iter / ITER);
+    const temp = C * (1 - iter / ITER);
     cards.forEach(c => {
       const fd = Math.hypot(force[c.id].x, force[c.id].y);
       if (fd > 0) {
-        pos[c.id].x += (force[c.id].x / fd) * Math.min(fd, t * 30);
-        pos[c.id].y += (force[c.id].y / fd) * Math.min(fd, t * 30);
+        pos[c.id].x += (force[c.id].x / fd) * Math.min(fd, temp * 30);
+        pos[c.id].y += (force[c.id].y / fd) * Math.min(fd, temp * 30);
       }
       pos[c.id].x = Math.max(30, Math.min(1450, pos[c.id].x));
       pos[c.id].y = Math.max(30, Math.min(700,  pos[c.id].y));
