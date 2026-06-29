@@ -43,6 +43,9 @@ let zoom   = 1.0;
 const ZOOM_MIN = 0.25, ZOOM_MAX = 4.0, ZOOM_STEP = 0.1;
 let panning = null;
 
+// Viewport cache (aktualizowany przez ResizeObserver – brak clientWidth w RAF)
+let vpW = window.innerWidth, vpH = window.innerHeight;
+
 // Minimap
 let minimap = null;
 
@@ -52,11 +55,11 @@ const undoStack = [];
 const redoStack = [];
 
 // DRY: konwersja współrzędnych ekran → przestrzeń canvas
+// boardWrap ma position:fixed; left:0; top:0 – brak potrzeby getBoundingClientRect
 function toCanvas(clientX, clientY) {
-  const r = boardWrap.getBoundingClientRect();
   return {
-    x: (clientX - r.left  - pan.x) / zoom,
-    y: (clientY - r.top   - pan.y) / zoom,
+    x: (clientX - pan.x) / zoom,
+    y: (clientY - pan.y) / zoom,
   };
 }
 
@@ -168,6 +171,7 @@ function getConnectedCards(cardId, depth = 3) {
 
 // ── Events ──────────────────────────────────────────────
 function bindEvents() {
+  new ResizeObserver(([e]) => { vpW = e.contentRect.width; vpH = e.contentRect.height; }).observe(boardWrap);
   boardWrap.addEventListener('mousedown', onMouseDown);
   boardWrap.addEventListener('mousedown', onMiddleDown);
   window.addEventListener('mousemove', onMouseMove);
@@ -276,15 +280,22 @@ function onMouseDown(e) {
     // Klik bez shift → wyczyść zaznaczenie, zwykły drag
     if (multiSelected.size > 0) clearMultiSelected();
     pushHistory();
-    const cardRect = card.getBoundingClientRect();
-    const cardData = state.cards.find(c => c.id === cid);
+    const cardRect  = card.getBoundingClientRect();
+    const cardData  = state.cards.find(c => c.id === cid);
+    const pinnedPin = state.pins.find(p => p.cardId === cid) || null;
+    const hasThreads = pinnedPin
+      ? state.threads.some(t => t.fromPin === pinnedPin.id || t.toPin === pinnedPin.id)
+      : false;
     dragging = {
-      cardId:  cid,
-      el:      card,
-      card:    cardData,
-      cardW:   card.offsetWidth,
-      offsetX: (e.clientX - cardRect.left) / zoom,
-      offsetY: (e.clientY - cardRect.top)  / zoom,
+      cardId:     cid,
+      el:         card,
+      card:       cardData,
+      cardW:      card.offsetWidth,
+      offsetX:    (e.clientX - cardRect.left) / zoom,
+      offsetY:    (e.clientY - cardRect.top)  / zoom,
+      pin:        pinnedPin,
+      pinEl:      pinnedPin ? canvas.querySelector(`.pin[data-id="${pinnedPin.id}"]`) : null,
+      hasThreads,
     };
     card.classList.add('dragging');
     selectCard(cid);
@@ -338,8 +349,12 @@ function applyMove() {
     const y = cy - dragging.offsetY;
     dragging.card.x = x; dragging.card.y = y;
     dragging.el.style.left = x + 'px'; dragging.el.style.top = y + 'px';
-    syncPinsOfCard(dragging.cardId, dragging.card, dragging.cardW);
-    scheduleThreadRender();
+    if (dragging.pin) {
+      const px = x + dragging.cardW / 2, py = y + 4;
+      dragging.pin.x = px; dragging.pin.y = py;
+      if (dragging.pinEl) { dragging.pinEl.style.left = px + 'px'; dragging.pinEl.style.top = py + 'px'; }
+    }
+    if (dragging.hasThreads) scheduleThreadRender();
     return;
   }
   if (threadStart) {
@@ -377,19 +392,22 @@ function onDblClick(e) {
   setTimeout(() => openEditModal(id), 80);
 }
 
+let wheelRafId = null;
 function onWheel(e) {
   e.preventDefault();
-  const rect = boardWrap.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
   const delta   = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
   const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(zoom + delta).toFixed(2)));
   if (newZoom === zoom) return;
-  pan.x = mx - (mx - pan.x) * (newZoom / zoom);
-  pan.y = my - (my - pan.y) * (newZoom / zoom);
+  // Math akumuluje się synchronicznie; DOM-write odkładamy na jeden RAF
+  pan.x = e.clientX - (e.clientX - pan.x) * (newZoom / zoom);
+  pan.y = e.clientY - (e.clientY - pan.y) * (newZoom / zoom);
   zoom  = newZoom;
-  applyTransform(true);
-  scheduleMinimap();
+  if (wheelRafId) return;
+  wheelRafId = requestAnimationFrame(() => {
+    wheelRafId = null;
+    applyTransform(true);
+    scheduleMinimap();
+  });
 }
 
 function onContextMenu(e) {
@@ -432,7 +450,7 @@ function scheduleThreadRender() {
 
 function checkCardsVisible() {
   if (!state.cards.length) return;
-  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const bw = vpW, bh = vpH;
   // Sprawdź czy choć jedna karta jest w viewport
   const anyVisible = state.cards.some(c => {
     const sx = c.x * zoom + pan.x;
@@ -456,7 +474,7 @@ function checkCardsVisible() {
 
 function fitToCards() {
   if (!state.cards.length) { resetView(); return; }
-  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const bw = vpW, bh = vpH;
   const xs = state.cards.map(c => c.x);
   const ys = state.cards.map(c => c.y);
   const minX = Math.min(...xs), maxX = Math.max(...xs) + 200;
@@ -482,7 +500,7 @@ export function resetView() {
 }
 
 export function zoomIn() {
-  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const bw = vpW, bh = vpH;
   const mx = bw / 2, my = bh / 2;
   const newZoom = Math.min(ZOOM_MAX, +(zoom + ZOOM_STEP).toFixed(2));
   if (newZoom === zoom) return;
@@ -493,7 +511,7 @@ export function zoomIn() {
 }
 
 export function zoomOut() {
-  const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+  const bw = vpW, bh = vpH;
   const mx = bw / 2, my = bh / 2;
   const newZoom = Math.max(ZOOM_MIN, +(zoom - ZOOM_STEP).toFixed(2));
   if (newZoom === zoom) return;
@@ -561,7 +579,7 @@ function scheduleMinimap() {
   clearTimeout(minimapTimer);
   minimapTimer = setTimeout(() => {
     if (!minimap) return;
-    const bw = boardWrap.clientWidth, bh = boardWrap.clientHeight;
+    const bw = vpW, bh = vpH;
     // Dynamiczny bounding box – uwzględnia karty daleko poza centrum
     const xs = state.cards.map(c => c.x).concat([0, bw]);
     const ys = state.cards.map(c => c.y).concat([0, bh]);
