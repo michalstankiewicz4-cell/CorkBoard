@@ -137,23 +137,42 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 /* ══ KARUZELA – pionowa, po prawej, bez tła ═════════ */
 #carousel-wrap {
   position: fixed;
-  top: 0; right: 8px; bottom: 0;
+  top: 0; right: 10px; bottom: 0;
   width: auto;
   z-index: 2000;
   display: flex; flex-direction: column;
   align-items: center;
   pointer-events: none;
+  padding: 10px 0;
+  gap: 4px;
 }
 #carousel-inner {
   display: flex; flex-direction: column; align-items: center;
-  gap: 5px; padding: 7px 4px;
-  background: none;
+  gap: 5px; padding: 7px;
   pointer-events: all;
   overflow-y: auto;
-  max-height: calc(100vh - 24px);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.18) transparent;
+  flex: 0 1 auto;
+  min-height: 0;
+  scrollbar-width: none;
+  background: rgba(18,10,3,.55);
+  border: 1px solid rgba(180,130,60,.25);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
 }
+#carousel-inner::-webkit-scrollbar { display: none; }
+.carousel-arrow {
+  display: none; align-items: center; justify-content: center;
+  width: 36px; height: 20px; flex-shrink: 0;
+  background: rgba(18,10,3,.55);
+  border: 1px solid rgba(180,130,60,.25);
+  border-radius: 8px;
+  color: rgba(200,168,100,.7);
+  font-size: .7rem; cursor: pointer;
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+  transition: color .15s;
+}
+.carousel-arrow:hover { color: #ffd878; }
 
 /* Kółka karuzeli */
 .ci-bubble {

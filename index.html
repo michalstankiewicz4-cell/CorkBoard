@@ -26,7 +26,7 @@
 
 <!-- ══ PRAWA KARUZELA – pionowa, po prawej, na tablicy ══ -->
 <div id="carousel-wrap">
-  <!-- Elementy jako kółka -->
+  <button id="carousel-arrow-up" class="carousel-arrow" onclick="carouselScroll(-1)">▲</button>
   <div id="carousel-inner">
     <button class="ci-tool" data-tool="pin" onclick="App.showPinColorPicker(this)">
       <span class="ci-ico"><svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><circle cx="10" cy="6" r="5"/><rect x="9" y="11" width="2" height="8" rx="1"/></svg></span>
@@ -69,6 +69,7 @@
       <span class="ci-ico">🎬</span><span class="ci-lbl">Film YT</span>
     </div>
   </div>
+  <button id="carousel-arrow-down" class="carousel-arrow" onclick="carouselScroll(1)">▼</button>
 </div>
 
 <!-- ══ LEWA KARUZELA – pionowa, po lewej, na tablicy ══ -->
@@ -163,7 +164,7 @@
 <!-- ══ MINIMAP – lewy dolny róg ══ -->
 <div id="minimap-wrap">
   <div id="minimap-header">
-    <span>🗺 <small style="font-size:0.65em;opacity:0.5;letter-spacing:0.02em">v1.4.1</small></span>
+    <span>🗺 <small style="font-size:0.65em;opacity:0.5;letter-spacing:0.02em">v1.5.0</small></span>
     <button onclick="minimapToggle()" id="mm-toggle-btn">ukryj</button>
   </div>
   <div id="minimap-container"></div>
@@ -340,6 +341,22 @@ Object.entries(settingChkMap).forEach(([id, key]) => {
   });
 });
 applySettings();
+
+// ── Karuzela – strzałki przewijania ──────────────────
+function updateCarouselArrows() {
+  const inner = document.getElementById('carousel-inner');
+  const up    = document.getElementById('carousel-arrow-up');
+  const dn    = document.getElementById('carousel-arrow-down');
+  up.style.display = inner.scrollTop > 2 ? 'flex' : 'none';
+  dn.style.display = inner.scrollTop + inner.clientHeight < inner.scrollHeight - 2 ? 'flex' : 'none';
+}
+window.carouselScroll = dir => {
+  document.getElementById('carousel-inner').scrollBy({ top: dir * 100, behavior: 'smooth' });
+  setTimeout(updateCarouselArrows, 200);
+};
+document.getElementById('carousel-inner').addEventListener('scroll', updateCarouselArrows);
+window.addEventListener('resize', updateCarouselArrows);
+setTimeout(updateCarouselArrows, 0);
 
 // ── Boot ─────────────────────────────────────────────
 AppModule.init();
