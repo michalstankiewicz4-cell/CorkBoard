@@ -68,6 +68,7 @@ export function init() {
   if (fromHash && fromHash.cards.length) {
     state = { ...state, ...fromHash };
     state.nextId = 300;
+    history.replaceState(null, '', location.pathname + location.search);
   } else if (saved && saved.cards && saved.cards.length) {
     state = { ...state, ...saved };
     if (!state.groups) state.groups = [];
