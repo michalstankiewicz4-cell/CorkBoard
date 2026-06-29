@@ -119,6 +119,8 @@
         <label class="lp-item lp-chk"><input type="checkbox" id="set-no-drag-shadow"> Brak cieni przy przeciąganiu</label>
         <label class="lp-item lp-chk"><input type="checkbox" id="set-no-pan-shadow"> Brak cieni przy panningu</label>
         <label class="lp-item lp-chk"><input type="checkbox" id="set-ghost-drag"> Przeciągaj duchy kart</label>
+        <div class="lp-sep"></div>
+        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-minimap"> Wyłącz minimapę</label>
       </div>
     </div>
     <!-- Autor -->
@@ -317,6 +319,7 @@ function applySettings() {
   document.body.classList.toggle('no-drag-shadow',   !!appSettings.noDragShadow);
   document.body.classList.toggle('no-pan-shadow',    !!appSettings.noPanShadow);
   document.body.classList.toggle('ghost-drag',       !!appSettings.ghostDrag);
+  document.body.classList.toggle('no-minimap',       !!appSettings.noMinimap);
 }
 const settingChkMap = {
   'set-no-thread-shadow': 'noThreadShadow',
@@ -324,6 +327,7 @@ const settingChkMap = {
   'set-no-drag-shadow':   'noDragShadow',
   'set-no-pan-shadow':    'noPanShadow',
   'set-ghost-drag':       'ghostDrag',
+  'set-no-minimap':       'noMinimap',
 };
 Object.entries(settingChkMap).forEach(([id, key]) => {
   const el = document.getElementById(id);
