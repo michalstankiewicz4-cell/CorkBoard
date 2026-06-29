@@ -70,6 +70,8 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 .lp-item.lp-danger:hover { background: rgba(220,80,60,.1); color: #ff7060; }
 .lp-sep { height: 1px; background: rgba(180,130,60,.2); margin: 3px 0; }
 .lp-item.view-btn.active { background: rgba(180,130,20,.18); color: #ffd878; font-weight: 600; }
+.lp-item.lp-soon { opacity: .38; cursor: not-allowed; }
+.lp-item.lp-soon:hover { background: none !important; color: rgba(200,168,100,.9) !important; }
 .lp-item.lp-chk { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
 .lp-item.lp-chk input[type="checkbox"] { accent-color: #ffd878; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
 
@@ -134,7 +136,7 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 }
 .hp-row > span:last-child { font-size: .68rem; color: rgba(200,168,100,.8); }
 
-/* ══ KARUZELA – pionowa, po prawej, bez tła ═════════ */
+/* ══ KARUZELA – pionowa, po prawej ══════════════════ */
 #carousel-wrap {
   position: fixed;
   top: 0; right: 10px; bottom: 0;

@@ -100,11 +100,11 @@
         <span class="ci-lbl">Widok</span>
       </button>
       <div class="lp-drop" id="lp-drop-widok">
-        <button class="lp-item view-btn active" data-view="basic" onclick="App.switchView('basic')">📌 Podstawowy</button>
-        <button class="lp-item view-btn" data-view="party" onclick="App.switchView('party')">🏛️ Partie</button>
-        <button class="lp-item view-btn" data-view="time" onclick="App.switchView('time')">📅 Czas</button>
-        <button class="lp-item view-btn" data-view="law" onclick="App.switchView('law')">⚖️ Ustawy</button>
-        <button class="lp-item view-btn" data-view="force" onclick="App.switchView('force')">🕸️ Sieć</button>
+        <button class="lp-item view-btn lp-soon" data-view="basic" title="wkrótce dostępne">📌 Podstawowy</button>
+        <button class="lp-item view-btn lp-soon" data-view="party" title="wkrótce dostępne">🏛️ Partie</button>
+        <button class="lp-item view-btn lp-soon" data-view="time"  title="wkrótce dostępne">📅 Czas</button>
+        <button class="lp-item view-btn lp-soon" data-view="law"   title="wkrótce dostępne">⚖️ Ustawy</button>
+        <button class="lp-item view-btn lp-soon" data-view="force" title="wkrótce dostępne">🕸️ Sieć</button>
       </div>
     </div>
     <!-- Ustawienia -->
@@ -259,13 +259,6 @@ document.addEventListener('click', e => {
 });
 
 // ── Narzędzia ────────────────────────────────────────
-const HINTS = {
-  select: 'Przeciągaj karty myszką',
-  pin:    'Kliknij kartę aby wbić pinezkę',
-  thread: 'Przeciągnij od pinezki do pinezki',
-  group:  'Zaznacz karty, potem „Utwórz grupę"',
-  delete: 'Kliknij kartę, pinezkę lub nitkę',
-};
 window.setToolUI = (tool) => {
   AppModule.setTool(tool);
   document.querySelectorAll('.ci-tool[data-tool]').forEach(b => b.classList.toggle('active-tool', b.dataset.tool === tool));
