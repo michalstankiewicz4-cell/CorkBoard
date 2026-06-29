@@ -138,8 +138,7 @@ function getVisibleThreadsWithMap(connectedSet, pinMap) {
 }
 
 function getConnectedCards(cardId, depth = 3) {
-  const pinMap = {};
-  state.pins.forEach(p => { pinMap[p.id] = p; });
+  const pinMap = buildPinMap(state.pins);
   const cardPins = {};
   state.pins.forEach(p => {
     if (!cardPins[p.cardId]) cardPins[p.cardId] = [];
@@ -197,6 +196,7 @@ function bindEvents() {
         [...multiSelected].forEach(id => {
           state.pins.filter(p => p.cardId === id).forEach(p => {
             state.threads = state.threads.filter(t => t.fromPin !== p.id && t.toPin !== p.id);
+            canvas.querySelector(`.pin[data-id="${p.id}"]`)?.remove();
           });
           state.pins  = state.pins.filter(p => p.cardId !== id);
           state.cards = state.cards.filter(c => c.id !== id);
@@ -266,8 +266,9 @@ function onMouseDown(e) {
       const { x: mx, y: my } = toCanvas(e.clientX, e.clientY);
       multiDragOffsets = new Map();
       multiSelected.forEach(id => {
-        const c = state.cards.find(c => c.id === id);
-        if (c) multiDragOffsets.set(id, { dx: c.x - mx, dy: c.y - my });
+        const c  = state.cards.find(c => c.id === id);
+        const el = canvas.querySelector(`.card[data-id="${id}"]`);
+        if (c && el) multiDragOffsets.set(id, { dx: c.x - mx, dy: c.y - my, card: c, el, cardW: el.offsetWidth });
       });
       e.preventDefault(); return;
     }
@@ -323,13 +324,10 @@ function applyMove() {
   if (multiDragOffsets) {
     const { x, y } = toCanvas(lastMoveX, lastMoveY);
     multiDragOffsets.forEach((off, cid) => {
-      const card = state.cards.find(c => c.id === cid);
-      if (!card) return;
-      card.x = x + off.dx;
-      card.y = y + off.dy;
-      const el = canvas.querySelector(`.card[data-id="${cid}"]`);
-      if (el) { el.style.left = card.x + 'px'; el.style.top = card.y + 'px'; }
-      syncPinsOfCard(cid, card);
+      off.card.x = x + off.dx;
+      off.card.y = y + off.dy;
+      off.el.style.left = off.card.x + 'px'; off.el.style.top = off.card.y + 'px';
+      syncPinsOfCard(cid, off.card, off.cardW);
     });
     scheduleThreadRender();
     return;
@@ -1044,12 +1042,16 @@ function readModalForm(type) {
 
 // ── Eksport / Import ──────────────────────────────────────
 export async function doExportJSON() { await exportJSON(state); }
+function maxIdFromData(data) {
+  const all = [...data.cards, ...data.pins, ...data.threads];
+  const nums = all.map(e => { const n = parseInt((e.id.match(/\d+$/) || [0])[0]); return isNaN(n) ? 0 : n; });
+  return Math.max(300, ...nums) + 1;
+}
 export function doImportJSON() {
   importJSON(data => {
     pushHistory();
     state.cards=data.cards; state.pins=data.pins; state.threads=data.threads;
-    const numIds = data.cards.map(c => { const n = parseInt((c.id.match(/\d+$/) || [0])[0]); return isNaN(n) ? 0 : n; });
-    state.nextId = Math.max(300, ...numIds) + 1;
+    state.nextId = maxIdFromData(data);
     renderAll(); save(); scheduleMinimap();
   });
 }
@@ -1057,8 +1059,7 @@ export function doImportPNG() {
   importPNG(data => {
     pushHistory();
     state.cards=data.cards; state.pins=data.pins; state.threads=data.threads;
-    const numIds = data.cards.map(c => { const n = parseInt((c.id.match(/\d+$/) || [0])[0]); return isNaN(n) ? 0 : n; });
-    state.nextId = Math.max(300, ...numIds) + 1;
+    state.nextId = maxIdFromData(data);
     renderAll(); save(); scheduleMinimap();
   });
 }
