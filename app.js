@@ -356,9 +356,9 @@ function onMouseUp(e) {
 }
 
 function onDblClick(e) {
-  // Podwójny klik na tablicy (nie na karcie) = szybka notatka
   const card = e.target.closest('.card');
-  if (card) return;
+  if (card) { openEditModal(card.dataset.id); return; }
+  // Podwójny klik na pustej tablicy = szybka notatka
   const { x, y } = toCanvas(e.clientX, e.clientY);
   const id = addCard('note', { text: '', color: state.selectedNoteColor }, x, y);
   // Otwórz od razu edytor
