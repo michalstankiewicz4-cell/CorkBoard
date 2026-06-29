@@ -70,7 +70,7 @@ export function init() {
   const saved    = loadState();
   if (fromHash && fromHash.cards.length) {
     state = { ...state, ...fromHash };
-    state.nextId = 300;
+    state.nextId = maxIdFromData(fromHash);
     history.replaceState(null, '', location.pathname + location.search);
   } else if (saved && saved.cards && saved.cards.length) {
     state = { ...state, ...saved };
