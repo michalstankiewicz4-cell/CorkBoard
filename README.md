@@ -12,18 +12,19 @@ An interactive detective-style investigation board built with vanilla JavaScript
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  [?]                                           [📌] [🧵]    │
-│  [📁]                   CORKBOARD              [👤] [❓]    │
-│  [🗺]                                           [🏛️] ...    │
-│                                                             │
-│              cards · pins · threads                         │
+│  [📁]                                          [📌] [🧵]    │
+│  [🗺]               CORKBOARD                  [👤] [❓]    │
+│  [⚙️]                                           [🏛️] ...    │
+│  [🌟]                                                        │
+│  [?]               cards · pins · threads                   │
 │                                                             │
 │  [minimap]                                                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-- **Left panel** — help, file, view, settings
-- **Right carousel** — tools and card types
+- **Left panel** — file, view, settings, author, help (with background matching the top bar)
+- **Right carousel** — tools and card types (with scroll arrows when needed)
+- **Top bar** — zoom out / center / zoom in
 - **Minimap** — bottom-left corner, overview of the entire board
 
 ---
@@ -41,6 +42,7 @@ Each card represents an element of the investigation. Available types:
 | **News** | Press article with source and link |
 | **Note** | Colored sticky note with free text |
 | **Date** | Event with a date on a colored background |
+| **YouTube** | Embedded YouTube video player |
 
 ### Adding cards
 
@@ -86,6 +88,7 @@ Threads and pins always render **above cards** (z-index).
 | Drag empty space (LMB) | Pan the view |
 | Scroll | Zoom in / out |
 | Right-click | Context menu |
+| `Ctrl+0` | Reset view to origin |
 
 ---
 
@@ -154,12 +157,13 @@ History stores up to 50 steps. Every change (add, delete, move card, pin, thread
 
 | Option | Description |
 |---|---|
+| **New board** | Clears the board (with confirmation) |
 | **Export JSON** | Downloads a `.json` file of the entire board |
 | **Import JSON** | Loads a board from a `.json` file |
 | **Save PNG** | Downloads a screenshot of the board as an image |
+| **Restore from PNG** | Restores board state from a previously exported PNG |
 | **Copy URL** | Encodes the board in a URL (clipboard) — shareable link |
 | **Reset to example** | Restores the built-in demo data |
-| **Clear board** | Deletes everything |
 
 Board state is automatically saved to the browser's `localStorage`.
 
@@ -171,9 +175,10 @@ Board state is automatically saved to the browser's `localStorage`.
 |---|---|
 | `Ctrl+Z` | Undo |
 | `Ctrl+Y` | Redo |
+| `Ctrl+0` | Reset view |
 | `Delete` | Delete selected cards |
 | `Shift+Click` | Multi-select cards |
-| `Esc` | Cancel selection / close filter |
+| `Esc` | Cancel selection / close filter / close menus |
 
 ---
 
@@ -199,6 +204,7 @@ corkboard/
 
 - 🃏 Card creator — custom card templates
 - 🎨 Theme / board appearance switcher
+- 🗺 Auto views (parties, timeline, network, acts)
 - 🧭 Navigation (breadcrumbs, view history)
 - ⚙️ Simple / Pro mode toggle
 - 🔌 External app integrations
@@ -239,18 +245,19 @@ Interaktywna tablica śledcza w stylu detektywistycznym — budowana w czystym J
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  [?]                                           [📌] [🧵]    │
-│  [📁]                  TABLICA KORKOWA         [👤] [❓]    │
-│  [🗺]                                           [🏛️] ...    │
-│                                                             │
-│              karty · pinezki · nitki                        │
+│  [📁]                                          [📌] [🧵]    │
+│  [🗺]              TABLICA KORKOWA             [👤] [❓]    │
+│  [⚙️]                                           [🏛️] ...    │
+│  [🌟]                                                        │
+│  [?]           karty · pinezki · nitki                      │
 │                                                             │
 │  [minimap]                                                  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-- **Lewy panel** — pomoc, plik, widok, ustawienia
-- **Prawa karuzela** — narzędzia i typy kart
+- **Lewy panel** — plik, widok, ustawienia, autor, pomoc (z tłem jak górny pasek)
+- **Prawa karuzela** — narzędzia i typy kart (ze strzałkami przewijania gdy trzeba)
+- **Górny pasek** — oddalanie / centrum / przybliżanie
 - **Minimap** — lewy dolny róg, podgląd całej tablicy
 
 ---
@@ -268,6 +275,7 @@ Każda karta reprezentuje element śledztwa. Dostępne typy:
 | **News** | Artykuł prasowy ze źródłem i linkiem |
 | **Notatka** | Kolorowa karteczka z dowolnym tekstem |
 | **Data** | Zdarzenie z datą na kolorowym tle |
+| **Film YT** | Odtwarzacz wideo YouTube osadzony na karcie |
 
 ### Dodawanie kart
 
@@ -313,6 +321,7 @@ Nitki i pinezki zawsze renderują się **ponad kartami** (z-index).
 | Przeciągnij puste miejsce (LPM) | Przesuń widok (panning) |
 | Scroll | Zoom in / out |
 | Prawy klik | Menu kontekstowe |
+| `Ctrl+0` | Resetuj widok do punktu startowego |
 
 ---
 
@@ -381,12 +390,13 @@ Menu **Plik** (lewy panel):
 
 | Opcja | Opis |
 |---|---|
+| **Nowa tablica** | Czyści tablicę (z potwierdzeniem) |
 | **Eksportuj JSON** | Pobiera plik `.json` z całą tablicą |
 | **Importuj JSON** | Wczytuje tablicę z pliku `.json` |
 | **Zapisz PNG** | Pobiera zrzut tablicy jako obraz |
+| **Przywróć z PNG** | Odtwarza stan tablicy z wcześniej wyeksportowanego PNG |
 | **Kopiuj URL** | Koduje tablicę w URL (schowek) — można udostępnić link |
 | **Reset do przykładu** | Przywraca przykładowe dane demonstracyjne |
-| **Wyczyść tablicę** | Usuwa wszystko |
 
 Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
 
@@ -398,9 +408,10 @@ Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
 |---|---|
 | `Ctrl+Z` | Cofnij |
 | `Ctrl+Y` | Ponów |
+| `Ctrl+0` | Resetuj widok |
 | `Delete` | Usuń zaznaczone karty |
 | `Shift+Klik` | Zaznacz wiele kart |
-| `Esc` | Anuluj wybór / zamknij filtr |
+| `Esc` | Anuluj wybór / zamknij filtr / zamknij menu |
 
 ---
 
@@ -426,6 +437,7 @@ corkboard/
 
 - 🃏 Kreator kartek — własne szablony kart do przyczepienia na tablicy
 - 🎨 Zmiana stylu / wyglądu tablicy
+- 🗺 Widoki automatyczne (partie, czas, sieć, ustawy)
 - 🧭 Nawigacja (breadcrumbs, historia widoków)
 - ⚙️ Przełącznik Simple / Pro
 - 🔌 Integracja z programami zewnętrznymi
