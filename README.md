@@ -2,7 +2,7 @@
 
 Created by vibecoding · [Live demo](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.5.0
 
-<img width="1915" height="946" alt="image" src="https://github.com/user-attachments/assets/7d34b93c-0ec4-4d66-b5b5-9cc37e0e66da" />
+<img width="1278" height="798" alt="image" src="https://github.com/user-attachments/assets/9afd58d5-bd36-4f1d-8f8f-2b6db8cedc37" />
 
 An interactive detective-style investigation board built with vanilla JavaScript (ES modules) — no frameworks, no build tools. Open `index.html` in a browser and you're ready to go.
 
