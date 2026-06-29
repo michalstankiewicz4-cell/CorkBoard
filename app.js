@@ -302,56 +302,60 @@ function onMiddleDown(e) {
 }
 
 let moveRafId = null;
+let lastMoveX = 0, lastMoveY = 0;
+
 function onMouseMove(e) {
   if (!panning && !dragging && !multiDragOffsets && !threadStart) return;
-  const ex = e.clientX, ey = e.clientY;
+  lastMoveX = e.clientX; lastMoveY = e.clientY;
   if (moveRafId) return;
-  moveRafId = requestAnimationFrame(() => {
-    moveRafId = null;
-    if (panning) {
-      pan.x = panning.panX0 + (ex - panning.startX);
-      pan.y = panning.panY0 + (ey - panning.startY);
-      applyTransform();
-      scheduleMinimap();
-      return;
-    }
-    if (multiDragOffsets) {
-      const { x, y } = toCanvas(ex, ey);
-      multiDragOffsets.forEach((off, cid) => {
-        const card = state.cards.find(c => c.id === cid);
-        if (!card) return;
-        card.x = x + off.dx;
-        card.y = y + off.dy;
-        const el = canvas.querySelector(`.card[data-id="${cid}"]`);
-        if (el) { el.style.left = card.x + 'px'; el.style.top = card.y + 'px'; }
-        syncPinsOfCard(cid, card);
-      });
-      scheduleThreadRender();
-      return;
-    }
-    if (dragging) {
-      const { x: cx, y: cy } = toCanvas(ex, ey);
-      const x = cx - dragging.offsetX;
-      const y = cy - dragging.offsetY;
-      dragging.card.x = x; dragging.card.y = y;
-      dragging.el.style.left = x + 'px'; dragging.el.style.top = y + 'px';
-      syncPinsOfCard(dragging.cardId, dragging.card, dragging.cardW);
-      scheduleThreadRender();
-      return;
-    }
-    if (threadStart) {
-      const { x, y } = toCanvas(ex, ey);
-      drawTempThread(threadSvg, threadStart.x, threadStart.y, x, y, state.selectedThreadColor);
-    }
-  });
+  moveRafId = requestAnimationFrame(applyMove);
+}
+
+function applyMove() {
+  moveRafId = null;
+  if (panning) {
+    pan.x = panning.panX0 + (lastMoveX - panning.startX);
+    pan.y = panning.panY0 + (lastMoveY - panning.startY);
+    applyTransform();
+    scheduleMinimap();
+    return;
+  }
+  if (multiDragOffsets) {
+    const { x, y } = toCanvas(lastMoveX, lastMoveY);
+    multiDragOffsets.forEach((off, cid) => {
+      const card = state.cards.find(c => c.id === cid);
+      if (!card) return;
+      card.x = x + off.dx;
+      card.y = y + off.dy;
+      const el = canvas.querySelector(`.card[data-id="${cid}"]`);
+      if (el) { el.style.left = card.x + 'px'; el.style.top = card.y + 'px'; }
+      syncPinsOfCard(cid, card);
+    });
+    scheduleThreadRender();
+    return;
+  }
+  if (dragging) {
+    const { x: cx, y: cy } = toCanvas(lastMoveX, lastMoveY);
+    const x = cx - dragging.offsetX;
+    const y = cy - dragging.offsetY;
+    dragging.card.x = x; dragging.card.y = y;
+    dragging.el.style.left = x + 'px'; dragging.el.style.top = y + 'px';
+    syncPinsOfCard(dragging.cardId, dragging.card, dragging.cardW);
+    scheduleThreadRender();
+    return;
+  }
+  if (threadStart) {
+    const { x, y } = toCanvas(lastMoveX, lastMoveY);
+    drawTempThread(threadSvg, threadStart.x, threadStart.y, x, y, state.selectedThreadColor);
+  }
 }
 
 function onMouseUp(e) {
-  if (moveRafId) { cancelAnimationFrame(moveRafId); moveRafId = null; }
+  if (moveRafId) { cancelAnimationFrame(moveRafId); moveRafId = null; applyMove(); }
   if (panning) { panning = null; boardWrap.style.cursor = ''; checkCardsVisible(); return; }
   if (multiDragOffsets) { multiDragOffsets = null; save(); scheduleMinimap(); return; }
   if (dragging) {
-    canvas.querySelector(`.card[data-id="${dragging.cardId}"]`)?.classList.remove('dragging');
+    dragging.el.classList.remove('dragging');
     dragging = null;
     save();
     scheduleMinimap();
