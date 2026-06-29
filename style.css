@@ -69,10 +69,12 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 .lp-item.lp-chk input[type="checkbox"] { accent-color: #ffd878; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
 
 /* ── Ustawienia – body-class overrides ───────────── */
-body.no-thread-shadow #thread-svg g[filter] { filter: none !important; }
-body.no-card-shadow   .card                 { box-shadow: none !important; }
-body.no-drag-shadow   .card.dragging        { box-shadow: none !important; }
-body.ghost-drag       .card.dragging        { opacity: 0.3; }
+body.no-thread-shadow #thread-svg g[filter]              { filter: none !important; }
+body.no-card-shadow   .card                              { box-shadow: none !important; }
+body.no-drag-shadow   .card.dragging                     { box-shadow: none !important; }
+body.no-drag-shadow.card-dragging #thread-svg g[filter]  { filter: none !important; }
+body.ghost-drag .card.dragging                           { background: rgba(200,168,100,.06) !important; box-shadow: none !important; outline: 2px dashed rgba(200,168,100,.5) !important; outline-offset: 2px; }
+body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 
 /* ══ PANEL POMOCY ════════════════════════════════════ */
 #help-panel {

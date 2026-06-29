@@ -298,6 +298,7 @@ function onMouseDown(e) {
       hasThreads,
     };
     card.classList.add('dragging');
+    document.body.classList.add('card-dragging');
     selectCard(cid);
     e.preventDefault();
   } else if (!pin && e.button === 0 && state.tool === 'select') {
@@ -369,6 +370,7 @@ function onMouseUp(e) {
   if (multiDragOffsets) { multiDragOffsets = null; save(); scheduleMinimap(); return; }
   if (dragging) {
     dragging.el.classList.remove('dragging');
+    document.body.classList.remove('card-dragging');
     dragging = null;
     save();
     scheduleMinimap();
