@@ -106,6 +106,20 @@
         <button class="lp-item view-btn" data-view="force" onclick="App.switchView('force')">🕸️ Sieć</button>
       </div>
     </div>
+    <!-- Ustawienia -->
+    <div class="lp-group">
+      <button class="ci-tool" onclick="toggleLeftMenu('ustawienia')">
+        <span class="ci-ico">⚙️</span>
+        <span class="ci-lbl">Ustawienia</span>
+      </button>
+      <div class="lp-drop" id="lp-drop-ustawienia">
+        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-thread-shadow"> Wyłącz cienie nitek</label>
+        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-card-shadow"> Wyłącz cienie kartek</label>
+        <div class="lp-sep"></div>
+        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-drag-shadow"> Brak cieni przy przeciąganiu</label>
+        <label class="lp-item lp-chk"><input type="checkbox" id="set-ghost-drag"> Przeciągaj duchy kart</label>
+      </div>
+    </div>
     <!-- Autor -->
     <button class="ci-tool lp-autor-btn" onclick="toggleAutorPanel()">
       <span class="ci-ico">🌟</span>
@@ -292,6 +306,33 @@ boardWrap.addEventListener('drop', e => {
   const id = AppModule.addCard(type, data, x, y);
   setTimeout(() => AppModule.openAddModalForId?.(id), 80);
 });
+
+// ── Ustawienia ────────────────────────────────────────
+const SETTINGS_KEY = 'corkboard_settings_v1';
+const appSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+function applySettings() {
+  document.body.classList.toggle('no-thread-shadow', !!appSettings.noThreadShadow);
+  document.body.classList.toggle('no-card-shadow',   !!appSettings.noCardShadow);
+  document.body.classList.toggle('no-drag-shadow',   !!appSettings.noDragShadow);
+  document.body.classList.toggle('ghost-drag',       !!appSettings.ghostDrag);
+}
+const settingChkMap = {
+  'set-no-thread-shadow': 'noThreadShadow',
+  'set-no-card-shadow':   'noCardShadow',
+  'set-no-drag-shadow':   'noDragShadow',
+  'set-ghost-drag':       'ghostDrag',
+};
+Object.entries(settingChkMap).forEach(([id, key]) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.checked = !!appSettings[key];
+  el.addEventListener('change', () => {
+    appSettings[key] = el.checked;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
+    applySettings();
+  });
+});
+applySettings();
 
 // ── Boot ─────────────────────────────────────────────
 AppModule.init();

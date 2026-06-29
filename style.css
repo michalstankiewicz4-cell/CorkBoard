@@ -65,6 +65,14 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 .lp-item.lp-danger:hover { background: rgba(220,80,60,.1); color: #ff7060; }
 .lp-sep { height: 1px; background: rgba(180,130,60,.2); margin: 3px 0; }
 .lp-item.view-btn.active { background: rgba(180,130,20,.18); color: #ffd878; font-weight: 600; }
+.lp-item.lp-chk { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.lp-item.lp-chk input[type="checkbox"] { accent-color: #ffd878; width: 13px; height: 13px; flex-shrink: 0; cursor: pointer; }
+
+/* ── Ustawienia – body-class overrides ───────────── */
+body.no-thread-shadow #thread-svg g[filter] { filter: none !important; }
+body.no-card-shadow   .card                 { box-shadow: none !important; }
+body.no-drag-shadow   .card.dragging        { box-shadow: none !important; }
+body.ghost-drag       .card.dragging        { opacity: 0.3; }
 
 /* ══ PANEL POMOCY ════════════════════════════════════ */
 #help-panel {
