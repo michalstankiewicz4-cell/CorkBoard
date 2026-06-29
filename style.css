@@ -13,7 +13,7 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 /* ══ LEWY PANEL ══════════════════════════════════════ */
 #left-panel {
   position: fixed;
-  top: 0; left: 8px; bottom: 0;
+  top: 0; left: 10px; bottom: 0;
   z-index: 2000;
   display: flex; flex-direction: column;
   align-items: center;
@@ -21,8 +21,13 @@ html, body { height: 100%; overflow: hidden; background: #1a0e04; }
 }
 #left-inner {
   display: flex; flex-direction: column; align-items: center;
-  gap: 5px; padding: 7px 4px;
+  gap: 5px; padding: 7px;
   pointer-events: all;
+  margin-top: 10px;
+  background: rgba(18,10,3,.55);
+  border: 1px solid rgba(180,130,60,.25);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
 }
 .lp-q {
   font-family: var(--font-ui); font-weight: 900;
