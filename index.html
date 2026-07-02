@@ -83,6 +83,10 @@
       data-template='{"url":"","title":""}'>
       <span class="ci-ico">🎬</span><span class="ci-lbl" data-i18n="ci.video">YT Video</span>
     </div>
+    <div class="ci-bubble" draggable="true" data-type="image"
+      data-template='{"url":"","caption":""}'>
+      <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
+    </div>
   </div>
   <button id="carousel-arrow-down" class="carousel-arrow" onclick="carouselScroll(1)">▼</button>
 </div>
@@ -104,6 +108,8 @@
         <button class="lp-item" onclick="App.doExportPNG()" data-i18n="file.screenPNG">📸 Screen PNG</button>
         <button class="lp-item" onclick="App.doImportPNG()" data-i18n="file.restorePNG">🖼 Restore from PNG</button>
         <button class="lp-item" onclick="App.doShareURL()" data-i18n="file.copyURL">🔗 Copy URL</button>
+        <div class="lp-sep"></div>
+        <button class="lp-item" onclick="App.doImportNotes()" data-i18n="file.importNotes">📷 Import Notes</button>
         <div class="lp-sep"></div>
         <button class="lp-item lp-danger" onclick="App.resetToSample()" data-i18n="file.resetSample">↺ Reset to example</button>
       </div>
@@ -226,6 +232,25 @@
     </span>
     <span class="ci-lbl" data-i18n="zoom.in">Zoom in</span>
   </button>
+</div>
+
+<!-- ══ IMPORT NOTES OVERLAY ══ -->
+<div id="in-overlay" onclick="if(event.target===this)window._inClose()">
+  <div id="in-modal">
+    <div id="in-header">
+      <span id="in-title" data-i18n="in.title">Import Notes — select areas</span>
+      <span id="in-hint" data-i18n="in.hint">Draw rectangles to select areas</span>
+      <button class="in-mode-btn active" data-mode="image" onclick="window._inSetMode('image')" data-i18n="in.modeImage">🖼 Image</button>
+      <button class="in-mode-btn" data-mode="ocr" onclick="window._inSetMode('ocr')" data-i18n="in.modeOCR">🔤 OCR</button>
+      <button class="in-ctrl-btn" onclick="window._inClearAll()" data-i18n="in.clearAll">Clear all</button>
+      <button class="in-ctrl-btn in-add" onclick="window._inAddToBoard()" data-i18n="in.addToBoard">Add to Board</button>
+      <button id="in-close-btn" onclick="window._inClose()">✕</button>
+    </div>
+    <div id="in-body">
+      <div id="in-canvas-wrap"><canvas id="in-canvas"></canvas></div>
+      <div id="in-list"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Author panel -->

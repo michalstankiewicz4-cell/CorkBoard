@@ -50,6 +50,9 @@ let vpW = window.innerWidth, vpH = window.innerHeight;
 // Minimap
 let minimap = null;
 
+// ── Import Notes state ────────────────────────────────────
+const IN = { img: null, scale: 1, selections: [], nextId: 1, drawing: null, mode: 'image' };
+
 // Undo / Redo
 const MAX_HISTORY = 50;
 const undoStack = [];
@@ -859,6 +862,183 @@ function openThreadEditModal(threadId) {
 
 window.deleteThreadUI = (id) => { deleteThread(id); hideModal(); };
 
+// ── Image file preview helper (called from modal file input) ──
+window._loadImgPreview = function(input, directUrl) {
+  const prev = document.getElementById('mf-img-preview');
+  const urlEl = document.getElementById('mf-url');
+  if (directUrl !== undefined) {
+    if (prev) prev.innerHTML = directUrl
+      ? `<img src="${directUrl}" style="max-width:220px;max-height:150px;border-radius:5px;object-fit:contain"/>`
+      : '';
+    return;
+  }
+  const file = input?.files?.[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    if (urlEl) urlEl.value = ev.target.result;
+    if (prev) prev.innerHTML = `<img src="${ev.target.result}" style="max-width:220px;max-height:150px;border-radius:5px;object-fit:contain"/>`;
+  };
+  reader.readAsDataURL(file);
+};
+
+// ── Import Notes ──────────────────────────────────────────
+export function doImportNotes() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/*';
+  input.onchange = e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => openInOverlay(img);
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function openInOverlay(img) {
+  IN.img = img; IN.selections = []; IN.nextId = 1; IN.drawing = null; IN.mode = 'image';
+  const overlay = document.getElementById('in-overlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    const wrap = document.getElementById('in-canvas-wrap');
+    const maxW = wrap.clientWidth - 20;
+    const maxH = wrap.clientHeight - 20;
+    IN.scale = Math.min(maxW / img.width, maxH / img.height, 1);
+    const cv = document.getElementById('in-canvas');
+    cv.width  = Math.round(img.width  * IN.scale);
+    cv.height = Math.round(img.height * IN.scale);
+    inRedraw();
+    inUpdateList();
+    cv.onmousedown  = inMouseDown;
+    cv.onmousemove  = inMouseMove;
+    cv.onmouseup    = inMouseUp;
+    cv.onmouseleave = () => { IN.drawing = null; inRedraw(); };
+  });
+}
+
+function inRedraw() {
+  const cv = document.getElementById('in-canvas'); if (!cv || !IN.img) return;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.drawImage(IN.img, 0, 0, cv.width, cv.height);
+  IN.selections.forEach((s, i) => {
+    const col = s.type === 'image' ? '#4fc3f7' : '#aed581';
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([]);
+    ctx.strokeRect(s.x, s.y, s.w, s.h);
+    ctx.fillStyle = col;
+    ctx.fillRect(s.x, s.y - 18, 22, 18);
+    ctx.fillStyle = '#000'; ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(i + 1, s.x + 5, s.y - 3);
+  });
+  if (IN.drawing) {
+    const col = IN.mode === 'image' ? '#4fc3f7' : '#aed581';
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([6, 3]);
+    ctx.strokeRect(IN.drawing.x, IN.drawing.y, IN.drawing.w, IN.drawing.h);
+    ctx.setLineDash([]);
+  }
+}
+
+function inMouseDown(e) {
+  const r = e.currentTarget.getBoundingClientRect();
+  IN.drawing = { x: e.clientX - r.left, y: e.clientY - r.top, w: 0, h: 0 };
+}
+function inMouseMove(e) {
+  if (!IN.drawing) return;
+  const r = e.currentTarget.getBoundingClientRect();
+  IN.drawing.w = (e.clientX - r.left) - IN.drawing.x;
+  IN.drawing.h = (e.clientY - r.top)  - IN.drawing.y;
+  inRedraw();
+}
+function inMouseUp(e) {
+  if (!IN.drawing) return;
+  const { x, y, w, h } = IN.drawing; IN.drawing = null;
+  if (Math.abs(w) < 10 || Math.abs(h) < 10) { inRedraw(); return; }
+  const nx = w < 0 ? x + w : x, ny = h < 0 ? y + h : y;
+  const nw = Math.abs(w), nh = Math.abs(h);
+  const crop = document.createElement('canvas');
+  crop.width = nw; crop.height = nh;
+  crop.getContext('2d').drawImage(IN.img, nx / IN.scale, ny / IN.scale, nw / IN.scale, nh / IN.scale, 0, 0, nw, nh);
+  const sel = { id: IN.nextId++, x: nx, y: ny, w: nw, h: nh, type: IN.mode, dataUrl: crop.toDataURL(), ocrText: '' };
+  IN.selections.push(sel);
+  inRedraw(); inUpdateList();
+  if (sel.type === 'ocr') inRunOCR(sel);
+}
+
+function inUpdateList() {
+  const list = document.getElementById('in-list'); if (!list) return;
+  if (IN.selections.length === 0) {
+    list.innerHTML = `<div class="in-empty">${t('in.noSel')}</div>`; return;
+  }
+  list.innerHTML = IN.selections.map((s, i) => `
+    <div class="in-sel">
+      <div class="in-sel-num">${i + 1}</div>
+      <img class="in-sel-thumb" src="${s.dataUrl}" alt=""/>
+      <div class="in-sel-row">
+        <button class="in-tbtn${s.type==='image'?' active':''}" onclick="window._inType(${s.id},'image')">🖼</button>
+        <button class="in-tbtn${s.type==='ocr'?' active':''}" onclick="window._inType(${s.id},'ocr')">🔤</button>
+        <button class="in-del" onclick="window._inDel(${s.id})">✕</button>
+      </div>
+      ${s.type==='ocr' ? `<div class="in-ocr-text">${s.ocrText ? esc(s.ocrText) : `<em>${t('in.recognizing')}</em>`}</div>` : ''}
+    </div>`).join('');
+}
+
+async function inRunOCR(sel) {
+  try {
+    if (!window.Tesseract) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
+        s.onload = res; s.onerror = rej; document.head.appendChild(s);
+      });
+    }
+    const { data: { text } } = await Tesseract.recognize(sel.dataUrl, 'eng+pol');
+    sel.ocrText = text.trim();
+  } catch (err) {
+    console.warn('OCR error:', err);
+    sel.ocrText = '';
+  }
+  inUpdateList();
+}
+
+window._inType = (id, type) => {
+  const sel = IN.selections.find(s => s.id === id); if (!sel) return;
+  sel.type = type;
+  if (type === 'ocr' && !sel.ocrText) inRunOCR(sel);
+  else inUpdateList();
+  inRedraw();
+};
+window._inDel = (id) => {
+  IN.selections = IN.selections.filter(s => s.id !== id);
+  inRedraw(); inUpdateList();
+};
+window._inSetMode = (mode) => {
+  IN.mode = mode;
+  document.querySelectorAll('.in-mode-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+};
+window._inClearAll = () => { IN.selections = []; IN.nextId = 1; inRedraw(); inUpdateList(); };
+window._inClose = () => {
+  document.getElementById('in-overlay').style.display = 'none';
+  IN.img = null; IN.selections = [];
+};
+window._inAddToBoard = () => {
+  if (IN.selections.length === 0) return;
+  const CARD_W = 220, GAP = 16;
+  const total = IN.selections.length;
+  const startX = (-pan.x + vpW / 2) / zoom - (total * (CARD_W + GAP)) / 2;
+  const startY = (-pan.y + vpH / 2) / zoom - 120;
+  IN.selections.forEach((sel, i) => {
+    const x = startX + i * (CARD_W + GAP);
+    if (sel.type === 'image') addCard('image', { url: sel.dataUrl, caption: '' }, x, startY);
+    else addCard('note', { text: sel.ocrText || '', color: 'y' }, x, startY);
+  });
+  document.getElementById('in-overlay').style.display = 'none';
+  IN.img = null; IN.selections = [];
+};
+
 // ── Views ────────────────────────────────────────────────
 export async function switchView(view) {
   state.currentView = view;
@@ -1027,11 +1207,22 @@ function buildModalHTML(type, d) {
       <div class="modal-field"><label>${t('field.ytLink')}</label><input id="mf-url" placeholder="https://youtu.be/..." value="${esc(d?.url)}"/></div>
       <div class="modal-field"><label>${t('field.title')}</label><input id="mf-title" value="${esc(d?.title)}"/></div>`;
   }
+  if (type==='image') {
+    fields=`
+      <div class="modal-field"><label>${t('field.imageFile')}</label>
+        <input type="file" id="mf-imgfile" accept="image/*" style="color:#c8a870" onchange="window._loadImgPreview(this)"/></div>
+      <div class="modal-field"><label>${t('field.imageURL')}</label>
+        <input id="mf-url" value="${esc(d?.url)}" placeholder="https://..." oninput="window._loadImgPreview(null,this.value)"/></div>
+      <div id="mf-img-preview" style="text-align:center;margin:4px 0;min-height:40px">
+        ${d?.url ? `<img src="${esc(d.url)}" style="max-width:220px;max-height:150px;border-radius:5px;object-fit:contain"/>` : ''}</div>
+      <div class="modal-field"><label>${t('field.caption')}</label><input id="mf-caption" value="${esc(d?.caption)}"/></div>`;
+  }
   const titles = {
     person:  t('modal.person'),  unknown: t('modal.unknown'),
     party:   t('modal.party'),   law:     t('modal.law'),
     news:    t('modal.news'),    note:    t('modal.note'),
     date:    t('modal.date'),    video:   t('modal.video'),
+    image:   t('modal.image'),
   };
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
@@ -1067,6 +1258,10 @@ function readModalForm(type) {
   if (type==='video') {
     const url=v('mf-url'); if(!url) return alert(t('alert.enterYTLink')),null;
     return { url, title:v('mf-title') };
+  }
+  if (type==='image') {
+    const url=v('mf-url'); if(!url) return alert(t('alert.noImage')),null;
+    return { url, caption:v('mf-caption') };
   }
   return null;
 }

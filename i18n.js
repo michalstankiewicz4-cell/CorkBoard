@@ -190,6 +190,25 @@ const translations = {
     'card.dateDefault':    'Date',
     'card.videoTitle':     'YouTube Video',
     'card.noYTLink':       'No YouTube link',
+
+    // image card
+    'modal.image':       'Image',
+    'ci.image':          'Image',
+    'field.imageFile':   'Upload file',
+    'field.imageURL':    'Or image URL',
+    'field.caption':     'Caption',
+    'alert.noImage':     'Provide an image file or URL.',
+
+    // import notes overlay
+    'file.importNotes':  '📷 Import Notes',
+    'in.title':          'Import Notes — select areas',
+    'in.hint':           'Draw rectangles to select areas',
+    'in.modeImage':      '🖼 Image',
+    'in.modeOCR':        '🔤 OCR',
+    'in.clearAll':       'Clear all',
+    'in.addToBoard':     'Add to Board',
+    'in.noSel':          'Draw rectangles on the image to select areas.',
+    'in.recognizing':    'Recognizing…',
   },
 
   pl: {
@@ -361,6 +380,23 @@ const translations = {
     'card.dateDefault':    'Data',
     'card.videoTitle':     'Film YouTube',
     'card.noYTLink':       'Brak linku YouTube',
+
+    'modal.image':       'Obrazek',
+    'ci.image':          'Obrazek',
+    'field.imageFile':   'Wgraj plik',
+    'field.imageURL':    'Lub URL obrazka',
+    'field.caption':     'Podpis',
+    'alert.noImage':     'Podaj plik lub URL obrazka.',
+
+    'file.importNotes':  '📷 Importuj notatki',
+    'in.title':          'Importuj notatki — zaznacz obszary',
+    'in.hint':           'Rysuj prostokąty aby wybrać obszary',
+    'in.modeImage':      '🖼 Obrazek',
+    'in.modeOCR':        '🔤 OCR',
+    'in.clearAll':       'Wyczyść',
+    'in.addToBoard':     'Dodaj do tablicy',
+    'in.noSel':          'Rysuj prostokąty na obrazku aby wybrać obszary.',
+    'in.recognizing':    'Rozpoznaję…',
   },
 };
 

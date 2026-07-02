@@ -112,6 +112,7 @@ function buildCardHTML(card) {
     case 'note':    return buildNote(d);
     case 'date':    return buildDate(d);
     case 'video':   return buildVideo(d);
+    case 'image':   return buildImage(d);
     default:        return '<div style="padding:10px;color:#333">?</div>';
   }
 }
@@ -180,6 +181,16 @@ function buildDate(d) {
     <div class="card-date" style="background:${noteColor(d.color)}">
       <div class="cd-label">${esc(d.label) || t('card.dateDefault')}</div>
       <div class="cd-date">${esc(d.date)}</div>
+    </div>`;
+}
+
+function buildImage(d) {
+  return `
+    <div class="card-image">
+      ${d.url
+        ? `<img src="${esc(d.url)}" alt="${esc(d.caption)}" draggable="false"/>`
+        : `<div class="ci-img-empty">🖼️</div>`}
+      ${d.caption ? `<div class="ci-caption">${esc(d.caption)}</div>` : ''}
     </div>`;
 }
 
