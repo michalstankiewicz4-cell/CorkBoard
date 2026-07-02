@@ -114,7 +114,10 @@ const translations = {
     'opt.performance': '⚡ Performance',
     'opt.language':    '🌐 Language',
     'opt.objects':     '🃏 Objects',
+    'opt.interface':   '🖥 Interface',
     'opt.reset':       '↺ Reset to defaults',
+    'opt.showAuthor':  'Show Author button',
+    'opt.showView':    'Show View button',
 
     // file menu
     'file.newBoard':    '📄 New board',
@@ -320,7 +323,10 @@ const translations = {
     'opt.performance': '⚡ Wydajność',
     'opt.language':    '🌐 Język',
     'opt.objects':     '🃏 Obiekty',
+    'opt.interface':   '🖥 Interfejs',
     'opt.reset':       '↺ Przywróć domyślne',
+    'opt.showAuthor':  'Pokaż przycisk Autor',
+    'opt.showView':    'Pokaż przycisk Widok',
 
     'file.newBoard':    '📄 Nowa tablica',
     'file.openJSON':    '📂 Otwórz JSON',

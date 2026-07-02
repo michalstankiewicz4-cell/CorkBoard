@@ -115,7 +115,7 @@
       </div>
     </div>
     <!-- View -->
-    <div class="lp-group">
+    <div class="lp-group" id="lp-group-view">
       <button class="ci-tool" onclick="toggleLeftMenu('widok')">
         <span class="ci-ico">🗺</span>
         <span class="ci-lbl" data-i18n="lp.view">View</span>
@@ -389,6 +389,26 @@ Object.entries(settingChkMap).forEach(([id, key]) => {
 });
 applySettings();
 
+// ── Interface settings ────────────────────────────────
+function applyInterfaceSettings() {
+  const showAuthor = appSettings.showAuthor !== false;
+  const showView   = !!appSettings.showView;
+  const autorBtn  = document.querySelector('.lp-autor-btn');
+  const viewGroup = document.getElementById('lp-group-view');
+  if (autorBtn)  autorBtn.style.display  = showAuthor ? '' : 'none';
+  if (viewGroup) viewGroup.style.display = showView   ? '' : 'none';
+}
+[['set-show-author','showAuthor',true],['set-show-view','showView',false]].forEach(([id,key,def]) => {
+  const el = document.getElementById(id); if (!el) return;
+  el.checked = appSettings[key] !== undefined ? !!appSettings[key] : def;
+  el.addEventListener('change', () => {
+    appSettings[key] = el.checked;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
+    applyInterfaceSettings();
+  });
+});
+applyInterfaceSettings();
+
 // ── Options Modal ─────────────────────────────────────
 const CAROUSEL_KEY = 'corkboard_carousel_v1';
 const CAROUSEL_META = [
@@ -526,6 +546,7 @@ AppModule.init();
       <button class="opt-tab active" data-tab="performance" onclick="window._optTab('performance')" data-i18n="opt.performance">⚡ Performance</button>
       <button class="opt-tab" data-tab="language" onclick="window._optTab('language')" data-i18n="opt.language">🌐 Language</button>
       <button class="opt-tab" data-tab="objects" onclick="window._optTab('objects')" data-i18n="opt.objects">🃏 Objects</button>
+      <button class="opt-tab" data-tab="interface" onclick="window._optTab('interface')" data-i18n="opt.interface">🖥 Interface</button>
     </div>
     <div id="opt-body">
       <!-- Performance -->
@@ -554,6 +575,11 @@ AppModule.init();
         <div id="opt-obj-list"></div>
         <div class="opt-sep"></div>
         <button class="opt-reset-btn" onclick="window._optReset()" data-i18n="opt.reset">↺ Reset to defaults</button>
+      </div>
+      <!-- Interface -->
+      <div class="opt-pane" id="opt-pane-interface">
+        <label class="opt-chk"><input type="checkbox" id="set-show-author" checked> <span data-i18n="opt.showAuthor">Show Author button</span></label>
+        <label class="opt-chk"><input type="checkbox" id="set-show-view"> <span data-i18n="opt.showView">Show View button</span></label>
       </div>
     </div>
   </div>
