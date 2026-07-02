@@ -702,11 +702,16 @@ export function showPinColorPicker(anchorEl) {
       hidePinColorPicker();
     });
   });
-  setTimeout(() => document.addEventListener('click', hidePinColorPicker, { once: true }), 0);
+  setTimeout(() => {
+    _pinDismiss = () => hidePinColorPicker();
+    document.addEventListener('click', _pinDismiss, { once: true });
+  }, 0);
 }
 
+let _pinDismiss = null;
 export function hidePinColorPicker() {
   document.getElementById('pin-color-picker')?.remove();
+  if (_pinDismiss) { document.removeEventListener('click', _pinDismiss); _pinDismiss = null; }
 }
 
 // ── Thread color picker (opened from carousel) ───────────
@@ -772,11 +777,16 @@ export function showThreadColorPicker(anchorEl) {
   }));
 
   function activate() { setTool('thread'); window.setToolUI?.('thread'); }
-  setTimeout(() => document.addEventListener('click', hideThreadColorPicker, { once: true }), 0);
+  setTimeout(() => {
+    _threadDismiss = () => hideThreadColorPicker();
+    document.addEventListener('click', _threadDismiss, { once: true });
+  }, 0);
 }
 
+let _threadDismiss = null;
 export function hideThreadColorPicker() {
   document.getElementById('thread-color-picker')?.remove();
+  if (_threadDismiss) { document.removeEventListener('click', _threadDismiss); _threadDismiss = null; }
 }
 
 // ── Pins ─────────────────────────────────────────────────
