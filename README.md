@@ -220,6 +220,16 @@ corkboard/
 
 ## Roadmap
 
+### Planned features
+
+- 🎨 **SVG Paint** — in-board drawing card with editable SVG objects (shapes, freehand, parametric curves: sinusoids, parabolas)
+- 📊 **Table card** — paste or OCR a table, display it as a formatted card
+- 🖌️ **Classic mini paint** — pixel/raster drawing card
+- 🔊 **Sound player card** — attach and play audio files directly on the board
+- 🎞️ **Animated GIF card** — display animated GIFs as board objects
+
+### Other ideas
+
 - 🃏 Card creator — custom card templates
 - 🎨 Theme / board appearance switcher
 - 🗺 Auto views (parties, timeline, network, acts)
@@ -470,6 +480,16 @@ corkboard/
 ---
 
 ## W przygotowaniu
+
+### Planowane funkcje
+
+- 🎨 **SVG Paint** — karta do rysowania z edytowalnymi obiektami SVG (kształty, odręczne, krzywe parametryczne: sinusoidy, parabole)
+- 📊 **Karta Tabela** — wklej lub zaimportuj przez OCR tabelę i wyświetl ją jako kartę
+- 🖌️ **Klasyczny mini paint** — karta do rysowania pikselowego/rastrowego
+- 🔊 **Odtwarzacz dźwięku** — karta do odtwarzania plików audio bezpośrednio na tablicy
+- 🎞️ **Animowany GIF** — karta wyświetlająca animowane GIF-y jako obiekty na tablicy
+
+### Inne pomysły
 
 - 🃏 Kreator kartek — własne szablony kart do przyczepienia na tablicy
 - 🎨 Zmiana stylu / wyglądu tablicy
