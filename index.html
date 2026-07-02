@@ -390,6 +390,25 @@ Object.entries(settingChkMap).forEach(([id, key]) => {
 applySettings();
 
 // ── Interface settings ────────────────────────────────
+let _ahTimer = null;
+const _ahEvents = ['mousemove', 'keydown', 'touchstart', 'click'];
+function _ahSchedule() {
+  clearTimeout(_ahTimer);
+  _ahTimer = setTimeout(() => document.body.classList.add('ui-hidden'), 4000);
+}
+function _ahReset() { document.body.classList.remove('ui-hidden'); _ahSchedule(); }
+
+function applyAutohide() {
+  clearTimeout(_ahTimer);
+  document.body.classList.remove('ui-hidden');
+  if (appSettings.autohide) {
+    _ahEvents.forEach(e => document.addEventListener(e, _ahReset));
+    _ahSchedule();
+  } else {
+    _ahEvents.forEach(e => document.removeEventListener(e, _ahReset));
+  }
+}
+
 function applyInterfaceSettings() {
   const showAuthor = appSettings.showAuthor !== false;
   const showView   = !!appSettings.showView;
@@ -397,8 +416,9 @@ function applyInterfaceSettings() {
   const viewGroup = document.getElementById('lp-group-view');
   if (autorBtn)  autorBtn.style.display  = showAuthor ? '' : 'none';
   if (viewGroup) viewGroup.style.display = showView   ? '' : 'none';
+  applyAutohide();
 }
-[['set-show-author','showAuthor',true],['set-show-view','showView',false]].forEach(([id,key,def]) => {
+[['set-show-author','showAuthor',true],['set-show-view','showView',false],['set-autohide','autohide',false]].forEach(([id,key,def]) => {
   const el = document.getElementById(id); if (!el) return;
   el.checked = appSettings[key] !== undefined ? !!appSettings[key] : def;
   el.addEventListener('change', () => {
@@ -596,6 +616,7 @@ AppModule.init();
       <div class="opt-pane" id="opt-pane-interface">
         <label class="opt-chk"><input type="checkbox" id="set-show-author" checked> <span data-i18n="opt.showAuthor">Show Author button</span></label>
         <label class="opt-chk"><input type="checkbox" id="set-show-view"> <span data-i18n="opt.showView">Show View button</span></label>
+        <label class="opt-chk"><input type="checkbox" id="set-autohide"> <span data-i18n="opt.autohide">Auto-hide menus &amp; minimap (4 s)</span></label>
         <div class="opt-sep"></div>
         <div class="opt-radio-group">
           <div class="opt-radio-lbl" data-i18n="opt.frame">Frame</div>

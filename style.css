@@ -658,6 +658,13 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 }
 .opt-reset-btn:hover { background: rgba(230,57,70,.18); color: #e63946; }
 
+/* ── Autohide UI ─── */
+#left-panel, #carousel-wrap, #minimap-wrap, #zoom-bar { transition: opacity 0.5s ease; }
+body.ui-hidden #left-panel,
+body.ui-hidden #carousel-wrap,
+body.ui-hidden #minimap-wrap,
+body.ui-hidden #zoom-bar { opacity: 0; pointer-events: none; }
+
 /* ── Print ─── */
 @media print {
   @page { size: A4 landscape; margin: 10mm; }

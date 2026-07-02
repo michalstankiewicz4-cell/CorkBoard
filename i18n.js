@@ -121,6 +121,7 @@ const translations = {
     'opt.frame':       'Frame',
     'opt.frameRaised': 'Raised (wooden)',
     'opt.frameFlat':   'Flat',
+    'opt.autohide':    'Auto-hide menus & minimap (4 s)',
 
     // file menu
     'file.newBoard':    '📄 New board',
@@ -333,6 +334,7 @@ const translations = {
     'opt.frame':       'Ramka',
     'opt.frameRaised': 'Wypukła (drewniana)',
     'opt.frameFlat':   'Płaska',
+    'opt.autohide':    'Ukryj menu i minimapę (4 s)',
 
     'file.newBoard':    '📄 Nowa tablica',
     'file.openJSON':    '📂 Otwórz JSON',
