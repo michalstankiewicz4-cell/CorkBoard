@@ -49,9 +49,11 @@ let vpW = window.innerWidth, vpH = window.innerHeight;
 
 // Minimap
 let minimap = null;
+let lastBoardW = 1800, lastBoardH = 900;
 
 // ── Import Notes state ────────────────────────────────────
 const IN = { img: null, scale: 1, selections: [], nextId: 1, drawing: null, mode: 'image' };
+let _tesseractPromise = null;
 
 // Undo / Redo
 const MAX_HISTORY = 50;
@@ -87,7 +89,22 @@ export function init() {
   }
 
   const mmEl = document.getElementById('minimap-container');
-  if (mmEl) minimap = new Minimap(mmEl);
+  if (mmEl) {
+    minimap = new Minimap(mmEl);
+    minimap.canvas.style.cursor = 'crosshair';
+    minimap.canvas.addEventListener('click', e => {
+      const r  = minimap.canvas.getBoundingClientRect();
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
+      const cw = minimap.canvas.width, ch = minimap.canvas.height;
+      const boardX = (mx - 4) / (cw - 8) * lastBoardW;
+      const boardY = (my - 4) / (ch - 8) * lastBoardH;
+      pan.x = vpW / 2 - boardX * zoom;
+      pan.y = vpH / 2 - boardY * zoom;
+      applyTransform();
+      scheduleMinimap();
+    });
+  }
 
   renderAll();
   bindEvents();
@@ -194,6 +211,7 @@ function bindEvents() {
       hidePinColorPicker(); hideThreadColorPicker();
       document.querySelectorAll('.lp-drop.open').forEach(el => el.classList.remove('open'));
       document.getElementById('help-panel')?.classList.remove('open');
+      document.getElementById('options-overlay')?.classList.remove('open');
       if (state.tool !== 'select') { setTool('select'); window.setToolUI?.('select'); }
     }
     if ((e.key === 'Delete' || e.key === 'Backspace')
@@ -596,9 +614,9 @@ function scheduleMinimap() {
     // Dynamic bounding box – accounts for cards far from the center
     const xs = state.cards.map(c => c.x).concat([0, bw]);
     const ys = state.cards.map(c => c.y).concat([0, bh]);
-    const boardW = Math.max(1800, Math.max(...xs) + 300);
-    const boardH = Math.max(900,  Math.max(...ys) + 200);
-    minimap.update(state.cards, state.pins, state.threads, pan, zoom, boardW, boardH, bw, bh);
+    lastBoardW = Math.max(1800, Math.max(...xs) + 300);
+    lastBoardH = Math.max(900,  Math.max(...ys) + 200);
+    minimap.update(state.cards, state.pins, state.threads, pan, zoom, lastBoardW, lastBoardH, bw, bh);
   }, 80);
 }
 
@@ -868,7 +886,7 @@ window._loadImgPreview = function(input, directUrl) {
   const urlEl = document.getElementById('mf-url');
   if (directUrl !== undefined) {
     if (prev) prev.innerHTML = directUrl
-      ? `<img src="${directUrl}" style="max-width:220px;max-height:150px;border-radius:5px;object-fit:contain"/>`
+      ? `<img src="${esc(directUrl)}" style="max-width:220px;max-height:150px;border-radius:5px;object-fit:contain"/>`
       : '';
     return;
   }
@@ -902,6 +920,8 @@ function openInOverlay(img) {
   IN.img = img; IN.selections = []; IN.nextId = 1; IN.drawing = null; IN.mode = 'image';
   const overlay = document.getElementById('in-overlay');
   overlay.style.display = 'flex';
+  document.querySelectorAll('.in-mode-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === 'image'));
   requestAnimationFrame(() => {
     const wrap = document.getElementById('in-canvas-wrap');
     const maxW = wrap.clientWidth - 20;
@@ -961,7 +981,7 @@ function inMouseUp(e) {
   const crop = document.createElement('canvas');
   crop.width = nw; crop.height = nh;
   crop.getContext('2d').drawImage(IN.img, nx / IN.scale, ny / IN.scale, nw / IN.scale, nh / IN.scale, 0, 0, nw, nh);
-  const sel = { id: IN.nextId++, x: nx, y: ny, w: nw, h: nh, type: IN.mode, dataUrl: crop.toDataURL(), ocrText: '' };
+  const sel = { id: IN.nextId++, x: nx, y: ny, w: nw, h: nh, type: IN.mode, dataUrl: crop.toDataURL(), ocrText: undefined };
   IN.selections.push(sel);
   inRedraw(); inUpdateList();
   if (sel.type === 'ocr') inRunOCR(sel);
@@ -981,24 +1001,28 @@ function inUpdateList() {
         <button class="in-tbtn${s.type==='ocr'?' active':''}" onclick="window._inType(${s.id},'ocr')">🔤</button>
         <button class="in-del" onclick="window._inDel(${s.id})">✕</button>
       </div>
-      ${s.type==='ocr' ? `<div class="in-ocr-text">${s.ocrText ? esc(s.ocrText) : `<em>${t('in.recognizing')}</em>`}</div>` : ''}
+      ${s.type==='ocr' ? `<div class="in-ocr-text">${s.ocrText !== undefined ? esc(s.ocrText) : `<em>${t('in.recognizing')}</em>`}</div>` : ''}
     </div>`).join('');
 }
 
 async function inRunOCR(sel) {
+  inUpdateList(); // show "Recognizing…" immediately (ocrText is undefined)
   try {
     if (!window.Tesseract) {
-      await new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
-        s.onload = res; s.onerror = rej; document.head.appendChild(s);
-      });
+      if (!_tesseractPromise) {
+        _tesseractPromise = new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
+          s.onload = res; s.onerror = rej; document.head.appendChild(s);
+        });
+      }
+      await _tesseractPromise;
     }
     const { data: { text } } = await Tesseract.recognize(sel.dataUrl, 'eng+pol');
     sel.ocrText = text.trim();
   } catch (err) {
     console.warn('OCR error:', err);
-    sel.ocrText = '';
+    sel.ocrText = ''; // empty string = done (prevents infinite retry)
   }
   inUpdateList();
 }
@@ -1006,7 +1030,7 @@ async function inRunOCR(sel) {
 window._inType = (id, type) => {
   const sel = IN.selections.find(s => s.id === id); if (!sel) return;
   sel.type = type;
-  if (type === 'ocr' && !sel.ocrText) inRunOCR(sel);
+  if (type === 'ocr' && sel.ocrText === undefined) inRunOCR(sel);
   else inUpdateList();
   inRedraw();
 };
@@ -1026,6 +1050,8 @@ window._inClose = () => {
 };
 window._inAddToBoard = () => {
   if (IN.selections.length === 0) return;
+  const hasPending = IN.selections.some(s => s.type === 'ocr' && s.ocrText === undefined);
+  if (hasPending && !confirm(t('confirm.ocrPending'))) return;
   const CARD_W = 220, GAP = 16;
   const total = IN.selections.length;
   const startX = (-pan.x + vpW / 2) / zoom - (total * (CARD_W + GAP)) / 2;

@@ -1,6 +1,6 @@
 # 📋 CorkBoard
 
-Created by vibecoding · [Live demo](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.5.0
+Created by vibecoding · [Live demo](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.6.0
 
 <img width="1278" height="798" alt="image" src="https://github.com/user-attachments/assets/9afd58d5-bd36-4f1d-8f8f-2b6db8cedc37" />
 
@@ -25,7 +25,7 @@ An interactive detective-style investigation board built with vanilla JavaScript
 - **Left panel** — file, view, settings, author, help (with background matching the top bar)
 - **Right carousel** — tools and card types (with scroll arrows when needed)
 - **Top bar** — zoom out / center / zoom in
-- **Minimap** — bottom-left corner, overview of the entire board
+- **Minimap** — bottom-left corner, overview of the entire board; **click to jump to any location**
 
 ---
 
@@ -43,6 +43,7 @@ Each card represents an element of the investigation. Available types:
 | **Note** | Colored sticky note with free text |
 | **Date** | Event with a date on a colored background |
 | **YouTube** | Embedded YouTube video player |
+| **Image** | Photo or graphic file (PNG, JPEG, etc.) pinned to the board |
 
 ### Adding cards
 
@@ -89,6 +90,7 @@ Threads and pins always render **above cards** (z-index).
 | Scroll | Zoom in / out |
 | Right-click | Context menu |
 | `Ctrl+0` | Reset view to origin |
+| **Click on minimap** | Centers the view on the clicked location |
 
 ---
 
@@ -163,9 +165,25 @@ History stores up to 50 steps. Every change (add, delete, move card, pin, thread
 | **Save PNG** | Downloads a screenshot of the board as an image |
 | **Restore from PNG** | Restores board state from a previously exported PNG |
 | **Copy URL** | Encodes the board in a URL (clipboard) — shareable link |
+| **Import Notes** | Opens an image and lets you select areas to extract as cards (see below) |
 | **Reset to example** | Restores the built-in demo data |
 
 Board state is automatically saved to the browser's `localStorage`.
+
+---
+
+## Import Notes (OCR)
+
+**File → 📷 Import Notes** opens a full-screen image viewer where you can select areas with the mouse:
+
+1. Click **Import Notes** and choose any image file (PNG, JPEG, etc.)
+2. Draw rectangles over the areas you want to extract
+3. For each selection, choose a mode:
+   - **🖼 Image** — crops the area and adds it to the board as an Image card
+   - **🔤 OCR** — recognizes the text in that area (using Tesseract.js, EN+PL) and adds it as a Note card
+4. Click **Add to Board** — all extractions land in a row at the center of the board, ready to reposition
+
+> OCR requires an internet connection on first use to download the language model (~20 MB, then cached in the browser).
 
 ---
 
@@ -235,7 +253,7 @@ Requires a browser with ES module support (Chrome 61+, Firefox 60+, Safari 11+, 
 
 # 📋 Tablica Korkowa
 
-Stworzona metodą vibecoding · [Demo online](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.5.0
+Stworzona metodą vibecoding · [Demo online](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.6.0
 
 Interaktywna tablica śledcza w stylu detektywistycznym — budowana w czystym JavaScript (ES modules), bez frameworków i narzędzi budowania. Otwórz `index.html` w przeglądarce i gotowe.
 
@@ -258,7 +276,7 @@ Interaktywna tablica śledcza w stylu detektywistycznym — budowana w czystym J
 - **Lewy panel** — plik, widok, ustawienia, autor, pomoc (z tłem jak górny pasek)
 - **Prawa karuzela** — narzędzia i typy kart (ze strzałkami przewijania gdy trzeba)
 - **Górny pasek** — oddalanie / centrum / przybliżanie
-- **Minimap** — lewy dolny róg, podgląd całej tablicy
+- **Minimap** — lewy dolny róg, podgląd całej tablicy; **kliknij aby skoczyć do dowolnego miejsca**
 
 ---
 
@@ -276,6 +294,7 @@ Każda karta reprezentuje element śledztwa. Dostępne typy:
 | **Notatka** | Kolorowa karteczka z dowolnym tekstem |
 | **Data** | Zdarzenie z datą na kolorowym tle |
 | **Film YT** | Odtwarzacz wideo YouTube osadzony na karcie |
+| **Obrazek** | Zdjęcie lub plik graficzny (PNG, JPEG itp.) przypięty do tablicy |
 
 ### Dodawanie kart
 
@@ -322,6 +341,7 @@ Nitki i pinezki zawsze renderują się **ponad kartami** (z-index).
 | Scroll | Zoom in / out |
 | Prawy klik | Menu kontekstowe |
 | `Ctrl+0` | Resetuj widok do punktu startowego |
+| **Kliknięcie na minimapę** | Wyśrodkowuje widok na klikniętym miejscu |
 
 ---
 
@@ -396,9 +416,25 @@ Menu **Plik** (lewy panel):
 | **Zapisz PNG** | Pobiera zrzut tablicy jako obraz |
 | **Przywróć z PNG** | Odtwarza stan tablicy z wcześniej wyeksportowanego PNG |
 | **Kopiuj URL** | Koduje tablicę w URL (schowek) — można udostępnić link |
+| **Importuj notatki** | Otwiera obraz i pozwala zaznaczać obszary do wyodrębnienia jako karty (patrz niżej) |
 | **Reset do przykładu** | Przywraca przykładowe dane demonstracyjne |
 
 Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
+
+---
+
+## Importuj notatki (OCR)
+
+**Plik → 📷 Importuj notatki** otwiera przeglądarkę obrazów na pełnym ekranie, gdzie zaznaczasz obszary myszą:
+
+1. Kliknij **Importuj notatki** i wybierz dowolny plik graficzny (PNG, JPEG itp.)
+2. Rysuj prostokąty na obszarach, które chcesz wyodrębnić
+3. Dla każdego zaznaczenia wybierz tryb:
+   - **🖼 Obrazek** — wycina obszar i dodaje go na tablicę jako kartę-obrazek
+   - **🔤 OCR** — rozpoznaje tekst w obszarze (Tesseract.js, EN+PL) i dodaje jako żółtą karteczkę-notatkę
+4. Kliknij **Dodaj do tablicy** — wszystkie wyodrębnione elementy trafiają w rząd na środku tablicy, gotowe do przesunięcia
+
+> OCR wymaga połączenia z internetem przy pierwszym użyciu, aby pobrać model językowy (~20 MB, potem cache w przeglądarce).
 
 ---
 

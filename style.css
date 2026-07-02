@@ -565,3 +565,86 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 #autor-panel a { color: #f0d090; text-decoration: underline; }
 #autor-panel a:hover { color: #ffd878; }
 #autor-panel .hp-close { position: absolute; top: 12px; right: 14px; }
+
+/* ── Options Modal ─── */
+#options-overlay {
+  display: none; position: fixed; inset: 0; z-index: 5500;
+  background: rgba(0,0,0,.55); align-items: center; justify-content: center;
+}
+#options-overlay.open { display: flex; }
+#options-modal {
+  background: #2b1f0e; border: 1px solid rgba(180,130,60,.3);
+  border-radius: 12px; width: min(520px, 96vw); max-height: 82vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 10px 44px rgba(0,0,0,.7); font-family: var(--font-ui); color: #c8a870;
+}
+#opt-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px 10px; border-bottom: 1px solid rgba(180,130,60,.2);
+  font-weight: 700; font-size: 1rem; color: #ffd878;
+}
+#opt-header button {
+  background: none; border: none; cursor: pointer; font-size: 1rem;
+  color: rgba(200,168,100,.5); padding: 2px 6px; border-radius: 4px;
+}
+#opt-header button:hover { color: #e63946; background: rgba(230,57,70,.1); }
+#opt-tabs {
+  display: flex; border-bottom: 1px solid rgba(180,130,60,.2);
+}
+.opt-tab {
+  flex: 1; padding: 10px 6px; background: none; border: none; cursor: pointer;
+  font-size: .82rem; font-weight: 600; color: rgba(200,168,100,.5);
+  border-bottom: 3px solid transparent; transition: color .15s, border-color .15s;
+}
+.opt-tab.active { color: #ffd878; border-bottom-color: #c97c2a; }
+.opt-tab:hover:not(.active) { background: rgba(255,255,255,.04); color: rgba(200,168,100,.8); }
+#opt-body { overflow-y: auto; flex: 1; }
+.opt-pane { display: none; padding: 14px 16px; }
+.opt-pane.active { display: block; }
+.opt-sep { height: 1px; background: rgba(180,130,60,.15); margin: 8px 0; }
+/* Performance tab */
+.opt-chk {
+  display: flex; align-items: center; gap: 10px; padding: 7px 6px;
+  cursor: pointer; font-size: .87rem; border-radius: 6px;
+}
+.opt-chk:hover { background: rgba(255,255,255,.05); }
+.opt-chk input[type=checkbox] { accent-color: #c97c2a; width: 15px; height: 15px; flex-shrink: 0; }
+/* Language tab */
+.opt-lang {
+  display: flex; align-items: center; gap: 16px; padding: 10px 6px; font-size: .87rem;
+}
+/* Objects tab */
+#opt-obj-list { display: flex; flex-direction: column; gap: 5px; }
+.opt-obj-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(180,130,60,.15);
+  border-radius: 8px; cursor: grab; user-select: none; transition: opacity .15s;
+}
+.opt-obj-item.opt-obj-hidden { opacity: .35; }
+.opt-obj-item.opt-drag-over { border-color: #c97c2a; background: rgba(201,124,42,.12); }
+.opt-obj-handle { color: rgba(200,168,100,.35); font-size: 1rem; cursor: grab; flex-shrink: 0; }
+.opt-obj-icon  { font-size: 1.05rem; width: 22px; text-align: center; flex-shrink: 0; }
+.opt-obj-name  { flex: 1; font-size: .87rem; font-weight: 500; color: #e0c898; }
+/* Toggle switch */
+.opt-obj-toggle { position: relative; display: inline-flex; align-items: center; cursor: pointer; flex-shrink: 0; }
+.opt-obj-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.opt-obj-sw {
+  display: inline-block; width: 36px; height: 20px;
+  background: rgba(180,130,60,.2); border-radius: 10px;
+  transition: background .2s; position: relative; border: 1px solid rgba(180,130,60,.3);
+}
+.opt-obj-sw::after {
+  content: ''; position: absolute; left: 2px; top: 2px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(200,168,100,.4); transition: left .2s, background .2s;
+}
+.opt-obj-toggle input:checked + .opt-obj-sw { background: #c97c2a; border-color: #c97c2a; }
+.opt-obj-toggle input:checked + .opt-obj-sw::after { left: 18px; background: #fff8e8; }
+/* Reset button */
+.opt-reset-btn {
+  margin-top: 14px; padding: 7px 16px;
+  background: rgba(230,57,70,.08); border: 1px solid rgba(230,57,70,.25);
+  color: rgba(230,57,70,.75); border-radius: 6px; cursor: pointer;
+  font-size: .82rem; font-weight: 600; transition: background .15s;
+}
+.opt-reset-btn:hover { background: rgba(230,57,70,.18); color: #e63946; }

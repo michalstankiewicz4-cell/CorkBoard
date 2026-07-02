@@ -105,9 +105,16 @@ const translations = {
     // left panel button labels
     'lp.file':     'File',
     'lp.view':     'View',
-    'lp.settings': 'Settings',
+    'lp.options':  'Options',
     'lp.author':   'Author',
     'lp.help':     'Help',
+
+    // Options modal
+    'opt.title':       '⚙️ Options',
+    'opt.performance': '⚡ Performance',
+    'opt.language':    '🌐 Language',
+    'opt.objects':     '🃏 Objects',
+    'opt.reset':       '↺ Reset to defaults',
 
     // file menu
     'file.newBoard':    '📄 New board',
@@ -209,6 +216,7 @@ const translations = {
     'in.addToBoard':     'Add to Board',
     'in.noSel':          'Draw rectangles on the image to select areas.',
     'in.recognizing':    'Recognizing…',
+    'confirm.ocrPending': 'Some OCR is still running. Add items with text available so far?',
   },
 
   pl: {
@@ -303,9 +311,16 @@ const translations = {
 
     'lp.file':     'Plik',
     'lp.view':     'Widok',
-    'lp.settings': 'Ustawienia',
+    'lp.options':  'Opcje',
     'lp.author':   'Autor',
     'lp.help':     'Pomoc',
+
+    // Okno Opcji
+    'opt.title':       '⚙️ Opcje',
+    'opt.performance': '⚡ Wydajność',
+    'opt.language':    '🌐 Język',
+    'opt.objects':     '🃏 Obiekty',
+    'opt.reset':       '↺ Przywróć domyślne',
 
     'file.newBoard':    '📄 Nowa tablica',
     'file.openJSON':    '📂 Otwórz JSON',
@@ -397,6 +412,7 @@ const translations = {
     'in.addToBoard':     'Dodaj do tablicy',
     'in.noSel':          'Rysuj prostokąty na obrazku aby wybrać obszary.',
     'in.recognizing':    'Rozpoznaję…',
+    'confirm.ocrPending': 'OCR jeszcze trwa. Dodać elementy z dostępnym tekstem?',
   },
 };
 

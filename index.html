@@ -51,6 +51,26 @@
       <span class="ci-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 17 Q9 2 17 10"/></svg></span>
       <span class="ci-lbl" data-i18n="ci.thread">Thread</span>
     </button>
+    <div class="ci-bubble" draggable="true" data-type="note"
+      data-template='{"text":"Notatka","color":"y"}'>
+      <span class="ci-ico">📝</span><span class="ci-lbl" data-i18n="ci.note">Note</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="image"
+      data-template='{"url":"","caption":""}'>
+      <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="date"
+      data-template='{"label":"Zdarzenie","date":"","color":"y"}'>
+      <span class="ci-ico">📅</span><span class="ci-lbl" data-i18n="ci.date">Date</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="video"
+      data-template='{"url":"","title":""}'>
+      <span class="ci-ico">🎬</span><span class="ci-lbl" data-i18n="ci.video">YT Video</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="news"
+      data-template='{"source":"","title":"Nagłówek","body":"Treść","url":"","accentColor":"#e63946"}'>
+      <span class="ci-ico">📰</span><span class="ci-lbl" data-i18n="ci.news">News</span>
+    </div>
     <div class="ci-bubble" draggable="true" data-type="person"
       data-template='{"name":"Nowa osoba","role":"","party":"","partyColor":"#666","emoji":"👤","photo":""}'>
       <span class="ci-ico">👤</span><span class="ci-lbl" data-i18n="ci.person">Person</span>
@@ -66,26 +86,6 @@
     <div class="ci-bubble" draggable="true" data-type="law"
       data-template='{"title":"Nowa ustawa","date":"","desc":""}'>
       <span class="ci-ico">⚖️</span><span class="ci-lbl" data-i18n="ci.law">Act</span>
-    </div>
-    <div class="ci-bubble" draggable="true" data-type="news"
-      data-template='{"source":"","title":"Nagłówek","body":"Treść","url":"","accentColor":"#e63946"}'>
-      <span class="ci-ico">📰</span><span class="ci-lbl" data-i18n="ci.news">News</span>
-    </div>
-    <div class="ci-bubble" draggable="true" data-type="note"
-      data-template='{"text":"Notatka","color":"y"}'>
-      <span class="ci-ico">📝</span><span class="ci-lbl" data-i18n="ci.note">Note</span>
-    </div>
-    <div class="ci-bubble" draggable="true" data-type="date"
-      data-template='{"label":"Zdarzenie","date":"","color":"y"}'>
-      <span class="ci-ico">📅</span><span class="ci-lbl" data-i18n="ci.date">Date</span>
-    </div>
-    <div class="ci-bubble" draggable="true" data-type="video"
-      data-template='{"url":"","title":""}'>
-      <span class="ci-ico">🎬</span><span class="ci-lbl" data-i18n="ci.video">YT Video</span>
-    </div>
-    <div class="ci-bubble" draggable="true" data-type="image"
-      data-template='{"url":"","caption":""}'>
-      <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
     </div>
   </div>
   <button id="carousel-arrow-down" class="carousel-arrow" onclick="carouselScroll(1)">▼</button>
@@ -128,31 +128,11 @@
         <button class="lp-item view-btn lp-soon" data-view="force" data-i18n="view.network" data-i18n-title="tooltip.soon">🕸️ Network</button>
       </div>
     </div>
-    <!-- Settings -->
-    <div class="lp-group">
-      <button class="ci-tool" onclick="toggleLeftMenu('ustawienia')">
-        <span class="ci-ico">⚙️</span>
-        <span class="ci-lbl" data-i18n="lp.settings">Settings</span>
-      </button>
-      <div class="lp-drop" id="lp-drop-ustawienia">
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-thread-shadow"> <span data-i18n="set.noThreadShadow">Disable thread shadows</span></label>
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-card-shadow"> <span data-i18n="set.noCardShadow">Disable card shadows</span></label>
-        <div class="lp-sep"></div>
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-drag-shadow"> <span data-i18n="set.noDragShadow">No shadows while dragging</span></label>
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-pan-shadow"> <span data-i18n="set.noPanShadow">No shadows while panning</span></label>
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-ghost-drag"> <span data-i18n="set.ghostDrag">Ghost drag cards</span></label>
-        <div class="lp-sep"></div>
-        <label class="lp-item lp-chk"><input type="checkbox" id="set-no-minimap"> <span data-i18n="set.noMinimap">Disable minimap</span></label>
-        <div class="lp-sep"></div>
-        <div class="lp-item lp-lang">
-          <span data-i18n="set.language">Language</span>
-          <div class="lp-lang-btns">
-            <button class="lp-lang-btn" data-lang="en" onclick="setAppLang('en')">EN</button>
-            <button class="lp-lang-btn" data-lang="pl" onclick="setAppLang('pl')">PL</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Options -->
+    <button class="ci-tool" onclick="window._openOptions()">
+      <span class="ci-ico">⚙️</span>
+      <span class="ci-lbl" data-i18n="lp.options">Options</span>
+    </button>
     <!-- Author -->
     <button class="ci-tool lp-autor-btn" onclick="toggleAutorPanel()">
       <span class="ci-ico">🌟</span>
@@ -193,7 +173,7 @@
 <!-- ══ MINIMAP – bottom-left corner ══ -->
 <div id="minimap-wrap">
   <div id="minimap-header">
-    <span>🗺 <small style="font-size:0.65em;opacity:0.5;letter-spacing:0.02em">v1.5.0</small></span>
+    <span>🗺 <small style="font-size:0.65em;opacity:0.5;letter-spacing:0.02em">v1.6.0</small></span>
     <button onclick="minimapToggle()" id="mm-toggle-btn" data-i18n="minimap.hide">hide</button>
   </div>
   <div id="minimap-container"></div>
@@ -409,6 +389,111 @@ Object.entries(settingChkMap).forEach(([id, key]) => {
 });
 applySettings();
 
+// ── Options Modal ─────────────────────────────────────
+const CAROUSEL_KEY = 'corkboard_carousel_v1';
+const CAROUSEL_META = [
+  { type: 'note',    icon: '📝' },
+  { type: 'image',   icon: '🖼️' },
+  { type: 'date',    icon: '📅' },
+  { type: 'video',   icon: '🎬' },
+  { type: 'news',    icon: '📰' },
+  { type: 'person',  icon: '👤' },
+  { type: 'unknown', icon: '❓' },
+  { type: 'party',   icon: '🏛️' },
+  { type: 'law',     icon: '⚖️' },
+];
+const DEFAULT_CAROUSEL = CAROUSEL_META.map(m => ({ type: m.type, visible: true }));
+
+function loadCarouselState() {
+  try { return JSON.parse(localStorage.getItem(CAROUSEL_KEY)) || null; } catch { return null; }
+}
+function saveCarouselState() {
+  localStorage.setItem(CAROUSEL_KEY, JSON.stringify(carouselState));
+}
+
+let carouselState = loadCarouselState() || DEFAULT_CAROUSEL.map(o => ({ ...o }));
+
+function applyCarouselState() {
+  const inner = document.getElementById('carousel-inner');
+  const bubbles = {};
+  inner.querySelectorAll('.ci-bubble[data-type]').forEach(el => { bubbles[el.dataset.type] = el; });
+  carouselState.forEach(({ type, visible }) => {
+    const el = bubbles[type]; if (!el) return;
+    el.style.display = visible ? '' : 'none';
+    inner.appendChild(el);
+  });
+  saveCarouselState();
+}
+
+window._openOptions = function() {
+  document.getElementById('options-overlay').classList.add('open');
+  window._optTab('performance');
+};
+window._closeOptions = function() {
+  document.getElementById('options-overlay').classList.remove('open');
+};
+window._optTab = function(tab) {
+  document.querySelectorAll('.opt-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.opt-pane').forEach(p => p.classList.toggle('active', p.id === 'opt-pane-' + tab));
+  if (tab === 'objects') _optRenderObjects();
+};
+
+let _optDragIdx = null;
+function _optRenderObjects() {
+  const list = document.getElementById('opt-obj-list'); if (!list) return;
+  const inner = document.getElementById('carousel-inner');
+  list.innerHTML = carouselState.map((item, i) => {
+    const meta = CAROUSEL_META.find(m => m.type === item.type);
+    const lbl  = inner.querySelector(`.ci-bubble[data-type="${item.type}"] .ci-lbl`);
+    const label = lbl ? lbl.textContent : (meta ? meta.icon : item.type);
+    return `<div class="opt-obj-item${item.visible ? '' : ' opt-obj-hidden'}" data-idx="${i}"
+        draggable="true"
+        ondragstart="window._optDragStart(${i})"
+        ondragover="event.preventDefault();window._optDragOver(this)"
+        ondrop="event.preventDefault();window._optDrop(${i})"
+        ondragend="window._optDragEnd()">
+      <span class="opt-obj-handle">⠿</span>
+      <span class="opt-obj-icon">${meta ? meta.icon : ''}</span>
+      <span class="opt-obj-name">${label}</span>
+      <label class="opt-obj-toggle" onclick="event.stopPropagation()">
+        <input type="checkbox" ${item.visible ? 'checked' : ''} onchange="window._optToggle(${i},this.checked)">
+        <span class="opt-obj-sw"></span>
+      </label>
+    </div>`;
+  }).join('');
+}
+
+window._optDragStart = function(idx) { _optDragIdx = idx; };
+window._optDragOver  = function(el) {
+  document.querySelectorAll('.opt-obj-item').forEach(e => e.classList.remove('opt-drag-over'));
+  el.classList.add('opt-drag-over');
+};
+window._optDrop = function(toIdx) {
+  document.querySelectorAll('.opt-obj-item').forEach(e => e.classList.remove('opt-drag-over'));
+  if (_optDragIdx === null || _optDragIdx === toIdx) { _optDragIdx = null; return; }
+  const moved = carouselState.splice(_optDragIdx, 1)[0];
+  carouselState.splice(toIdx, 0, moved);
+  _optDragIdx = null;
+  _optRenderObjects();
+  applyCarouselState();
+};
+window._optDragEnd = function() {
+  document.querySelectorAll('.opt-obj-item').forEach(e => e.classList.remove('opt-drag-over'));
+  _optDragIdx = null;
+};
+window._optToggle = function(idx, checked) {
+  carouselState[idx].visible = checked;
+  _optRenderObjects();
+  applyCarouselState();
+};
+window._optReset = function() {
+  carouselState = DEFAULT_CAROUSEL.map(o => ({ ...o }));
+  _optRenderObjects();
+  applyCarouselState();
+};
+
+applyCarouselState();
+
 // ── Carousel scroll arrows ────────────────────────────
 function updateCarouselArrows() {
   const inner = document.getElementById('carousel-inner');
@@ -429,5 +514,49 @@ setTimeout(updateCarouselArrows, 0);
 applyI18n();
 AppModule.init();
 </script>
+
+<!-- ══ OPTIONS MODAL ══ -->
+<div id="options-overlay" onclick="if(event.target===this)window._closeOptions()">
+  <div id="options-modal">
+    <div id="opt-header">
+      <span data-i18n="opt.title">⚙️ Options</span>
+      <button onclick="window._closeOptions()">✕</button>
+    </div>
+    <div id="opt-tabs">
+      <button class="opt-tab active" data-tab="performance" onclick="window._optTab('performance')" data-i18n="opt.performance">⚡ Performance</button>
+      <button class="opt-tab" data-tab="language" onclick="window._optTab('language')" data-i18n="opt.language">🌐 Language</button>
+      <button class="opt-tab" data-tab="objects" onclick="window._optTab('objects')" data-i18n="opt.objects">🃏 Objects</button>
+    </div>
+    <div id="opt-body">
+      <!-- Performance -->
+      <div class="opt-pane active" id="opt-pane-performance">
+        <label class="opt-chk"><input type="checkbox" id="set-no-thread-shadow"> <span data-i18n="set.noThreadShadow">Disable thread shadows</span></label>
+        <label class="opt-chk"><input type="checkbox" id="set-no-card-shadow"> <span data-i18n="set.noCardShadow">Disable card shadows</span></label>
+        <div class="opt-sep"></div>
+        <label class="opt-chk"><input type="checkbox" id="set-no-drag-shadow"> <span data-i18n="set.noDragShadow">No shadows while dragging</span></label>
+        <label class="opt-chk"><input type="checkbox" id="set-no-pan-shadow"> <span data-i18n="set.noPanShadow">No shadows while panning</span></label>
+        <label class="opt-chk"><input type="checkbox" id="set-ghost-drag"> <span data-i18n="set.ghostDrag">Ghost drag cards</span></label>
+        <div class="opt-sep"></div>
+        <label class="opt-chk"><input type="checkbox" id="set-no-minimap"> <span data-i18n="set.noMinimap">Disable minimap</span></label>
+      </div>
+      <!-- Language -->
+      <div class="opt-pane" id="opt-pane-language">
+        <div class="opt-lang">
+          <span data-i18n="set.language">Language</span>
+          <div class="lp-lang-btns">
+            <button class="lp-lang-btn" data-lang="en" onclick="setAppLang('en')">EN</button>
+            <button class="lp-lang-btn" data-lang="pl" onclick="setAppLang('pl')">PL</button>
+          </div>
+        </div>
+      </div>
+      <!-- Objects -->
+      <div class="opt-pane" id="opt-pane-objects">
+        <div id="opt-obj-list"></div>
+        <div class="opt-sep"></div>
+        <button class="opt-reset-btn" onclick="window._optReset()" data-i18n="opt.reset">↺ Reset to defaults</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
