@@ -1386,8 +1386,9 @@ export async function doExportPNG() {
 
     // html2canvas renders board-wrap::after box-shadow inconsistently (top/left only)
     // – disable the pseudo-element, redraw the frame manually in exportPNG
+    // Suppress ::after and board-wrap box-shadow — both are redrawn manually in exportPNG
     suppressAfterStyle = document.createElement('style');
-    suppressAfterStyle.textContent = '#board-wrap::after { display: none !important; }';
+    suppressAfterStyle.textContent = '#board-wrap::after { display: none !important; } #board-wrap { box-shadow: none !important; }';
     document.head.appendChild(suppressAfterStyle);
 
     // Disable box-shadow – redrawn manually in exportPNG
@@ -1460,4 +1461,71 @@ export function clearBoard() {
 // ── Save ─────────────────────────────────────────────────
 function save() {
   saveState({ cards:state.cards, pins:state.pins, threads:state.threads, nextId:state.nextId, groups:state.groups });
+}
+
+// ── Print ─────────────────────────────────────────────────
+{
+  let _pBW = null, _pCanvasT = null, _pSvgT = null;
+
+  window.addEventListener('beforeprint', () => {
+    if (_pBW !== null) return; // re-entrancy guard (Chromium re-fires on settings change)
+    if (!state.cards.length) return;
+    const CARD_W = 220, CARD_H = 180, MARGIN = 30;
+    const minX = Math.min(...state.cards.map(c => c.x)) - MARGIN;
+    const minY = Math.min(...state.cards.map(c => c.y)) - MARGIN;
+    const maxX = Math.max(...state.cards.map(c => c.x + CARD_W)) + MARGIN;
+    const maxY = Math.max(...state.cards.map(c => c.y + CARD_H)) + MARGIN;
+    const contentW = Math.max(maxX - minX, 400);
+    const contentH = Math.max(maxY - minY, 300);
+
+    _pBW      = { position: boardWrap.style.position, width: boardWrap.style.width,
+                  height: boardWrap.style.height, top: boardWrap.style.top,
+                  left: boardWrap.style.left, overflow: boardWrap.style.overflow };
+    _pCanvasT = canvas.style.transform;
+    _pSvgT    = threadSvg.style.transform;
+
+    canvas.querySelectorAll('.card').forEach(el => {
+      const c = state.cards.find(c2 => c2.id === el.dataset.id);
+      if (c) { el.style.left = (c.x - minX) + 'px'; el.style.top = (c.y - minY) + 'px'; }
+    });
+    const adjPins = state.pins.map(p => ({ ...p, x: p.x - minX, y: p.y - minY }));
+    canvas.querySelectorAll('.pin').forEach(el => {
+      const p = adjPins.find(p2 => p2.id === el.dataset.id);
+      if (p) { el.style.left = p.x + 'px'; el.style.top = p.y + 'px'; }
+    });
+
+    canvas.style.transform    = '';
+    threadSvg.style.transform = '';
+    // Temporarily clear card filter so all threads print
+    const savedFilter = state.filterCardId;
+    state.filterCardId = null;
+    renderAllThreads(threadSvg, getVisibleThreads(), adjPins, null);
+    state.filterCardId = savedFilter;
+
+    boardWrap.style.position = 'absolute';
+    boardWrap.style.width    = contentW + 'px';
+    boardWrap.style.height   = contentH + 'px';
+    boardWrap.style.top      = '0';
+    boardWrap.style.left     = '0';
+    boardWrap.style.overflow = 'visible';
+  });
+
+  window.addEventListener('afterprint', () => {
+    if (!_pBW) return;
+    Object.assign(boardWrap.style, _pBW);
+    // Restore by card ID from state — avoids index mismatch if DOM changed
+    canvas.querySelectorAll('.card').forEach(el => {
+      const c = state.cards.find(c2 => c2.id === el.dataset.id);
+      if (c) { el.style.left = c.x + 'px'; el.style.top = c.y + 'px'; }
+    });
+    canvas.querySelectorAll('.pin').forEach(el => {
+      const p = state.pins.find(p2 => p2.id === el.dataset.id);
+      if (p) { el.style.left = p.x + 'px'; el.style.top = p.y + 'px'; }
+    });
+    canvas.style.transform    = _pCanvasT;
+    threadSvg.style.transform = _pSvgT;
+    renderAllThreads(threadSvg, getVisibleThreads(), state.pins, onThreadClick);
+    scheduleMinimap();
+    _pBW = null;
+  });
 }

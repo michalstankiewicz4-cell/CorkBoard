@@ -409,6 +409,22 @@ function applyInterfaceSettings() {
 });
 applyInterfaceSettings();
 
+// ── Frame style ───────────────────────────────────────
+function applyFrameStyle() {
+  document.body.classList.toggle('frame-flat', appSettings.frameStyle === 'flat');
+}
+document.querySelectorAll('input[name="opt-frame"]').forEach(el => {
+  if (el.value === (appSettings.frameStyle || 'raised')) el.checked = true;
+  el.addEventListener('change', () => {
+    if (el.checked) {
+      appSettings.frameStyle = el.value;
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
+      applyFrameStyle();
+    }
+  });
+});
+applyFrameStyle();
+
 // ── Options Modal ─────────────────────────────────────
 const CAROUSEL_KEY = 'corkboard_carousel_v1';
 const CAROUSEL_META = [
@@ -580,6 +596,12 @@ AppModule.init();
       <div class="opt-pane" id="opt-pane-interface">
         <label class="opt-chk"><input type="checkbox" id="set-show-author" checked> <span data-i18n="opt.showAuthor">Show Author button</span></label>
         <label class="opt-chk"><input type="checkbox" id="set-show-view"> <span data-i18n="opt.showView">Show View button</span></label>
+        <div class="opt-sep"></div>
+        <div class="opt-radio-group">
+          <div class="opt-radio-lbl" data-i18n="opt.frame">Frame</div>
+          <label class="opt-chk"><input type="radio" name="opt-frame" id="frame-raised" value="raised"> <span data-i18n="opt.frameRaised">Raised (wooden)</span></label>
+          <label class="opt-chk"><input type="radio" name="opt-frame" id="frame-flat"   value="flat">   <span data-i18n="opt.frameFlat">Flat</span></label>
+        </div>
       </div>
     </div>
   </div>

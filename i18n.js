@@ -118,6 +118,9 @@ const translations = {
     'opt.reset':       '↺ Reset to defaults',
     'opt.showAuthor':  'Show Author button',
     'opt.showView':    'Show View button',
+    'opt.frame':       'Frame',
+    'opt.frameRaised': 'Raised (wooden)',
+    'opt.frameFlat':   'Flat',
 
     // file menu
     'file.newBoard':    '📄 New board',
@@ -327,6 +330,9 @@ const translations = {
     'opt.reset':       '↺ Przywróć domyślne',
     'opt.showAuthor':  'Pokaż przycisk Autor',
     'opt.showView':    'Pokaż przycisk Widok',
+    'opt.frame':       'Ramka',
+    'opt.frameRaised': 'Wypukła (drewniana)',
+    'opt.frameFlat':   'Płaska',
 
     'file.newBoard':    '📄 Nowa tablica',
     'file.openJSON':    '📂 Otwórz JSON',

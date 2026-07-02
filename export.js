@@ -148,40 +148,79 @@ export async function exportPNG(boardEl, contentW, contentH) {
     ctx.drawImage(sc, 0, 0);
   }
 
-  // Draw wooden gradient frame (replica of #board-frame::before from CSS)
-  const F = Math.round(22 * SCALE); // frame width in canvas pixels
-
-  // Gradient stops from #board-frame::before (CSS px positions → fraction 0–1)
-  const stops = [
-    [0,      '#8B5225'],
-    [2/22,   '#A0632E'],
-    [4/22,   '#7D4E22'],
-    [6/22,   '#C4884A'],
-    [8/22,   '#9B6030'],
-    [10/22,  '#B87840'],
-    [12/22,  '#7D4E22'],
-    [14/22,  '#8B5225'],
-    [16/22,  '#6B3F1A'],
-    [18/22,  '#5a3214'],
-    [1,      'rgba(90,50,20,0)'],
-  ];
-  function makeGrad(x1, y1, x2, y2) {
-    const g = ctx.createLinearGradient(x1, y1, x2, y2);
-    stops.forEach(([pos, c]) => g.addColorStop(pos, c));
-    return g;
+  // Draw flat frame: replica of #board-wrap::after wooden inner strips (html2canvas skips ::after)
+  // CSS: inset 0 18px #6B3F1A, inset 0 20px #7D4E22, inset 0 22px #4a2a0e (all 4 sides)
+  if (document.body.classList.contains('frame-flat')) {
+    const L1 = Math.round(18 * SCALE), L2 = Math.round(20 * SCALE), L3 = Math.round(22 * SCALE);
+    // Paint widest first so narrower strips paint on top — matching CSS first-on-top z-order
+    [[L3, '#4a2a0e'], [L2, '#7D4E22'], [L1, '#6B3F1A']].forEach(([px, color]) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(0,      0,      W,  px);  // top
+      ctx.fillRect(0,      H - px, W,  px);  // bottom
+      ctx.fillRect(0,      0,      px, H);   // left
+      ctx.fillRect(W - px, 0,      px, H);   // right
+    });
   }
 
-  // Left and right (full height) – under corners
-  ctx.fillStyle = makeGrad(0, 0, F, 0);
-  ctx.fillRect(0, 0, F, H);
-  ctx.fillStyle = makeGrad(W, 0, W - F, 0);
-  ctx.fillRect(W - F, 0, F, H);
+  // Draw wooden frame only when raised (not flat) mode
+  if (!document.body.classList.contains('frame-flat')) {
+    const F = Math.round(22 * SCALE); // frame width in canvas pixels
 
-  // Top and bottom (full width) – on top of corners like in CSS
-  ctx.fillStyle = makeGrad(0, 0, 0, F);
-  ctx.fillRect(0, 0, W, F);
-  ctx.fillStyle = makeGrad(0, H, 0, H - F);
-  ctx.fillRect(0, H - F, W, F);
+    // Gradient stops from #board-frame::before (CSS px positions → fraction 0–1)
+    const stops = [
+      [0,      '#8B5225'],
+      [2/22,   '#A0632E'],
+      [4/22,   '#7D4E22'],
+      [6/22,   '#C4884A'],
+      [8/22,   '#9B6030'],
+      [10/22,  '#B87840'],
+      [12/22,  '#7D4E22'],
+      [14/22,  '#8B5225'],
+      [16/22,  '#6B3F1A'],
+      [18/22,  '#5a3214'],
+      [1,      'rgba(90,50,20,0)'],
+    ];
+    function makeGrad(x1, y1, x2, y2) {
+      const g = ctx.createLinearGradient(x1, y1, x2, y2);
+      stops.forEach(([pos, c]) => g.addColorStop(pos, c));
+      return g;
+    }
+
+    // Left and right (full height) – under corners
+    ctx.fillStyle = makeGrad(0, 0, F, 0);
+    ctx.fillRect(0, 0, F, H);
+    ctx.fillStyle = makeGrad(W, 0, W - F, 0);
+    ctx.fillRect(W - F, 0, F, H);
+
+    // Top and bottom (full width) – on top of corners like in CSS
+    ctx.fillStyle = makeGrad(0, 0, 0, F);
+    ctx.fillRect(0, 0, W, F);
+    ctx.fillStyle = makeGrad(0, H, 0, H - F);
+    ctx.fillRect(0, H - F, W, F);
+
+    // Draw screws at corners (replica of .frame-screw SVG: top:4px left/right:4px)
+    function drawScrew(cx, cy) {
+      const S = SCALE;
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, 6 * S, 0, Math.PI * 2);
+      ctx.fillStyle = '#5a3a1a'; ctx.fill();
+      ctx.strokeStyle = '#2a1505'; ctx.lineWidth = 0.8 * S; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, 4.5 * S, 0, Math.PI * 2);
+      ctx.fillStyle = '#7a5030'; ctx.fill();
+      ctx.strokeStyle = '#3a2010'; ctx.lineWidth = 0.5 * S; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, 2 * S, 0, Math.PI * 2);
+      ctx.fillStyle = '#4a2a10'; ctx.fill();
+      ctx.strokeStyle = '#3a2010'; ctx.lineWidth = 0.8 * S; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(cx - 2 * S, cy); ctx.lineTo(cx + 2 * S, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - 2 * S); ctx.lineTo(cx, cy + 2 * S); ctx.stroke();
+      ctx.restore();
+    }
+    const P = Math.round(11 * SCALE); // 4px margin + 7px to screw center
+    drawScrew(P,     P);      // top-left
+    drawScrew(W - P, P);      // top-right
+    drawScrew(P,     H - P);  // bottom-left
+    drawScrew(W - P, H - P);  // bottom-right
+  }
 
   const pageUrl = window.location.href;
   const pngBlob = await new Promise(res => cap.toBlob(res, 'image/png'));
