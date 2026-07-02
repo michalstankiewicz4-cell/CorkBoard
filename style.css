@@ -554,12 +554,17 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 }
 #autor-overlay.open { display: flex; }
 #autor-panel {
-  background: #1c1208; border: 1px solid rgba(180,130,60,.35);
-  border-radius: 14px; padding: 26px 28px 24px; max-width: 430px; width: 92%;
-  box-shadow: 0 14px 44px rgba(0,0,0,.8); font-family: var(--font-ui);
-  color: #c8a870; position: relative; line-height: 1.55;
+  background: #2b1f0e; border: 1px solid rgba(180,130,60,.3);
+  border-radius: 12px; padding: 0 0 24px; max-width: 430px; width: 92%;
+  box-shadow: 0 10px 44px rgba(0,0,0,.7); font-family: var(--font-ui);
+  color: #c8a870; position: relative; line-height: 1.55; overflow: hidden;
 }
-#autor-panel .ap-title { font-size: 1.05rem; font-weight: 700; color: #ffd878; margin-bottom: 14px; }
+#autor-panel .ap-title {
+  font-size: 1rem; font-weight: 700; color: #ffd878;
+  padding: 14px 16px 10px; margin-bottom: 14px;
+  border-bottom: 1px solid rgba(180,130,60,.2);
+}
+#autor-panel p { font-size: .82rem; margin-bottom: 10px; padding: 0 16px; }
 #autor-panel p { font-size: .82rem; margin-bottom: 10px; }
 #autor-panel strong { color: #f0d090; }
 #autor-panel a { color: #f0d090; text-decoration: underline; }
