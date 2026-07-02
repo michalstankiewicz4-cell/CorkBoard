@@ -222,7 +222,7 @@ corkboard/
 
 ### Planned features
 
-- 🎨 **SVG Paint** — in-board drawing card with editable SVG objects (shapes, freehand, parametric curves: sinusoids, parabolas)
+- 🎨 **SVG Paint and charts** — in-board drawing card with editable SVG objects (shapes, freehand, parametric curves: sinusoids, parabolas)
 - 📊 **Table card** — paste or OCR a table, display it as a formatted card
 - 🖌️ **Classic mini paint** — pixel/raster drawing card
 - 🔊 **Sound player card** — attach and play audio files directly on the board
@@ -483,7 +483,7 @@ corkboard/
 
 ### Planowane funkcje
 
-- 🎨 **SVG Paint** — karta do rysowania z edytowalnymi obiektami SVG (kształty, odręczne, krzywe parametryczne: sinusoidy, parabole)
+- 🎨 **SVG Paint i wykresy** — karta do rysowania z edytowalnymi obiektami SVG (kształty, odręczne, krzywe parametryczne: sinusoidy, parabole)
 - 📊 **Karta Tabela** — wklej lub zaimportuj przez OCR tabelę i wyświetl ją jako kartę
 - 🖌️ **Klasyczny mini paint** — karta do rysowania pikselowego/rastrowego
 - 🔊 **Odtwarzacz dźwięku** — karta do odtwarzania plików audio bezpośrednio na tablicy
