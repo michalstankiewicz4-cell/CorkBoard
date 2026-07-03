@@ -230,6 +230,7 @@ corkboard/
 
 ### Other ideas
 
+- 📱 E-paper displays – ready
 - 🃏 Card creator — custom card templates
 - 🎨 Theme / board appearance switcher
 - 🗺 Auto views (parties, timeline, network, acts)
@@ -491,6 +492,7 @@ corkboard/
 
 ### Inne pomysły
 
+- 📱 E-paper displays – ready
 - 🃏 Kreator kartek — własne szablony kart do przyczepienia na tablicy
 - 🎨 Zmiana stylu / wyglądu tablicy
 - 🗺 Widoki automatyczne (partie, czas, sieć, ustawy)
