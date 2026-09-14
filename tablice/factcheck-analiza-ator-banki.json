@@ -14,8 +14,8 @@
     {
       "id": "video-main",
       "type": "video",
-      "x": 340,
-      "y": 10,
+      "x": 637.1051277281747,
+      "y": 32.394258408319395,
       "angle": -3.7,
       "data": {
         "url": "https://www.youtube.com/watch?v=ErvYD9BzGkk",
@@ -120,8 +120,8 @@
     {
       "id": "claim-banki",
       "type": "news",
-      "x": 40,
-      "y": 480,
+      "x": -116.99846927703372,
+      "y": 440.40121895926336,
       "angle": -1.8,
       "data": {
         "source": "forsal.pl (Jagienka Michalik) / NBP",
@@ -134,8 +134,8 @@
     {
       "id": "yn-banki",
       "type": "yesno",
-      "x": 40,
-      "y": 690,
+      "x": -85.8911898173983,
+      "y": 725.8854311988467,
       "angle": -0.6,
       "data": {
         "question": "Czy banki/NBP naprawdę apelują o trzymanie gotówki w domu?",
@@ -145,8 +145,8 @@
     {
       "id": "note-banki",
       "type": "note",
-      "x": 250,
-      "y": 510,
+      "x": 153.0680081806486,
+      "y": 476.42549060639874,
       "angle": 0.2,
       "data": {
         "text": "UWAGA:\nkwota przesadzona.\nNBP/banki radzą\n500-1000 zł/os.\n(~tydzień wydatków),\nNIE „dwie pensje”",
@@ -170,8 +170,8 @@
     {
       "id": "yn-uk",
       "type": "yesno",
-      "x": 300,
-      "y": 690,
+      "x": 309.6379849872892,
+      "y": 718.651849655878,
       "angle": -3.7,
       "data": {
         "question": "Czy rząd Wielkiej Brytanii faktycznie apelował o domowe zapasy?",
@@ -195,8 +195,8 @@
     {
       "id": "yn-zloto",
       "type": "yesno",
-      "x": 560,
-      "y": 690,
+      "x": 568.3333585224455,
+      "y": 733.3333478655135,
       "angle": 0,
       "data": {
         "question": "Czy europejskie banki centralne realnie ściągają złoto z USA?",
@@ -206,8 +206,8 @@
     {
       "id": "claim-oszczednosci",
       "type": "news",
-      "x": 820,
-      "y": 480,
+      "x": 802.3785652281746,
+      "y": 446.3684735979353,
       "angle": 1.2,
       "data": {
         "source": "CBOS / VeloBank / KRD / forsal.pl",
@@ -220,8 +220,8 @@
     {
       "id": "yn-oszczednosci",
       "type": "yesno",
-      "x": 820,
-      "y": 690,
+      "x": 817.8651171487476,
+      "y": 726.676039922805,
       "angle": 2.6,
       "data": {
         "question": "Czy ok. 80% Polaków rzeczywiście nie ma żadnych oszczędności?",
@@ -231,8 +231,8 @@
     {
       "id": "claim-blackout",
       "type": "news",
-      "x": 1080,
-      "y": 480,
+      "x": 1069.6393074156747,
+      "y": 440.1887657528831,
       "angle": 0.9,
       "data": {
         "source": "rp.pl / techsetter.pl / Wikipedia",
@@ -245,8 +245,8 @@
     {
       "id": "yn-blackout",
       "type": "yesno",
-      "x": 1080,
-      "y": 690,
+      "x": 1064.211654420883,
+      "y": 717.5516909644717,
       "angle": -0.6,
       "data": {
         "question": "Czy w Europie ostatnio zdarzały się poważne blackouty?",
@@ -327,8 +327,8 @@
     {
       "id": "yn-pesel",
       "type": "yesno",
-      "x": 560,
-      "y": 1170,
+      "x": 548.1849413674976,
+      "y": 1219.8750959123884,
       "angle": -2.7,
       "data": {
         "question": "Czy wyciekły dane ok. 19 mln Polaków (w tym PESEL)?",
@@ -349,8 +349,8 @@
     {
       "id": "claim-tvn",
       "type": "news",
-      "x": 820,
-      "y": 960,
+      "x": 893.7357836526538,
+      "y": 951.0444786435081,
       "angle": -1.4,
       "data": {
         "source": "press.pl / oko.press / dziennik.pl",
@@ -363,8 +363,8 @@
     {
       "id": "yn-tvn",
       "type": "yesno",
-      "x": 820,
-      "y": 1170,
+      "x": 830.9751635354663,
+      "y": 1181.2689862932477,
       "angle": -1.6,
       "data": {
         "question": "Czy potwierdzono, że TVN zapłaciło za inscenizację „urodzin Hitlera”?",
@@ -374,8 +374,8 @@
     {
       "id": "claim-pomnik",
       "type": "news",
-      "x": 1080,
-      "y": 960,
+      "x": 1149.293644980779,
+      "y": 914.0647524879091,
       "angle": -1.6,
       "data": {
         "source": "wiadomosci.wp.pl / rmf24.pl / gazetaprawna.pl",
@@ -388,8 +388,8 @@
     {
       "id": "yn-pomnik",
       "type": "yesno",
-      "x": 1080,
-      "y": 1170,
+      "x": 1117.4187467060394,
+      "y": 1179.3490745907736,
       "angle": -0.5,
       "data": {
         "question": "Czy zniszczenie pomnika UPA faktycznie jest ścigane jako znieważenie narodowościowe?",
@@ -410,8 +410,8 @@
     {
       "id": "claim-blackout-pewny",
       "type": "law",
-      "x": 300,
-      "y": 1400,
+      "x": 261.6887662372892,
+      "y": 1398.2750084286645,
       "angle": -2.4,
       "data": {
         "title": "Teza: blackout w PL jest „nieunikniony” (100%)",
@@ -478,8 +478,8 @@
     {
       "id": "claim-motyw-bankow",
       "type": "note",
-      "x": 1080,
-      "y": 1400,
+      "x": 1040.7073209247892,
+      "y": 1419.9707176571799,
       "angle": 2.9,
       "data": {
         "text": "TEORIA AUTORA:\nbanki radzą gotówkę\nw domu, bo boją się\nszturmu na banki\npodczas blackoutu\n(chcą uniknąć paniki\ni utraty wizerunku)",
@@ -652,6 +652,17 @@
         "text": "Zgodne z aktualnym\nstanem prawnym.\nUnijny AI Act WPROST\nnie przyznaje AI\nosobowości prawnej —\nodpowiedzialność\nzostaje po stronie\ntwórców/dostawców.\nTeza autora trafna\njak na dziś.",
         "color": "g"
       }
+    },
+    {
+      "id": "card-301",
+      "type": "note",
+      "x": 158.76314774770594,
+      "y": -96.34389377775645,
+      "angle": 5,
+      "data": {
+        "text": "- Zrób proszę analizę, rozbij na punkty i podpunkty, sprawdź w internecie, czy poszczególne zagadnienia są prawdziwe i mają potwierdzenie w internecie i wypełnij czystą tablicę odpowiednimi kartami.\n\n- Zrób dodatkową własną analizę i odpowiedz na pytania i zagadnienia stworzone przez autora i odpowiedz czy są prawdziwe lub jakie jest ich prawdopodobieństwo",
+        "color": "y"
+      }
     }
   ],
   "pins": [
@@ -665,8 +676,8 @@
     {
       "id": "pin-video-main",
       "cardId": "video-main",
-      "x": 460,
-      "y": 18,
+      "x": 757.1051277281747,
+      "y": 36.394258408319395,
       "color": "gold"
     },
     {
@@ -721,22 +732,22 @@
     {
       "id": "pin-claim-banki",
       "cardId": "claim-banki",
-      "x": 135,
-      "y": 488,
+      "x": -21.99846927703372,
+      "y": 444.40121895926336,
       "color": "gold"
     },
     {
       "id": "pin-yn-banki",
       "cardId": "yn-banki",
-      "x": 115,
-      "y": 698,
+      "x": -10.891189817398299,
+      "y": 729.8854311988467,
       "color": "red"
     },
     {
       "id": "pin-note-banki",
       "cardId": "note-banki",
-      "x": 320,
-      "y": 518,
+      "x": 222.0680081806486,
+      "y": 480.42549060639874,
       "color": "yellow"
     },
     {
@@ -749,8 +760,8 @@
     {
       "id": "pin-yn-uk",
       "cardId": "yn-uk",
-      "x": 375,
-      "y": 698,
+      "x": 384.6379849872892,
+      "y": 722.651849655878,
       "color": "red"
     },
     {
@@ -763,36 +774,36 @@
     {
       "id": "pin-yn-zloto",
       "cardId": "yn-zloto",
-      "x": 635,
-      "y": 698,
+      "x": 643.3333585224455,
+      "y": 737.3333478655135,
       "color": "red"
     },
     {
       "id": "pin-claim-oszczednosci",
       "cardId": "claim-oszczednosci",
-      "x": 915,
-      "y": 488,
+      "x": 897.3785652281746,
+      "y": 450.3684735979353,
       "color": "gold"
     },
     {
       "id": "pin-yn-oszczednosci",
       "cardId": "yn-oszczednosci",
-      "x": 895,
-      "y": 698,
+      "x": 892.8651171487476,
+      "y": 730.676039922805,
       "color": "red"
     },
     {
       "id": "pin-claim-blackout",
       "cardId": "claim-blackout",
-      "x": 1175,
-      "y": 488,
+      "x": 1164.6393074156747,
+      "y": 444.1887657528831,
       "color": "gold"
     },
     {
       "id": "pin-yn-blackout",
       "cardId": "yn-blackout",
-      "x": 1155,
-      "y": 698,
+      "x": 1139.211654420883,
+      "y": 721.5516909644717,
       "color": "red"
     },
     {
@@ -840,8 +851,8 @@
     {
       "id": "pin-yn-pesel",
       "cardId": "yn-pesel",
-      "x": 635,
-      "y": 1178,
+      "x": 623.1849413674976,
+      "y": 1223.8750959123884,
       "color": "red"
     },
     {
@@ -854,29 +865,29 @@
     {
       "id": "pin-claim-tvn",
       "cardId": "claim-tvn",
-      "x": 915,
-      "y": 968,
+      "x": 988.7357836526538,
+      "y": 955.0444786435081,
       "color": "gold"
     },
     {
       "id": "pin-yn-tvn",
       "cardId": "yn-tvn",
-      "x": 895,
-      "y": 1178,
+      "x": 905.9751635354663,
+      "y": 1185.2689862932477,
       "color": "red"
     },
     {
       "id": "pin-claim-pomnik",
       "cardId": "claim-pomnik",
-      "x": 1175,
-      "y": 968,
+      "x": 1244.293644980779,
+      "y": 918.0647524879091,
       "color": "gold"
     },
     {
       "id": "pin-yn-pomnik",
       "cardId": "yn-pomnik",
-      "x": 1155,
-      "y": 1178,
+      "x": 1192.4187467060394,
+      "y": 1183.3490745907736,
       "color": "red"
     },
     {
@@ -889,8 +900,8 @@
     {
       "id": "pin-claim-blackout-pewny",
       "cardId": "claim-blackout-pewny",
-      "x": 382.5,
-      "y": 1408,
+      "x": 344.1887662372892,
+      "y": 1402.2750084286645,
       "color": "orange"
     },
     {
@@ -931,8 +942,8 @@
     {
       "id": "pin-claim-motyw-bankow",
       "cardId": "claim-motyw-bankow",
-      "x": 1150,
-      "y": 1408,
+      "x": 1109.2073209247892,
+      "y": 1423.9707176571799,
       "color": "blue"
     },
     {
