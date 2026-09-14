@@ -395,6 +395,263 @@
         "question": "Czy zniszczenie pomnika UPA faktycznie jest ścigane jako znieważenie narodowościowe?",
         "answer": "yes"
       }
+    },
+    {
+      "id": "note-section2",
+      "type": "note",
+      "x": 40,
+      "y": 1400,
+      "angle": -2.7,
+      "data": {
+        "text": "WŁASNA ANALIZA:\nspekulacje, opinie\ni prognozy autora\n(nie twarde fakty —\nocena wiarygodności/\nprawdopodobieństwa)",
+        "color": "m"
+      }
+    },
+    {
+      "id": "claim-blackout-pewny",
+      "type": "law",
+      "x": 300,
+      "y": 1400,
+      "angle": -2.4,
+      "data": {
+        "title": "Teza: blackout w PL jest „nieunikniony” (100%)",
+        "date": "",
+        "desc": "Autor twierdzi, że blackout w Polsce w ciągu kilku lat to pewnik (100%), z powodu stanu sieci przesyłowych i przeciążenia fotowoltaiką."
+      }
+    },
+    {
+      "id": "yn-blackout-pewny",
+      "type": "yesno",
+      "x": 300,
+      "y": 1610,
+      "angle": 0.4,
+      "data": {
+        "question": "Czy blackout w Polsce jest naprawdę „nieunikniony” (100%)?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-blackout-prob",
+      "type": "note",
+      "x": 470,
+      "y": 1430,
+      "angle": 2.8,
+      "data": {
+        "text": "Realne ryzyko\nistnieje (przeciążenia\nOZE, stan sieci),\nale eksperci mówią\n„ryzyko”, nie pewność.\nPSE inwestuje 10,8 mld zł\nw sieć (2025).\nMoja ocena: RYZYKO\nPODWYŻSZONE, ale\nnie „100% w kilka lat”.",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-bankrut",
+      "type": "law",
+      "x": 700,
+      "y": 1400,
+      "angle": -0.7,
+      "data": {
+        "title": "Teza: Polska jest już „realnym bankrutem”",
+        "date": "",
+        "desc": "Autor twierdzi, że Polska jest de facto (choć nie de iure) bankrutem finansowym."
+      }
+    },
+    {
+      "id": "yn-bankrut",
+      "type": "yesno",
+      "x": 700,
+      "y": 1610,
+      "angle": -1.7,
+      "data": {
+        "question": "Czy Polska formalnie jest bankrutem?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-bankrut",
+      "type": "note",
+      "x": 870,
+      "y": 1430,
+      "angle": -1.2,
+      "data": {
+        "text": "Dług: 59,7% PKB\n(tuż przy limicie\nkonstyt. 60%).\nDeficyt: ~7% PKB\n(najwyższy od 20 lat).\nSytuacja poważna,\nALE Polska normalnie\nobsługuje dług i\npożycza na rynku —\nto NIE jest bankructwo\nw sensie prawnym.",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-motyw-bankow",
+      "type": "note",
+      "x": 1080,
+      "y": 1400,
+      "angle": 2.9,
+      "data": {
+        "text": "TEORIA AUTORA:\nbanki radzą gotówkę\nw domu, bo boją się\nszturmu na banki\npodczas blackoutu\n(chcą uniknąć paniki\ni utraty wizerunku)",
+        "color": "c"
+      }
+    },
+    {
+      "id": "note-motyw-ocena",
+      "type": "note",
+      "x": 1080,
+      "y": 1610,
+      "angle": 2.1,
+      "data": {
+        "text": "OCENA: spekulacja\nUMIARKOWANIE\nWIARYGODNA.\nOficjalny powód wg\nNBP to odporność na\nCYBERATAKI, nie obrona\nprzed panicznym\nszturmem na banki.\nTeoria autora możliwa,\nale niepotwierdzona\nprzez same banki.",
+        "color": "w"
+      }
+    },
+    {
+      "id": "claim-sterowani",
+      "type": "note",
+      "x": 40,
+      "y": 1860,
+      "angle": -0.1,
+      "data": {
+        "text": "TEZA AUTORA:\nrządy PiS i Tuska\nnie są suwerenne,\n„wykonują polecenia\nkogoś z zewnątrz”",
+        "color": "r"
+      }
+    },
+    {
+      "id": "yn-sterowani",
+      "type": "yesno",
+      "x": 40,
+      "y": 2070,
+      "angle": 1.9,
+      "data": {
+        "question": "Czy ta teza ma jakiekolwiek potwierdzenie/dowody?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-sterowani",
+      "type": "note",
+      "x": 210,
+      "y": 1890,
+      "angle": -1.5,
+      "data": {
+        "text": "Czysta opinia\npolityczna bez\ndowodów w materiale.\nNiefalsyfikowalna —\nnie da się jej ani\npotwierdzić, ani obalić.\nTraktować jako pogląd\nautora, nie fakt.",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-masoneria",
+      "type": "note",
+      "x": 420,
+      "y": 1860,
+      "angle": 0.9,
+      "data": {
+        "text": "TEZA (pytanie widza):\nponad 50% polskich\nbiskupów należy do\nmasonerii?\nAutor: „nie wiem,\nale wydaje mi się,\nże duży odsetek”",
+        "color": "m"
+      }
+    },
+    {
+      "id": "yn-masoneria",
+      "type": "yesno",
+      "x": 420,
+      "y": 2070,
+      "angle": -2.6,
+      "data": {
+        "question": "Czy istnieją jakiekolwiek dane/badania na ten temat?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-masoneria",
+      "type": "note",
+      "x": 590,
+      "y": 1890,
+      "angle": -0.2,
+      "data": {
+        "text": "Autor SAM przyznaje\nbrak danych.\nZ natury rzeczy\nnieweryfikowalne —\nżadnych statystyk\nnie ma i być nie może.\nCzysta spekulacja,\nprawdopodobieństwo\nnie do oszacowania.",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-rolowani",
+      "type": "note",
+      "x": 800,
+      "y": 1860,
+      "angle": -4,
+      "data": {
+        "text": "TEZA AUTORA:\nPolacy dają się\n„rolować” przez\ninstynkt stadny,\n„fajnopolactwo”\ni brak własnych elit",
+        "color": "c"
+      }
+    },
+    {
+      "id": "note-rolowani",
+      "type": "note",
+      "x": 970,
+      "y": 1860,
+      "angle": 2.8,
+      "data": {
+        "text": "OCENA: częściowo\nzasadne, ALE zbyt\nuproszczone.\nKonformizm i „owczy\npęd” to zjawiska\nUNIWERSALNE (psychologia\nspołeczna, np. eksperyment\nAscha), nie specyficznie\npolskie. To bardziej\npubliczna diagnoza\nniż twardy fakt.",
+        "color": "w"
+      }
+    },
+    {
+      "id": "claim-rewolucja",
+      "type": "law",
+      "x": 1160,
+      "y": 1860,
+      "angle": -0.7,
+      "data": {
+        "title": "Czy obalić rząd siłą?",
+        "date": "",
+        "desc": "Autor: nielegalne + „rewolucja zawsze zjada swoje dzieci” (przykład: bolszewicy zastąpili cara, ludziom nie było lepiej)."
+      }
+    },
+    {
+      "id": "yn-rewolucja-legalne",
+      "type": "yesno",
+      "x": 1160,
+      "y": 2070,
+      "angle": 3.4,
+      "data": {
+        "question": "Czy siłowe obalenie rządu jest zgodne z polskim prawem?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-rewolucja",
+      "type": "note",
+      "x": 1330,
+      "y": 1890,
+      "angle": -1.4,
+      "data": {
+        "text": "Część prawna: TAK,\nautor ma rację —\nKonstytucja RP nie\nprzewiduje siłowego\nobalania władzy.\nCzęść historyczna\n(„rewolucja zawsze\nzjada dzieci”): silnie\nugruntowana (Francja,\nRosja), ale NIE\nuniwersalna — patrz\nAksamitna Rewolucja\n1989 w Czechosłowacji.",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-ai-osobowosc",
+      "type": "law",
+      "x": 40,
+      "y": 2320,
+      "angle": 1.9,
+      "data": {
+        "title": "Firmy w 100% zarządzane przez AI wymagają osobowości prawnej dla AI",
+        "date": "",
+        "desc": "Autor: pełne zarządzanie przez AI „szybko nie nastąpi”, bo wymagałoby nadania AI osobowości prawnej."
+      }
+    },
+    {
+      "id": "yn-ai-osobowosc",
+      "type": "yesno",
+      "x": 40,
+      "y": 2530,
+      "angle": -1.7,
+      "data": {
+        "question": "Czy obecne prawo (np. unijny AI Act) przyznaje AI osobowość prawną?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "note-ai-osobowosc",
+      "type": "note",
+      "x": 210,
+      "y": 2350,
+      "angle": 3.8,
+      "data": {
+        "text": "Zgodne z aktualnym\nstanem prawnym.\nUnijny AI Act WPROST\nnie przyznaje AI\nosobowości prawnej —\nodpowiedzialność\nzostaje po stronie\ntwórców/dostawców.\nTeza autora trafna\njak na dziś.",
+        "color": "g"
+      }
     }
   ],
   "pins": [
@@ -621,6 +878,167 @@
       "x": 1155,
       "y": 1178,
       "color": "red"
+    },
+    {
+      "id": "pin-note-section2",
+      "cardId": "note-section2",
+      "x": 110,
+      "y": 1408,
+      "color": "purple"
+    },
+    {
+      "id": "pin-claim-blackout-pewny",
+      "cardId": "claim-blackout-pewny",
+      "x": 382.5,
+      "y": 1408,
+      "color": "orange"
+    },
+    {
+      "id": "pin-yn-blackout-pewny",
+      "cardId": "yn-blackout-pewny",
+      "x": 375,
+      "y": 1618,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-blackout-prob",
+      "cardId": "note-blackout-prob",
+      "x": 540,
+      "y": 1438,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-bankrut",
+      "cardId": "claim-bankrut",
+      "x": 782.5,
+      "y": 1408,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-bankrut",
+      "cardId": "yn-bankrut",
+      "x": 775,
+      "y": 1618,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-bankrut",
+      "cardId": "note-bankrut",
+      "x": 940,
+      "y": 1438,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-motyw-bankow",
+      "cardId": "claim-motyw-bankow",
+      "x": 1150,
+      "y": 1408,
+      "color": "blue"
+    },
+    {
+      "id": "pin-note-motyw-ocena",
+      "cardId": "note-motyw-ocena",
+      "x": 1150,
+      "y": 1618,
+      "color": "purple"
+    },
+    {
+      "id": "pin-claim-sterowani",
+      "cardId": "claim-sterowani",
+      "x": 110,
+      "y": 1868,
+      "color": "red"
+    },
+    {
+      "id": "pin-yn-sterowani",
+      "cardId": "yn-sterowani",
+      "x": 115,
+      "y": 2078,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-sterowani",
+      "cardId": "note-sterowani",
+      "x": 280,
+      "y": 1898,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-masoneria",
+      "cardId": "claim-masoneria",
+      "x": 490,
+      "y": 1868,
+      "color": "purple"
+    },
+    {
+      "id": "pin-yn-masoneria",
+      "cardId": "yn-masoneria",
+      "x": 495,
+      "y": 2078,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-masoneria",
+      "cardId": "note-masoneria",
+      "x": 660,
+      "y": 1898,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-rolowani",
+      "cardId": "claim-rolowani",
+      "x": 870,
+      "y": 1868,
+      "color": "blue"
+    },
+    {
+      "id": "pin-note-rolowani",
+      "cardId": "note-rolowani",
+      "x": 1040,
+      "y": 1868,
+      "color": "green"
+    },
+    {
+      "id": "pin-claim-rewolucja",
+      "cardId": "claim-rewolucja",
+      "x": 1242.5,
+      "y": 1868,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-rewolucja-legalne",
+      "cardId": "yn-rewolucja-legalne",
+      "x": 1235,
+      "y": 2078,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-rewolucja",
+      "cardId": "note-rewolucja",
+      "x": 1400,
+      "y": 1898,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-ai-osobowosc",
+      "cardId": "claim-ai-osobowosc",
+      "x": 122.5,
+      "y": 2328,
+      "color": "blue"
+    },
+    {
+      "id": "pin-yn-ai-osobowosc",
+      "cardId": "yn-ai-osobowosc",
+      "x": 115,
+      "y": 2538,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-ai-osobowosc",
+      "cardId": "note-ai-osobowosc",
+      "x": 280,
+      "y": 2358,
+      "color": "green"
     }
   ],
   "threads": [
@@ -886,6 +1304,187 @@
       "striped": false,
       "width": 1.5,
       "label": "prokuratura"
+    },
+    {
+      "id": "t-blackout-pewny-yn",
+      "fromPin": "pin-claim-blackout-pewny",
+      "toPin": "pin-yn-blackout-pewny",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-blackout-pewny-note",
+      "fromPin": "pin-claim-blackout-pewny",
+      "toPin": "pin-note-blackout-prob",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-video-blackout-pewny",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-blackout-pewny",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-blackout-pewny-blackout",
+      "fromPin": "pin-claim-blackout-pewny",
+      "toPin": "pin-claim-blackout",
+      "color": "k",
+      "striped": true,
+      "stripeColor2": "w",
+      "width": 1.3,
+      "label": "powiązane"
+    },
+    {
+      "id": "t-bankrut-yn",
+      "fromPin": "pin-claim-bankrut",
+      "toPin": "pin-yn-bankrut",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-bankrut-note",
+      "fromPin": "pin-claim-bankrut",
+      "toPin": "pin-note-bankrut",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-video-bankrut",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-bankrut",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-motyw-ocena",
+      "fromPin": "pin-claim-motyw-bankow",
+      "toPin": "pin-note-motyw-ocena",
+      "color": "c",
+      "striped": false,
+      "width": 1.5
+    },
+    {
+      "id": "t-motyw-banki",
+      "fromPin": "pin-claim-motyw-bankow",
+      "toPin": "pin-claim-banki",
+      "color": "k",
+      "striped": true,
+      "stripeColor2": "w",
+      "width": 1.3,
+      "label": "powiązane"
+    },
+    {
+      "id": "t-sterowani-yn",
+      "fromPin": "pin-claim-sterowani",
+      "toPin": "pin-yn-sterowani",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-sterowani-note",
+      "fromPin": "pin-claim-sterowani",
+      "toPin": "pin-note-sterowani",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-ator-sterowani",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-claim-sterowani",
+      "color": "pu",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-masoneria-yn",
+      "fromPin": "pin-claim-masoneria",
+      "toPin": "pin-yn-masoneria",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-masoneria-note",
+      "fromPin": "pin-claim-masoneria",
+      "toPin": "pin-note-masoneria",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-rolowani-note",
+      "fromPin": "pin-claim-rolowani",
+      "toPin": "pin-note-rolowani",
+      "color": "c",
+      "striped": false,
+      "width": 1.5
+    },
+    {
+      "id": "t-ator-rolowani",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-claim-rolowani",
+      "color": "pu",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-rewolucja-yn",
+      "fromPin": "pin-claim-rewolucja",
+      "toPin": "pin-yn-rewolucja-legalne",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-rewolucja-note",
+      "fromPin": "pin-claim-rewolucja",
+      "toPin": "pin-note-rewolucja",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-ator-rewolucja",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-claim-rewolucja",
+      "color": "pu",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-ai-osobowosc-yn",
+      "fromPin": "pin-claim-ai-osobowosc",
+      "toPin": "pin-yn-ai-osobowosc",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-ai-osobowosc-note",
+      "fromPin": "pin-claim-ai-osobowosc",
+      "toPin": "pin-note-ai-osobowosc",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-video-ai",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-ai-osobowosc",
+      "color": "b",
+      "striped": true,
+      "stripeColor2": "w",
+      "width": 1.2
     }
   ]
 }
