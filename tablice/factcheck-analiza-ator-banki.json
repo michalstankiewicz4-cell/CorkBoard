@@ -1,0 +1,891 @@
+{
+  "cards": [
+    {
+      "id": "note-intro",
+      "type": "note",
+      "x": 40,
+      "y": 20,
+      "angle": 2.3,
+      "data": {
+        "text": "FACT-CHECK ODCINKA\n„Banki Każą Szykować\nSię Na Najgorsze!”\nAnaliza Ator (Q&A)\n\n58 min, kilkanaście\nwątków — zielone TAK\n= potwierdzone,\nczerwone NIE = obalone",
+        "color": "w"
+      }
+    },
+    {
+      "id": "video-main",
+      "type": "video",
+      "x": 340,
+      "y": 10,
+      "angle": -3.7,
+      "data": {
+        "url": "https://www.youtube.com/watch?v=ErvYD9BzGkk",
+        "title": "Banki Każą Szykować Się Na Najgorsze! Rozesłały Listy Do Klientów! Co Wiedzą? - Analiza Ator"
+      }
+    },
+    {
+      "id": "person-ator",
+      "type": "person",
+      "x": 40,
+      "y": 260,
+      "angle": -3.1,
+      "data": {
+        "name": "Krzysztof „Ator” Woźniak",
+        "role": "Prawnik z wykształcenia\nAutor kanału „Wideoprezentacje”\n(dawniej o grach, dziś geopolityka)",
+        "party": "Autor",
+        "partyColor": "#555",
+        "emoji": "🎙️"
+      }
+    },
+    {
+      "id": "person-fogelman",
+      "type": "person",
+      "x": 220,
+      "y": 260,
+      "angle": -3.9,
+      "data": {
+        "name": "Lejb Fogelman",
+        "role": "Prawnik, Greenberg Traurig (NY)\nSpecjalista ds. prywatyzacji\nSzkolny kolega braci Kaczyńskich",
+        "party": "",
+        "partyColor": "#666",
+        "emoji": "🧑‍⚖️"
+      }
+    },
+    {
+      "id": "person-jackowski",
+      "type": "person",
+      "x": 400,
+      "y": 260,
+      "angle": 2.9,
+      "data": {
+        "name": "Krzysztof Jackowski",
+        "role": "Tzw. „jasnowidz z Człuchowa”\nCodzienne transmisje na żywo",
+        "party": "",
+        "partyColor": "#666",
+        "emoji": "🔮"
+      }
+    },
+    {
+      "id": "person-braun",
+      "type": "person",
+      "x": 580,
+      "y": 260,
+      "angle": 2,
+      "data": {
+        "name": "Grzegorz Braun",
+        "role": "Poseł do Parlamentu Europejskiego\nZniszczył pomnik UPA (2025)",
+        "party": "",
+        "partyColor": "#8b2500",
+        "emoji": "🔨"
+      }
+    },
+    {
+      "id": "person-zurek",
+      "type": "person",
+      "x": 760,
+      "y": 260,
+      "angle": -1.4,
+      "data": {
+        "name": "Waldemar Żurek",
+        "role": "Minister Sprawiedliwości\nProkurator Generalny RP",
+        "party": "",
+        "partyColor": "#1565c0",
+        "emoji": "⚖️"
+      }
+    },
+    {
+      "id": "person-mentzen",
+      "type": "person",
+      "x": 940,
+      "y": 260,
+      "angle": -3.8,
+      "data": {
+        "name": "Sławomir Mentzen",
+        "role": "Polityk\nSkrytykowany w odcinku za\nnagłaśnianie banalnych „odkryć”\nekonomicznych",
+        "party": "",
+        "partyColor": "#666",
+        "emoji": "📊"
+      }
+    },
+    {
+      "id": "unknown-lobby",
+      "type": "unknown",
+      "x": 1120,
+      "y": 260,
+      "angle": 2,
+      "data": {
+        "name": "Lobby bankowe",
+        "role": "Wg autora: żąda trzymania\ngotówki w domu, oderwane\nod realiów finansowych Polaków"
+      }
+    },
+    {
+      "id": "claim-banki",
+      "type": "news",
+      "x": 40,
+      "y": 480,
+      "angle": -1.8,
+      "data": {
+        "source": "forsal.pl (Jagienka Michalik) / NBP",
+        "title": "Banki każą wypłacać gotówkę „na czarną godzinę”",
+        "body": "Wg materiału banki (i NBP) apelują, by trzymać w domu gotówkę — nawet równowartość dwóch pensji — na wypadek kryzysu/cyberataku/blackoutu.",
+        "url": "https://forsal.pl/gospodarka/aktualnosci/artykuly/9888324,trzeba-wyplacac-pieniadze-na-czarna-godzine-apeluja-o-to-banki-za.html",
+        "accentColor": "#2e7d32"
+      }
+    },
+    {
+      "id": "yn-banki",
+      "type": "yesno",
+      "x": 40,
+      "y": 690,
+      "angle": -0.6,
+      "data": {
+        "question": "Czy banki/NBP naprawdę apelują o trzymanie gotówki w domu?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "note-banki",
+      "type": "note",
+      "x": 250,
+      "y": 510,
+      "angle": 0.2,
+      "data": {
+        "text": "UWAGA:\nkwota przesadzona.\nNBP/banki radzą\n500-1000 zł/os.\n(~tydzień wydatków),\nNIE „dwie pensje”",
+        "color": "y"
+      }
+    },
+    {
+      "id": "claim-uk",
+      "type": "news",
+      "x": 300,
+      "y": 480,
+      "angle": 0.4,
+      "data": {
+        "source": "rząd Wielkiej Brytanii / dorzeczy.pl",
+        "title": "UK: rząd każe obywatelom robić zapasy",
+        "body": "Materiał: władze UK wzywają do gromadzenia wody, jedzenia, leków i gotówki oraz szykowania się do ewentualnej ewakuacji.",
+        "url": "https://dorzeczy.pl/swiat/932692/wielka-brytania-szykuje-sie-na-kryzys-rzad-apeluje-do-obywateli-by-zrobili-zapasy.html",
+        "accentColor": "#1565c0"
+      }
+    },
+    {
+      "id": "yn-uk",
+      "type": "yesno",
+      "x": 300,
+      "y": 690,
+      "angle": -3.7,
+      "data": {
+        "question": "Czy rząd Wielkiej Brytanii faktycznie apelował o domowe zapasy?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "claim-zloto",
+      "type": "news",
+      "x": 560,
+      "y": 480,
+      "angle": 1.9,
+      "data": {
+        "source": "rp.pl / bankier.pl",
+        "title": "Europa ściąga złoto ze Stanów Zjednoczonych",
+        "body": "Francja i Holandia (2025) repatriowały część złota z USA/Kanady do Europy, powołując się na „narastające niepokoje geopolityczne”. NBP też się do tego szykuje.",
+        "url": "https://www.bankier.pl/wiadomosc/Holandia-zabrala-zloto-z-USA-i-Kanady-do-Europy-Co-NBP-zrobi-z-polskim-rezerwami-9191367.html",
+        "accentColor": "#c8971c"
+      }
+    },
+    {
+      "id": "yn-zloto",
+      "type": "yesno",
+      "x": 560,
+      "y": 690,
+      "angle": 0,
+      "data": {
+        "question": "Czy europejskie banki centralne realnie ściągają złoto z USA?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "claim-oszczednosci",
+      "type": "news",
+      "x": 820,
+      "y": 480,
+      "angle": 1.2,
+      "data": {
+        "source": "CBOS / VeloBank / KRD / forsal.pl",
+        "title": "„80% Polaków nie ma żadnych oszczędności”?",
+        "body": "W materiale pada liczba ok. 80%. Realne badania (CBOS, VeloBank, KRD) wskazują 20-46% Polaków bez oszczędności, zależnie od metodologii — czyli znacznie mniej.",
+        "url": "https://forsal.pl/finanse/twoje-pieniadze/artykuly/10953667,oszczednosci-polakow-co-piaty-ich-nie-ma-kobiety-czesciej-nie-maja-finansowej-poduszki.html",
+        "accentColor": "#e63946"
+      }
+    },
+    {
+      "id": "yn-oszczednosci",
+      "type": "yesno",
+      "x": 820,
+      "y": 690,
+      "angle": 2.6,
+      "data": {
+        "question": "Czy ok. 80% Polaków rzeczywiście nie ma żadnych oszczędności?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "claim-blackout",
+      "type": "news",
+      "x": 1080,
+      "y": 480,
+      "angle": 0.9,
+      "data": {
+        "source": "rp.pl / techsetter.pl / Wikipedia",
+        "title": "Blackout w Hiszpanii, Portugalii i Francji (28.04.2025)",
+        "body": "Ogromna awaria sieci energetycznej pozbawiła prądu ok. 50 mln ludzi na Płw. Iberyjskim i w części Francji — to realne zdarzenie. Blackouty w Paryżu i Czechach z materiału nie zostały jednak potwierdzone w źródłach.",
+        "url": "https://pl.wikipedia.org/wiki/Awaria_zasilania_na_P%C3%B3%C5%82wyspie_Iberyjskim",
+        "accentColor": "#9b59b6"
+      }
+    },
+    {
+      "id": "yn-blackout",
+      "type": "yesno",
+      "x": 1080,
+      "y": 690,
+      "angle": -0.6,
+      "data": {
+        "question": "Czy w Europie ostatnio zdarzały się poważne blackouty?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "note-blackout",
+      "type": "note",
+      "x": 1290,
+      "y": 510,
+      "angle": 2,
+      "data": {
+        "text": "Iberyjski blackout\n(Hiszpania/Portugalia/\nFrancja) potwierdzony.\nParyż i Czechy —\nbrak potwierdzenia\nw źródłach",
+        "color": "c"
+      }
+    },
+    {
+      "id": "claim-haavara",
+      "type": "law",
+      "x": 40,
+      "y": 960,
+      "angle": -2.2,
+      "data": {
+        "title": "Porozumienie Haavara (1933)",
+        "date": "1933-08-25",
+        "desc": "Umowa między nazistowskimi Niemcami a organizacjami syjonistycznymi, umożliwiająca emigrację ok. 60 000 niemieckich Żydów do Palestyny (1933-1939) z częściowym transferem majątku."
+      }
+    },
+    {
+      "id": "yn-haavara",
+      "type": "yesno",
+      "x": 40,
+      "y": 1170,
+      "angle": -0.5,
+      "data": {
+        "question": "Czy Porozumienie Haavara z 1933 r. rzeczywiście miało miejsce?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "claim-wolyn",
+      "type": "law",
+      "x": 300,
+      "y": 960,
+      "angle": -0.6,
+      "data": {
+        "title": "Rzeź Wołyńska (1943-1945)",
+        "date": "1943-02-01",
+        "desc": "Wg IPN/PAP na Wołyniu i w Galicji Wsch. zginęło ponad 100 000 Polaków z rąk OUN-UPA — jedno z największych ludobójstw popełnionych na Polakach w XX w."
+      }
+    },
+    {
+      "id": "yn-wolyn",
+      "type": "yesno",
+      "x": 300,
+      "y": 1170,
+      "angle": 3.8,
+      "data": {
+        "question": "Czy UPA zamordowało ponad 100 000 Polaków?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "claim-pesel",
+      "type": "news",
+      "x": 560,
+      "y": 960,
+      "angle": -1.4,
+      "data": {
+        "source": "money.pl / gazetaprawna.pl",
+        "title": "Wyciek danych 19 mln Polaków (PESEL, dane medyczne)",
+        "body": "Cyberatak na firmę MyDr ujawnił dane ok. 19 mln osób (PESEL, dane kontaktowe, medyczne) — potwierdzone przez wicepremiera K. Gawkowskiego. Materiał SŁUSZNIE odrzuca jednak tezę, że wyciek posłuży do sfałszowania wyborów 2027 — brak na to dowodów.",
+        "url": "https://www.money.pl/gospodarka/wyciek-danych-19-milionow-polakow-tak-mozna-zastrzec-numer-pesel-7317666990860416a.html",
+        "accentColor": "#f4511e"
+      }
+    },
+    {
+      "id": "yn-pesel",
+      "type": "yesno",
+      "x": 560,
+      "y": 1170,
+      "angle": -2.7,
+      "data": {
+        "question": "Czy wyciekły dane ok. 19 mln Polaków (w tym PESEL)?",
+        "answer": "yes"
+      }
+    },
+    {
+      "id": "note-pesel",
+      "type": "note",
+      "x": 770,
+      "y": 990,
+      "angle": 3.8,
+      "data": {
+        "text": "Autor materiału\nSAM odrzuca tezę\no fałszerstwie\nwyborów 2027 —\ni słusznie: brak\nna to dowodów",
+        "color": "g"
+      }
+    },
+    {
+      "id": "claim-tvn",
+      "type": "news",
+      "x": 820,
+      "y": 960,
+      "angle": -1.4,
+      "data": {
+        "source": "press.pl / oko.press / dziennik.pl",
+        "title": "„TVN zapłaciło za zorganizowanie urodzin Hitlera”?",
+        "body": "Zarzut wysuwany przez wPolityce.pl/„Sieci” (2017, Wodzisław Śl.). Prokuratura w Gliwicach nie znalazła dowodów, że ekipa TVN należała do neonazistowskiego środowiska; TVN zaprzecza i pozwał oskarżycieli.",
+        "url": "https://oko.press/to-byl-reportaz-wcieleniowy-tvn-nie-prowokacja",
+        "accentColor": "#e63946"
+      }
+    },
+    {
+      "id": "yn-tvn",
+      "type": "yesno",
+      "x": 820,
+      "y": 1170,
+      "angle": -1.6,
+      "data": {
+        "question": "Czy potwierdzono, że TVN zapłaciło za inscenizację „urodzin Hitlera”?",
+        "answer": "no"
+      }
+    },
+    {
+      "id": "claim-pomnik",
+      "type": "news",
+      "x": 1080,
+      "y": 960,
+      "angle": -1.6,
+      "data": {
+        "source": "wiadomosci.wp.pl / rmf24.pl / gazetaprawna.pl",
+        "title": "Zniszczenie pomnika UPA — śledztwo o „znieważenie narodowościowe”",
+        "body": "Grzegorz Braun zniszczył pomnik żołnierzy UPA k. Dołhobyczowa (2025). Prokuratura prowadzi śledztwo o znieważenie grupy narodowości ukraińskiej poprzez zbezczeszczenie miejsca spoczynku — grozi do 5 lat więzienia.",
+        "url": "https://www.rmf24.pl/regiony/news-zniszczenie-pomnika-zolnierzy-upa-sledczy-zabezpieczyli-nagr,nIdn,1017315",
+        "accentColor": "#455a64"
+      }
+    },
+    {
+      "id": "yn-pomnik",
+      "type": "yesno",
+      "x": 1080,
+      "y": 1170,
+      "angle": -0.5,
+      "data": {
+        "question": "Czy zniszczenie pomnika UPA faktycznie jest ścigane jako znieważenie narodowościowe?",
+        "answer": "yes"
+      }
+    }
+  ],
+  "pins": [
+    {
+      "id": "pin-note-intro",
+      "cardId": "note-intro",
+      "x": 110,
+      "y": 28,
+      "color": "black"
+    },
+    {
+      "id": "pin-video-main",
+      "cardId": "video-main",
+      "x": 460,
+      "y": 18,
+      "color": "gold"
+    },
+    {
+      "id": "pin-person-ator",
+      "cardId": "person-ator",
+      "x": 105,
+      "y": 268,
+      "color": "purple"
+    },
+    {
+      "id": "pin-person-fogelman",
+      "cardId": "person-fogelman",
+      "x": 285,
+      "y": 268,
+      "color": "blue"
+    },
+    {
+      "id": "pin-person-jackowski",
+      "cardId": "person-jackowski",
+      "x": 465,
+      "y": 268,
+      "color": "purple"
+    },
+    {
+      "id": "pin-person-braun",
+      "cardId": "person-braun",
+      "x": 645,
+      "y": 268,
+      "color": "orange"
+    },
+    {
+      "id": "pin-person-zurek",
+      "cardId": "person-zurek",
+      "x": 825,
+      "y": 268,
+      "color": "blue"
+    },
+    {
+      "id": "pin-person-mentzen",
+      "cardId": "person-mentzen",
+      "x": 1005,
+      "y": 268,
+      "color": "green"
+    },
+    {
+      "id": "pin-unknown-lobby",
+      "cardId": "unknown-lobby",
+      "x": 1185,
+      "y": 268,
+      "color": "gold"
+    },
+    {
+      "id": "pin-claim-banki",
+      "cardId": "claim-banki",
+      "x": 135,
+      "y": 488,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-banki",
+      "cardId": "yn-banki",
+      "x": 115,
+      "y": 698,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-banki",
+      "cardId": "note-banki",
+      "x": 320,
+      "y": 518,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-uk",
+      "cardId": "claim-uk",
+      "x": 395,
+      "y": 488,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-uk",
+      "cardId": "yn-uk",
+      "x": 375,
+      "y": 698,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-zloto",
+      "cardId": "claim-zloto",
+      "x": 655,
+      "y": 488,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-zloto",
+      "cardId": "yn-zloto",
+      "x": 635,
+      "y": 698,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-oszczednosci",
+      "cardId": "claim-oszczednosci",
+      "x": 915,
+      "y": 488,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-oszczednosci",
+      "cardId": "yn-oszczednosci",
+      "x": 895,
+      "y": 698,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-blackout",
+      "cardId": "claim-blackout",
+      "x": 1175,
+      "y": 488,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-blackout",
+      "cardId": "yn-blackout",
+      "x": 1155,
+      "y": 698,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-blackout",
+      "cardId": "note-blackout",
+      "x": 1360,
+      "y": 518,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-haavara",
+      "cardId": "claim-haavara",
+      "x": 122.5,
+      "y": 968,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-haavara",
+      "cardId": "yn-haavara",
+      "x": 115,
+      "y": 1178,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-wolyn",
+      "cardId": "claim-wolyn",
+      "x": 382.5,
+      "y": 968,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-wolyn",
+      "cardId": "yn-wolyn",
+      "x": 375,
+      "y": 1178,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-pesel",
+      "cardId": "claim-pesel",
+      "x": 655,
+      "y": 968,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-pesel",
+      "cardId": "yn-pesel",
+      "x": 635,
+      "y": 1178,
+      "color": "red"
+    },
+    {
+      "id": "pin-note-pesel",
+      "cardId": "note-pesel",
+      "x": 840,
+      "y": 998,
+      "color": "yellow"
+    },
+    {
+      "id": "pin-claim-tvn",
+      "cardId": "claim-tvn",
+      "x": 915,
+      "y": 968,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-tvn",
+      "cardId": "yn-tvn",
+      "x": 895,
+      "y": 1178,
+      "color": "red"
+    },
+    {
+      "id": "pin-claim-pomnik",
+      "cardId": "claim-pomnik",
+      "x": 1175,
+      "y": 968,
+      "color": "gold"
+    },
+    {
+      "id": "pin-yn-pomnik",
+      "cardId": "yn-pomnik",
+      "x": 1155,
+      "y": 1178,
+      "color": "red"
+    }
+  ],
+  "threads": [
+    {
+      "id": "t-ator-fogelman",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-person-fogelman",
+      "color": "pu",
+      "striped": false,
+      "width": 1.5,
+      "label": "wątek Jackowski/Fogelman"
+    },
+    {
+      "id": "t-fogelman-jackowski",
+      "fromPin": "pin-person-fogelman",
+      "toPin": "pin-person-jackowski",
+      "color": "pu",
+      "striped": false,
+      "width": 1.5
+    },
+    {
+      "id": "t-ator-braun",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-person-braun",
+      "color": "or",
+      "striped": false,
+      "width": 1.5
+    },
+    {
+      "id": "t-braun-zurek",
+      "fromPin": "pin-person-braun",
+      "toPin": "pin-person-zurek",
+      "color": "k",
+      "striped": false,
+      "width": 1.5,
+      "label": "śledztwo prokuratury"
+    },
+    {
+      "id": "t-ator-mentzen",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-person-mentzen",
+      "color": "pu",
+      "striped": true,
+      "stripeColor2": "w",
+      "width": 1.5,
+      "label": "krytyka"
+    },
+    {
+      "id": "t-ator-lobby",
+      "fromPin": "pin-person-ator",
+      "toPin": "pin-unknown-lobby",
+      "color": "go",
+      "striped": false,
+      "width": 1.5
+    },
+    {
+      "id": "t-claim-yn-banki",
+      "fromPin": "pin-claim-banki",
+      "toPin": "pin-yn-banki",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-banki",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-banki",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-note-banki",
+      "fromPin": "pin-claim-banki",
+      "toPin": "pin-note-banki",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-uk",
+      "fromPin": "pin-claim-uk",
+      "toPin": "pin-yn-uk",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-uk",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-uk",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-zloto",
+      "fromPin": "pin-claim-zloto",
+      "toPin": "pin-yn-zloto",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-zloto",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-zloto",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-oszczednosci",
+      "fromPin": "pin-claim-oszczednosci",
+      "toPin": "pin-yn-oszczednosci",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-oszczednosci",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-oszczednosci",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-blackout",
+      "fromPin": "pin-claim-blackout",
+      "toPin": "pin-yn-blackout",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-blackout",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-blackout",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-note-blackout",
+      "fromPin": "pin-claim-blackout",
+      "toPin": "pin-note-blackout",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-haavara",
+      "fromPin": "pin-claim-haavara",
+      "toPin": "pin-yn-haavara",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-haavara",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-haavara",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-wolyn",
+      "fromPin": "pin-claim-wolyn",
+      "toPin": "pin-yn-wolyn",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-wolyn",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-wolyn",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-pesel",
+      "fromPin": "pin-claim-pesel",
+      "toPin": "pin-yn-pesel",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-pesel",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-pesel",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-note-pesel",
+      "fromPin": "pin-claim-pesel",
+      "toPin": "pin-note-pesel",
+      "color": "y",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-tvn",
+      "fromPin": "pin-claim-tvn",
+      "toPin": "pin-yn-tvn",
+      "color": "r",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-tvn",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-tvn",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-claim-yn-pomnik",
+      "fromPin": "pin-claim-pomnik",
+      "toPin": "pin-yn-pomnik",
+      "color": "g",
+      "striped": false,
+      "width": 2.5
+    },
+    {
+      "id": "t-video-claim-pomnik",
+      "fromPin": "pin-video-main",
+      "toPin": "pin-claim-pomnik",
+      "color": "b",
+      "striped": false,
+      "width": 1.3
+    },
+    {
+      "id": "t-fogelman-haavara",
+      "fromPin": "pin-person-fogelman",
+      "toPin": "pin-claim-haavara",
+      "color": "or",
+      "striped": false,
+      "width": 1.5,
+      "label": "dygresja w odcinku"
+    },
+    {
+      "id": "t-braun-pomnik",
+      "fromPin": "pin-person-braun",
+      "toPin": "pin-claim-pomnik",
+      "color": "k",
+      "striped": false,
+      "width": 2,
+      "label": "sprawca"
+    },
+    {
+      "id": "t-zurek-pomnik",
+      "fromPin": "pin-person-zurek",
+      "toPin": "pin-claim-pomnik",
+      "color": "b",
+      "striped": false,
+      "width": 1.5,
+      "label": "prokuratura"
+    }
+  ]
+}
