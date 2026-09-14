@@ -113,6 +113,7 @@ function buildCardHTML(card) {
     case 'date':    return buildDate(d);
     case 'video':   return buildVideo(d);
     case 'image':   return buildImage(d);
+    case 'yesno':   return buildYesNo(d);
     default:        return '<div style="padding:10px;color:#333">?</div>';
   }
 }
@@ -181,6 +182,24 @@ function buildDate(d) {
     <div class="card-date" style="background:${noteColor(d.color)}">
       <div class="cd-label">${esc(d.label) || t('card.dateDefault')}</div>
       <div class="cd-date">${esc(d.date)}</div>
+    </div>`;
+}
+
+function buildYesNo(d) {
+  const answer = d.answer === 'yes' || d.answer === 'no' ? d.answer : null;
+  const opt = (val, label, iconPath) => `
+    <div class="cyn-opt cyn-${val}${answer===val?' cyn-selected':''}" data-yn="${val}"
+      onmousedown="event.stopPropagation()" onclick="App.toggleYesNo(this)">
+      <div class="cyn-box"><svg viewBox="0 0 24 24"><path d="${iconPath}"/></svg></div>
+      <span class="cyn-label">${label}</span>
+    </div>`;
+  return `
+    <div class="card-yesno">
+      <div class="cyn-question">${esc(d.question) || t('card.yesnoDefault')}</div>
+      <div class="cyn-options">
+        ${opt('yes', t('yn.yes'), 'M4 13l5 5L20 6')}
+        ${opt('no',  t('yn.no'),  'M5 5l14 14M19 5L5 19')}
+      </div>
     </div>`;
 }
 

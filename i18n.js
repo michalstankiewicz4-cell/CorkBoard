@@ -213,6 +213,15 @@ const translations = {
     'field.caption':     'Caption',
     'alert.noImage':     'Provide an image file or URL.',
 
+    // yes/no card
+    'modal.yesno':          'Yes / No question',
+    'ci.yesno':              'Yes/No',
+    'field.question':        'Question',
+    'alert.enterQuestion':   'Enter a question',
+    'card.yesnoDefault':     'Question?',
+    'yn.yes':                'YES',
+    'yn.no':                 'NO',
+
     // import notes overlay
     'file.importNotes':  '📷 Import Notes',
     'in.title':          'Import Notes — select areas',
@@ -416,6 +425,15 @@ const translations = {
     'field.imageURL':    'Lub URL obrazka',
     'field.caption':     'Podpis',
     'alert.noImage':     'Podaj plik lub URL obrazka.',
+
+    // karta tak/nie
+    'modal.yesno':          'Pytanie tak / nie',
+    'ci.yesno':              'Tak/Nie',
+    'field.question':        'Pytanie',
+    'alert.enterQuestion':   'Podaj treść pytania',
+    'card.yesnoDefault':     'Pytanie?',
+    'yn.yes':                'TAK',
+    'yn.no':                 'NIE',
 
     'file.importNotes':  '📷 Importuj notatki',
     'in.title':          'Importuj notatki — zaznacz obszary',

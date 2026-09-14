@@ -55,6 +55,10 @@
       data-template='{"text":"Notatka","color":"y"}'>
       <span class="ci-ico">📝</span><span class="ci-lbl" data-i18n="ci.note">Note</span>
     </div>
+    <div class="ci-bubble" draggable="true" data-type="yesno"
+      data-template='{"question":"Pytanie?","answer":null}'>
+      <span class="ci-ico">☑️</span><span class="ci-lbl" data-i18n="ci.yesno">Yes/No</span>
+    </div>
     <div class="ci-bubble" draggable="true" data-type="image"
       data-template='{"url":"","caption":""}'>
       <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
@@ -449,6 +453,7 @@ applyFrameStyle();
 const CAROUSEL_KEY = 'corkboard_carousel_v1';
 const CAROUSEL_META = [
   { type: 'note',    icon: '📝' },
+  { type: 'yesno',   icon: '☑️' },
   { type: 'image',   icon: '🖼️' },
   { type: 'date',    icon: '📅' },
   { type: 'video',   icon: '🎬' },
@@ -461,7 +466,14 @@ const CAROUSEL_META = [
 const DEFAULT_CAROUSEL = CAROUSEL_META.map(m => ({ type: m.type, visible: true }));
 
 function loadCarouselState() {
-  try { return JSON.parse(localStorage.getItem(CAROUSEL_KEY)) || null; } catch { return null; }
+  let stored;
+  try { stored = JSON.parse(localStorage.getItem(CAROUSEL_KEY)) || null; } catch { stored = null; }
+  if (!stored) return null;
+  // Merge in any card types added to CAROUSEL_META after this state was saved
+  // (older localStorage snapshots won't know about them yet).
+  const known = new Set(stored.map(o => o.type));
+  CAROUSEL_META.forEach(m => { if (!known.has(m.type)) stored.push({ type: m.type, visible: true }); });
+  return stored;
 }
 function saveCarouselState() {
   localStorage.setItem(CAROUSEL_KEY, JSON.stringify(carouselState));

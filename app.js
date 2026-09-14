@@ -1237,6 +1237,9 @@ function buildModalHTML(type, d) {
       <div class="modal-field"><label>${t('field.label')}</label><input id="mf-label" value="${esc(d?.label)}"/></div>
       <div class="modal-field"><label>${t('field.date')} *</label><input id="mf-date" value="${esc(d?.date)}"/></div>
       <div class="modal-field"><label>${t('field.noteColor')}</label><select id="mf-color">${noteOpts}</select></div>`;
+  } else if (type==='yesno') {
+    fields=`
+      <div class="modal-field"><label>${t('field.question')} *</label><input id="mf-question" value="${esc(d?.question)}"/></div>`;
   }
   if (type==='video') {
     fields=`
@@ -1258,7 +1261,7 @@ function buildModalHTML(type, d) {
     party:   t('modal.party'),   law:     t('modal.law'),
     news:    t('modal.news'),    note:    t('modal.note'),
     date:    t('modal.date'),    video:   t('modal.video'),
-    image:   t('modal.image'),
+    image:   t('modal.image'),   yesno:   t('modal.yesno'),
   };
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
@@ -1291,6 +1294,11 @@ function readModalForm(type) {
     const date=v('mf-date'); if(!date) return alert(t('alert.enterDate')),null;
     return { label:v('mf-label'), date, color:sel('mf-color') };
   }
+  if (type==='yesno') {
+    const question=v('mf-question'); if(!question) return alert(t('alert.enterQuestion')),null;
+    const existing = editingId ? state.cards.find(c => c.id === editingId)?.data : null;
+    return { question, answer: existing?.answer ?? null };
+  }
   if (type==='video') {
     const url=v('mf-url'); if(!url) return alert(t('alert.enterYTLink')),null;
     return { url, title:v('mf-title') };
@@ -1300,6 +1308,18 @@ function readModalForm(type) {
     return { url, caption:v('mf-caption') };
   }
   return null;
+}
+
+// Toggle a yes/no card's answer (called from the checkbox onclick in cards.js)
+export function toggleYesNo(el) {
+  const cardEl = el.closest('.card');
+  if (!cardEl) return;
+  const card = state.cards.find(c => c.id === cardEl.dataset.id);
+  if (!card) return;
+  const val = el.dataset.yn;
+  card.data.answer = card.data.answer === val ? null : val;
+  updateCardElement(cardEl, card);
+  save();
 }
 
 // ── Export / Import ───────────────────────────────────────
