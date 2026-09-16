@@ -127,7 +127,6 @@
         "source": "forsal.pl (Jagienka Michalik) / NBP",
         "title": "Banki każą wypłacać gotówkę „na czarną godzinę”",
         "body": "Wg materiału banki (i NBP) apelują, by trzymać w domu gotówkę — nawet równowartość dwóch pensji — na wypadek kryzysu/cyberataku/blackoutu.",
-        "url": "https://forsal.pl/gospodarka/aktualnosci/artykuly/9888324,trzeba-wyplacac-pieniadze-na-czarna-godzine-apeluja-o-to-banki-za.html",
         "accentColor": "#2e7d32"
       }
     },
@@ -163,7 +162,6 @@
         "source": "rząd Wielkiej Brytanii / dorzeczy.pl",
         "title": "UK: rząd każe obywatelom robić zapasy",
         "body": "Materiał: władze UK wzywają do gromadzenia wody, jedzenia, leków i gotówki oraz szykowania się do ewentualnej ewakuacji.",
-        "url": "https://dorzeczy.pl/swiat/932692/wielka-brytania-szykuje-sie-na-kryzys-rzad-apeluje-do-obywateli-by-zrobili-zapasy.html",
         "accentColor": "#1565c0"
       }
     },
@@ -188,7 +186,6 @@
         "source": "rp.pl / bankier.pl",
         "title": "Europa ściąga złoto ze Stanów Zjednoczonych",
         "body": "Francja i Holandia (2025) repatriowały część złota z USA/Kanady do Europy, powołując się na „narastające niepokoje geopolityczne”. NBP też się do tego szykuje.",
-        "url": "https://www.bankier.pl/wiadomosc/Holandia-zabrala-zloto-z-USA-i-Kanady-do-Europy-Co-NBP-zrobi-z-polskim-rezerwami-9191367.html",
         "accentColor": "#c8971c"
       }
     },
@@ -213,7 +210,6 @@
         "source": "CBOS / VeloBank / KRD / forsal.pl",
         "title": "„80% Polaków nie ma żadnych oszczędności”?",
         "body": "W materiale pada liczba ok. 80%. Realne badania (CBOS, VeloBank, KRD) wskazują 20-46% Polaków bez oszczędności, zależnie od metodologii — czyli znacznie mniej.",
-        "url": "https://forsal.pl/finanse/twoje-pieniadze/artykuly/10953667,oszczednosci-polakow-co-piaty-ich-nie-ma-kobiety-czesciej-nie-maja-finansowej-poduszki.html",
         "accentColor": "#e63946"
       }
     },
@@ -238,7 +234,6 @@
         "source": "rp.pl / techsetter.pl / Wikipedia",
         "title": "Blackout w Hiszpanii, Portugalii i Francji (28.04.2025)",
         "body": "Ogromna awaria sieci energetycznej pozbawiła prądu ok. 50 mln ludzi na Płw. Iberyjskim i w części Francji — to realne zdarzenie. Blackouty w Paryżu i Czechach z materiału nie zostały jednak potwierdzone w źródłach.",
-        "url": "https://pl.wikipedia.org/wiki/Awaria_zasilania_na_P%C3%B3%C5%82wyspie_Iberyjskim",
         "accentColor": "#9b59b6"
       }
     },
@@ -320,7 +315,6 @@
         "source": "money.pl / gazetaprawna.pl",
         "title": "Wyciek danych 19 mln Polaków (PESEL, dane medyczne)",
         "body": "Cyberatak na firmę MyDr ujawnił dane ok. 19 mln osób (PESEL, dane kontaktowe, medyczne) — potwierdzone przez wicepremiera K. Gawkowskiego. Materiał SŁUSZNIE odrzuca jednak tezę, że wyciek posłuży do sfałszowania wyborów 2027 — brak na to dowodów.",
-        "url": "https://www.money.pl/gospodarka/wyciek-danych-19-milionow-polakow-tak-mozna-zastrzec-numer-pesel-7317666990860416a.html",
         "accentColor": "#f4511e"
       }
     },
@@ -356,7 +350,6 @@
         "source": "press.pl / oko.press / dziennik.pl",
         "title": "„TVN zapłaciło za zorganizowanie urodzin Hitlera”?",
         "body": "Zarzut wysuwany przez wPolityce.pl/„Sieci” (2017, Wodzisław Śl.). Prokuratura w Gliwicach nie znalazła dowodów, że ekipa TVN należała do neonazistowskiego środowiska; TVN zaprzecza i pozwał oskarżycieli.",
-        "url": "https://oko.press/to-byl-reportaz-wcieleniowy-tvn-nie-prowokacja",
         "accentColor": "#e63946"
       }
     },
@@ -381,7 +374,6 @@
         "source": "wiadomosci.wp.pl / rmf24.pl / gazetaprawna.pl",
         "title": "Zniszczenie pomnika UPA — śledztwo o „znieważenie narodowościowe”",
         "body": "Grzegorz Braun zniszczył pomnik żołnierzy UPA k. Dołhobyczowa (2025). Prokuratura prowadzi śledztwo o znieważenie grupy narodowości ukraińskiej poprzez zbezczeszczenie miejsca spoczynku — grozi do 5 lat więzienia.",
-        "url": "https://www.rmf24.pl/regiony/news-zniszczenie-pomnika-zolnierzy-upa-sledczy-zabezpieczyli-nagr,nIdn,1017315",
         "accentColor": "#455a64"
       }
     },
@@ -662,6 +654,125 @@
       "data": {
         "text": "- Zrób proszę analizę, rozbij na punkty i podpunkty, sprawdź w internecie, czy poszczególne zagadnienia są prawdziwe i mają potwierdzenie w internecie i wypełnij czystą tablicę odpowiednimi kartami.\n\n- Zrób dodatkową własną analizę i odpowiedz na pytania i zagadnienia stworzone przez autora i odpowiedz czy są prawdziwe lub jakie jest ich prawdopodobieństwo",
         "color": "y"
+      }
+    },
+    {
+      "id": "source-banki",
+      "type": "source",
+      "x": 40,
+      "y": 2820,
+      "angle": -3.2,
+      "data": {
+        "url": "https://forsal.pl/gospodarka/aktualnosci/artykuly/9888324,trzeba-wyplacac-pieniadze-na-czarna-godzine-apeluja-o-to-banki-za.html",
+        "label": "Banki apelują o wypłatę gotówki na \"czarną godzinę\"",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-uk",
+      "type": "source",
+      "x": 260,
+      "y": 2820,
+      "angle": -1.8,
+      "data": {
+        "url": "https://dorzeczy.pl/swiat/932692/wielka-brytania-szykuje-sie-na-kryzys-rzad-apeluje-do-obywateli-by-zrobili-zapasy.html",
+        "label": "UK: rząd zaleca domowe zapasy kryzysowe",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-zloto",
+      "type": "source",
+      "x": 480,
+      "y": 2820,
+      "angle": 2.3,
+      "data": {
+        "url": "https://www.bankier.pl/wiadomosc/Holandia-zabrala-zloto-z-USA-i-Kanady-do-Europy-Co-NBP-zrobi-z-polskim-rezerwami-9191367.html",
+        "label": "Holandia repatriowała złoto z USA/Kanady",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-oszczednosci",
+      "type": "source",
+      "x": 700,
+      "y": 2820,
+      "angle": -3.5,
+      "data": {
+        "url": "https://forsal.pl/finanse/twoje-pieniadze/artykuly/10953667,oszczednosci-polakow-co-piaty-ich-nie-ma-kobiety-czesciej-nie-maja-finansowej-poduszki.html",
+        "label": "Ile Polaków nie ma oszczędności (dane)",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-blackout",
+      "type": "source",
+      "x": 920,
+      "y": 2820,
+      "angle": 2.7,
+      "data": {
+        "url": "https://pl.wikipedia.org/wiki/Awaria_zasilania_na_P%C3%B3%C5%82wyspie_Iberyjskim",
+        "label": "Awaria zasilania na Płw. Iberyjskim (28.04.2025)",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-pesel",
+      "type": "source",
+      "x": 1140,
+      "y": 2820,
+      "angle": -0.2,
+      "data": {
+        "url": "https://www.money.pl/gospodarka/wyciek-danych-19-milionow-polakow-tak-mozna-zastrzec-numer-pesel-7317666990860416a.html",
+        "label": "Wyciek danych 19 mln Polaków (PESEL)",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-tvn",
+      "type": "source",
+      "x": 1360,
+      "y": 2820,
+      "angle": 2.2,
+      "data": {
+        "url": "https://oko.press/to-byl-reportaz-wcieleniowy-tvn-nie-prowokacja",
+        "label": "\"Urodziny Hitlera\" — czy to była prowokacja TVN?",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-pomnik",
+      "type": "source",
+      "x": 1580,
+      "y": 2820,
+      "angle": 2.4,
+      "data": {
+        "url": "https://www.rmf24.pl/regiony/news-zniszczenie-pomnika-zolnierzy-upa-sledczy-zabezpieczyli-nagr,nIdn,1017315",
+        "label": "Śledztwo ws. zniszczenia pomnika UPA",
+        "note": ""
+      }
+    },
+    {
+      "id": "note-section-sources",
+      "type": "note",
+      "x": 40,
+      "y": 2690,
+      "angle": -2.8,
+      "data": {
+        "text": "ŹRÓDŁA — przeniesione\nz kart News do osobnych\nkart Źródło (linki poniżej)",
+        "color": "w"
+      }
+    },
+    {
+      "id": "quote-banki",
+      "type": "quote",
+      "x": 260,
+      "y": 2690,
+      "angle": 2.3,
+      "data": {
+        "text": "Banki każą wybierać gotówkę skąd. To nielogiczne, bo na tym tracą, co oni wiedzą?",
+        "author": "pytanie widza (odczytane przez Atora)",
+        "context": "0:02, tytułowe pytanie odcinka"
       }
     }
   ],
@@ -1050,6 +1161,76 @@
       "x": 280,
       "y": 2358,
       "color": "green"
+    },
+    {
+      "id": "pin-source-banki",
+      "cardId": "source-banki",
+      "x": 115,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-uk",
+      "cardId": "source-uk",
+      "x": 335,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-zloto",
+      "cardId": "source-zloto",
+      "x": 555,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-oszczednosci",
+      "cardId": "source-oszczednosci",
+      "x": 775,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-blackout",
+      "cardId": "source-blackout",
+      "x": 995,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-pesel",
+      "cardId": "source-pesel",
+      "x": 1215,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-tvn",
+      "cardId": "source-tvn",
+      "x": 1435,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-pomnik",
+      "cardId": "source-pomnik",
+      "x": 1655,
+      "y": 2828,
+      "color": "gold"
+    },
+    {
+      "id": "pin-note-section-sources",
+      "cardId": "note-section-sources",
+      "x": 110,
+      "y": 2698,
+      "color": "black"
+    },
+    {
+      "id": "pin-quote-banki",
+      "cardId": "quote-banki",
+      "x": 347.5,
+      "y": 2698,
+      "color": "purple"
     }
   ],
   "threads": [
@@ -1496,6 +1677,87 @@
       "striped": true,
       "stripeColor2": "w",
       "width": 1.2
+    },
+    {
+      "id": "t-source-banki",
+      "fromPin": "pin-claim-banki",
+      "toPin": "pin-source-banki",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-uk",
+      "fromPin": "pin-claim-uk",
+      "toPin": "pin-source-uk",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-zloto",
+      "fromPin": "pin-claim-zloto",
+      "toPin": "pin-source-zloto",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-oszczednosci",
+      "fromPin": "pin-claim-oszczednosci",
+      "toPin": "pin-source-oszczednosci",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-blackout",
+      "fromPin": "pin-claim-blackout",
+      "toPin": "pin-source-blackout",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-pesel",
+      "fromPin": "pin-claim-pesel",
+      "toPin": "pin-source-pesel",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-tvn",
+      "fromPin": "pin-claim-tvn",
+      "toPin": "pin-source-tvn",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-pomnik",
+      "fromPin": "pin-claim-pomnik",
+      "toPin": "pin-source-pomnik",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-quote-banki",
+      "fromPin": "pin-claim-banki",
+      "toPin": "pin-quote-banki",
+      "color": "pu",
+      "striped": false,
+      "width": 1.3,
+      "label": "cytat"
     }
   ]
 }

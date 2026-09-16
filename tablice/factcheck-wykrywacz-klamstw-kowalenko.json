@@ -98,7 +98,6 @@
         "source": "TVP Info / Demagog.org.pl",
         "title": "Fałszywy \"radny\" Kamil Kowalenko z Płocka",
         "body": "Konto na X podszywało się pod radnego KO ukraińskiego pochodzenia, twierdząc że dostał z KPO drogi wózek inwalidzki i dofinansowanie \"interesów na Ukrainie\" — prezentowane jako dowód \"zdrady interesów Polski\".",
-        "url": "https://demagog.org.pl/fake_news/parkingi-dla-ukraincow-i-fikcyjny-radny-z-plocka-uwazaj-na-dezinformacje/",
         "accentColor": "#2e7d32"
       }
     },
@@ -168,7 +167,6 @@
         "source": "GovTech.com / Komisja Europejska",
         "title": "Niebieski „ptaszek\" na X = tylko płatna subskrypcja",
         "body": "Wg eksperta plakietka weryfikacyjna na X nie oznacza sprawdzenia tożsamości, tylko opłacenie subskrypcji ($8/mies. + numer telefonu). KE w XII 2025 uznała to oznaczenie za wprowadzające w błąd (narusza unijny DSA).",
-        "url": "https://www.govtech.com/question-of-the-day/can-x-users-hide-their-blue-checkmarks",
         "accentColor": "#1565c0"
       }
     },
@@ -216,7 +214,6 @@
         "source": "rp.pl — przegląd podatków cyfrowych na świecie",
         "title": "Twierdzenie: „Niemcy, Francja i Hiszpania mają podatek cyfrowy, Polska nie\"",
         "body": "Francja: TAK (od 2019, 3%). Hiszpania: TAK (od 2021, 3%). Niemcy: FAŁSZ — Niemcy NIE wprowadziły podatku cyfrowego. Polska: prawda w momencie nagrania (projekt ustawy dopiero z VII 2026, wejście w życie planowane 1.01.2027).",
-        "url": "https://www.rp.pl/biznes/art44885651-od-tokio-po-sztokholm-jak-z-big-techami-radzi-sobie-swiat",
         "accentColor": "#e63946"
       }
     },
@@ -306,6 +303,65 @@
       "data": {
         "question": "Ogólna rzetelność analizowanego fragmentu",
         "value": 7
+      }
+    },
+    {
+      "id": "source-kowalenko",
+      "type": "source",
+      "x": 40,
+      "y": 1450,
+      "angle": 0,
+      "data": {
+        "url": "https://demagog.org.pl/fake_news/parkingi-dla-ukraincow-i-fikcyjny-radny-z-plocka-uwazaj-na-dezinformacje/",
+        "label": "Demagog: fikcyjny radny z Płocka",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-blue-check",
+      "type": "source",
+      "x": 260,
+      "y": 1450,
+      "angle": -1.9,
+      "data": {
+        "url": "https://www.govtech.com/question-of-the-day/can-x-users-hide-their-blue-checkmarks",
+        "label": "Blue checkmark na X — brak weryfikacji tożsamości",
+        "note": ""
+      }
+    },
+    {
+      "id": "source-podatek",
+      "type": "source",
+      "x": 480,
+      "y": 1450,
+      "angle": -3.3,
+      "data": {
+        "url": "https://www.rp.pl/biznes/art44885651-od-tokio-po-sztokholm-jak-z-big-techami-radzi-sobie-swiat",
+        "label": "Przegląd podatków cyfrowych na świecie",
+        "note": ""
+      }
+    },
+    {
+      "id": "note-section-sources",
+      "type": "note",
+      "x": 40,
+      "y": 1320,
+      "angle": -1.5,
+      "data": {
+        "text": "ŹRÓDŁA — przeniesione\nz kart News do osobnych\nkart Źródło (linki poniżej)",
+        "color": "w"
+      }
+    },
+    {
+      "id": "quote-kowalenko",
+      "type": "quote",
+      "x": 700,
+      "y": 1450,
+      "angle": -2.2,
+      "data": {
+        "text": "Ten oto jego ekscelencja Kamil Kowalenko z Ukrainy, radny Platformy Obywatelskiej w Płocku, dostał za pieniądze z KPO najdroższy wózek inwalidzki oraz spore dofinansowanie swoich interesów na arenie ukraińskiej.",
+        "author": "@KamilKowalenko (fałszywe konto)",
+        "context": "11:01, wpis na X cytowany w materiale"
       }
     }
   ],
@@ -491,6 +547,41 @@
       "x": 760,
       "y": 1178,
       "color": "red"
+    },
+    {
+      "id": "pin-source-kowalenko",
+      "cardId": "source-kowalenko",
+      "x": 115,
+      "y": 1458,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-blue-check",
+      "cardId": "source-blue-check",
+      "x": 335,
+      "y": 1458,
+      "color": "gold"
+    },
+    {
+      "id": "pin-source-podatek",
+      "cardId": "source-podatek",
+      "x": 555,
+      "y": 1458,
+      "color": "gold"
+    },
+    {
+      "id": "pin-note-section-sources",
+      "cardId": "note-section-sources",
+      "x": 110,
+      "y": 1328,
+      "color": "black"
+    },
+    {
+      "id": "pin-quote-kowalenko",
+      "cardId": "quote-kowalenko",
+      "x": 787.5,
+      "y": 1458,
+      "color": "purple"
     }
   ],
   "threads": [
@@ -708,6 +799,42 @@
       "color": "k",
       "striped": false,
       "width": 2
+    },
+    {
+      "id": "t-source-kowalenko",
+      "fromPin": "pin-claim-kowalenko",
+      "toPin": "pin-source-kowalenko",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-blue-check",
+      "fromPin": "pin-claim-blue-check",
+      "toPin": "pin-source-blue-check",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-source-podatek",
+      "fromPin": "pin-claim-podatek",
+      "toPin": "pin-source-podatek",
+      "color": "y",
+      "striped": false,
+      "width": 1.3,
+      "label": "źródło"
+    },
+    {
+      "id": "t-quote-kowalenko",
+      "fromPin": "pin-unknown-kowalenko",
+      "toPin": "pin-quote-kowalenko",
+      "color": "pu",
+      "striped": false,
+      "width": 1.3,
+      "label": "cytat wpisu"
     }
   ]
 }
