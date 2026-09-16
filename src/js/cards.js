@@ -115,6 +115,10 @@ function buildCardHTML(card) {
     case 'image':   return buildImage(d);
     case 'yesno':   return buildYesNo(d);
     case 'scale':   return buildScale(d);
+    case 'spectrum':return buildSpectrum(d);
+    case 'quote':   return buildQuote(d);
+    case 'source':  return buildSource(d);
+    case 'legend':  return buildLegend(d);
     default:        return '<div style="padding:10px;color:#333">?</div>';
   }
 }
@@ -216,6 +220,80 @@ function buildScale(d) {
         <div class="cs-marker" style="bottom:${fillPct}%"></div>
       </div>
       <div class="cs-value">${value}/10</div>
+    </div>`;
+}
+
+function buildSpectrum(d) {
+  const value = Math.max(0, Math.min(10, Math.round(d.value ?? 5)));
+  const pct = value * 10;
+  return `
+    <div class="card-spectrum">
+      <div class="csp-label">${esc(d.label) || t('card.spectrumDefault')}</div>
+      <div class="csp-track" onmousedown="App.startSpectrumDrag(event, this)">
+        <div class="csp-marker" style="left:${pct}%"></div>
+      </div>
+      <div class="csp-ends"><span>${t('spectrum.left')}</span><span>${t('spectrum.right')}</span></div>
+    </div>`;
+}
+
+function buildQuote(d) {
+  return `
+    <div class="card-quote">
+      <div class="cq-mark">&ldquo;</div>
+      <div class="cq-text">${esc(d.text).replace(/\n/g, '<br>')}</div>
+      ${d.author  ? `<div class="cq-author">— ${esc(d.author)}</div>`   : ''}
+      ${d.context ? `<div class="cq-context">${esc(d.context)}</div>` : ''}
+    </div>`;
+}
+
+function domainOf(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; }
+}
+
+function buildSource(d) {
+  const domain  = domainOf(d.url);
+  const favicon = domain ? `https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(domain)}` : '';
+  const rowHTML = `
+    <div class="cso-row">
+      ${favicon ? `<img class="cso-favicon" src="${favicon}" alt="" onerror="this.style.visibility='hidden'"/>` : '<span class="cso-favicon-fallback">🔗</span>'}
+      <span class="cso-domain">${esc(domain) || t('card.sourceDefault')}</span>
+    </div>`;
+  return `
+    <div class="card-source">
+      ${d.url ? `<a class="cso-link" href="${esc(d.url)}" target="_blank" rel="noopener">${rowHTML}</a>` : rowHTML}
+      ${d.label ? `<div class="cso-label">${esc(d.label)}</div>` : ''}
+      ${d.note  ? `<div class="cso-note">${esc(d.note)}</div>`   : ''}
+    </div>`;
+}
+
+const LEGEND_COLORS = {
+  zielony: '#2ecc71', zielona: '#2ecc71', green: '#2ecc71',
+  czerwony: '#e74c3c', czerwona: '#e74c3c', red: '#e74c3c',
+  żółty: '#f1c40f', żółta: '#f1c40f', yellow: '#f1c40f',
+  niebieski: '#3498db', niebieska: '#3498db', blue: '#3498db',
+  fioletowy: '#9b59b6', fioletowa: '#9b59b6', purple: '#9b59b6',
+  złoty: '#c8971c', złota: '#c8971c', gold: '#c8971c',
+  czarny: '#333333', czarna: '#333333', black: '#333333',
+  szary: '#888888', szara: '#888888', gray: '#888888', grey: '#888888',
+  pomarańczowy: '#e67e22', pomarańczowa: '#e67e22', orange: '#e67e22',
+  różowy: '#e91e63', różowa: '#e91e63', pink: '#e91e63',
+};
+
+function legendLineHTML(line) {
+  const m = line.match(/^\s*([a-ząćęłńóśźż]+)\s*[:\-–→]\s*(.+)$/iu);
+  const color = m && LEGEND_COLORS[m[1].toLowerCase()];
+  if (color) {
+    return `<div class="cl-row"><span class="cl-dot" style="background:${color}"></span>${esc(m[2])}</div>`;
+  }
+  return line.trim() ? `<div class="cl-row cl-plain">${esc(line)}</div>` : '';
+}
+
+function buildLegend(d) {
+  const lines = (d.text || '').split('\n');
+  return `
+    <div class="card-legend">
+      <div class="cl-title">🔑 ${esc(d.title) || t('card.legendDefault')}</div>
+      ${lines.map(legendLineHTML).join('')}
     </div>`;
 }
 

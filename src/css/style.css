@@ -414,6 +414,46 @@ body.ghost-drag .card.dragging > *                       { visibility: hidden; }
 .cs-marker { position: absolute; left: -4px; right: -4px; height: 3px; background: #1a1a1a; box-shadow: 0 0 0 1px rgba(255,255,255,.7); transform: translateY(50%); pointer-events: none; }
 .cs-value { margin-top: 8px; font-weight: 700; font-size: .82rem; color: #333; }
 
+/* ══ KARTA – SPEKTRUM (LEWICA–PRAWICA) ═══════════════ */
+.card-spectrum { width: 150px; background: #fff; font-family: var(--font-ui); padding: 14px 14px 12px; border-radius: 6px; text-align: center; }
+.csp-label { font-family: var(--font-hand); font-size: .95rem; color: #222; line-height: 1.3; margin-bottom: 12px; min-height: 1.3em; word-break: break-word; }
+.csp-track {
+  position: relative; width: 100%; height: 10px; border-radius: 5px; cursor: ew-resize; user-select: none;
+  background: linear-gradient(to right, #16a5a5 0%, #b7ada0 50%, #d9821b 100%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+}
+.csp-marker {
+  position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; border: 3px solid #1a1a1a; box-shadow: 0 1px 3px rgba(0,0,0,.4);
+  transform: translate(-50%, -50%); pointer-events: none;
+}
+.csp-ends { display: flex; justify-content: space-between; margin-top: 6px; font-size: .62rem; font-weight: 700; letter-spacing: .04em; color: #999; text-transform: uppercase; }
+
+/* ══ KARTA – CYTAT ════════════════════════════════════ */
+.card-quote { width: 175px; background: #fbf8f2; font-family: var(--font-ui); padding: 8px 16px 14px; border-radius: 4px; border-left: 4px solid #c8a870; position: relative; }
+.cq-mark { font-family: Georgia, serif; font-size: 2.6rem; line-height: 1; color: #c8a870; opacity: .7; height: 22px; }
+.cq-text { font-family: var(--font-hand); font-size: 1.05rem; color: #2a2a2a; line-height: 1.35; font-style: italic; }
+.cq-author { margin-top: 8px; font-size: .74rem; font-weight: 700; color: #555; }
+.cq-context { margin-top: 2px; font-size: .65rem; color: #999; }
+
+/* ══ KARTA – ŹRÓDŁO ═══════════════════════════════════ */
+.card-source { width: 150px; background: #fff; font-family: var(--font-ui); padding: 11px 13px; border-radius: 6px; }
+.cso-link { text-decoration: none; color: inherit; display: block; }
+.cso-row { display: flex; align-items: center; gap: 8px; }
+.cso-favicon { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; }
+.cso-favicon-fallback { font-size: 1.1rem; flex-shrink: 0; }
+.cso-domain { font-size: .8rem; font-weight: 700; color: #1565c0; word-break: break-all; }
+.cso-link:hover .cso-domain { text-decoration: underline; }
+.cso-label { margin-top: 6px; font-size: .72rem; color: #444; line-height: 1.3; }
+.cso-note  { margin-top: 4px; font-size: .68rem; color: #999; line-height: 1.3; font-style: italic; }
+
+/* ══ KARTA – LEGENDA ══════════════════════════════════ */
+.card-legend { width: 170px; background: #fdf6e3; font-family: var(--font-ui); padding: 12px 14px 14px; border-radius: 4px; border: 1px dashed #c8a870; }
+.cl-title { font-weight: 700; font-size: .78rem; letter-spacing: .03em; color: #6b5320; margin-bottom: 8px; text-transform: uppercase; }
+.cl-row { display: flex; align-items: center; gap: 7px; font-size: .74rem; color: #333; line-height: 1.5; }
+.cl-row.cl-plain { font-weight: 700; margin-top: 4px; color: #6b5320; }
+.cl-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+
 /* ══ KARTA – FILM YOUTUBE ════════════════════════════ */
 .card-video { width: 240px; overflow: hidden; }
 .cv-header {

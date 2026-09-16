@@ -228,6 +228,39 @@ const translations = {
     'field.scaleValue':      'Value',
     'card.scaleDefault':     'Question?',
 
+    // spectrum (horizontal left-right) card
+    'modal.spectrum':        'Spectrum (left-right)',
+    'ci.spectrum':           'Spectrum',
+    'field.spectrumValue':   'Position',
+    'card.spectrumDefault':  'Who / what?',
+    'alert.enterLabel':      'Enter a label',
+    'spectrum.left':         'LEFT',
+    'spectrum.right':        'RIGHT',
+
+    // quote card
+    'modal.quote':           'Quote',
+    'ci.quote':               'Quote',
+    'field.quoteText':        'Quote text',
+    'field.quoteAuthor':      'Author / speaker',
+    'field.quoteContext':     'Context (timestamp, situation)',
+    'alert.enterQuote':       'Enter the quote text',
+
+    // source card
+    'modal.source':           'Source',
+    'ci.source':               'Source',
+    'field.sourceURL':         'URL',
+    'field.sourceLabel':       'Label (optional)',
+    'field.sourceNote':        'Note (optional)',
+    'card.sourceDefault':      'Source',
+    'alert.enterSourceURL':    'Enter a URL',
+
+    // legend card
+    'modal.legend':            'Legend',
+    'ci.legend':                'Legend',
+    'field.legendTitle':        'Title',
+    'field.legendText':         'Rows (e.g. "green: confirmed")',
+    'card.legendDefault':       'Legend',
+
     // import notes overlay
     'file.importNotes':  '📷 Import Notes',
     'in.title':          'Import Notes — select areas',
@@ -446,6 +479,39 @@ const translations = {
     'ci.scale':              'Skala',
     'field.scaleValue':      'Wartość',
     'card.scaleDefault':     'Pytanie?',
+
+    // karta spektrum (lewica-prawica)
+    'modal.spectrum':        'Spektrum (lewica-prawica)',
+    'ci.spectrum':           'Spektrum',
+    'field.spectrumValue':   'Pozycja',
+    'card.spectrumDefault':  'Kto / co?',
+    'alert.enterLabel':      'Podaj etykietę',
+    'spectrum.left':         'LEWICA',
+    'spectrum.right':        'PRAWICA',
+
+    // karta cytatu
+    'modal.quote':            'Cytat',
+    'ci.quote':                'Cytat',
+    'field.quoteText':         'Treść cytatu',
+    'field.quoteAuthor':       'Autor / kto powiedział',
+    'field.quoteContext':      'Kontekst (timestamp, sytuacja)',
+    'alert.enterQuote':        'Podaj treść cytatu',
+
+    // karta źródła
+    'modal.source':            'Źródło',
+    'ci.source':                'Źródło',
+    'field.sourceURL':          'URL',
+    'field.sourceLabel':        'Etykieta (opcjonalnie)',
+    'field.sourceNote':         'Notatka (opcjonalnie)',
+    'card.sourceDefault':       'Źródło',
+    'alert.enterSourceURL':     'Podaj adres URL',
+
+    // karta legendy
+    'modal.legend':             'Legenda',
+    'ci.legend':                 'Legenda',
+    'field.legendTitle':         'Tytuł',
+    'field.legendText':          'Wiersze (np. „zielony: potwierdzone")',
+    'card.legendDefault':        'Legenda',
 
     'file.importNotes':  '📷 Importuj notatki',
     'in.title':          'Importuj notatki — zaznacz obszary',

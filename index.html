@@ -63,6 +63,10 @@
       data-template='{"question":"Pytanie?","value":5}'>
       <span class="ci-ico">📊</span><span class="ci-lbl" data-i18n="ci.scale">Scale</span>
     </div>
+    <div class="ci-bubble" draggable="true" data-type="spectrum"
+      data-template='{"label":"Kto / co?","value":5}'>
+      <span class="ci-ico">↔️</span><span class="ci-lbl" data-i18n="ci.spectrum">Spectrum</span>
+    </div>
     <div class="ci-bubble" draggable="true" data-type="image"
       data-template='{"url":"","caption":""}'>
       <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
@@ -78,6 +82,18 @@
     <div class="ci-bubble" draggable="true" data-type="news"
       data-template='{"source":"","title":"Nagłówek","body":"Treść","url":"","accentColor":"#e63946"}'>
       <span class="ci-ico">📰</span><span class="ci-lbl" data-i18n="ci.news">News</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="quote"
+      data-template='{"text":"Cytat...","author":"","context":""}'>
+      <span class="ci-ico">💬</span><span class="ci-lbl" data-i18n="ci.quote">Quote</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="source"
+      data-template='{"url":"","label":"","note":""}'>
+      <span class="ci-ico">🔗</span><span class="ci-lbl" data-i18n="ci.source">Source</span>
+    </div>
+    <div class="ci-bubble" draggable="true" data-type="legend"
+      data-template='{"title":"Legenda","text":"zielony: potwierdzone\nczerwony: obalone\nżółty: zastrzeżenie"}'>
+      <span class="ci-ico">🔑</span><span class="ci-lbl" data-i18n="ci.legend">Legend</span>
     </div>
     <div class="ci-bubble" draggable="true" data-type="person"
       data-template='{"name":"Nowa osoba","role":"","party":"","partyColor":"#666","emoji":"👤","photo":""}'>
@@ -456,17 +472,21 @@ applyFrameStyle();
 // ── Options Modal ─────────────────────────────────────
 const CAROUSEL_KEY = 'corkboard_carousel_v1';
 const CAROUSEL_META = [
-  { type: 'note',    icon: '📝' },
-  { type: 'yesno',   icon: '☑️' },
-  { type: 'scale',   icon: '📊' },
-  { type: 'image',   icon: '🖼️' },
-  { type: 'date',    icon: '📅' },
-  { type: 'video',   icon: '🎬' },
-  { type: 'news',    icon: '📰' },
-  { type: 'person',  icon: '👤' },
-  { type: 'unknown', icon: '❓' },
-  { type: 'party',   icon: '🏛️' },
-  { type: 'law',     icon: '⚖️' },
+  { type: 'note',     icon: '📝' },
+  { type: 'yesno',    icon: '☑️' },
+  { type: 'scale',    icon: '📊' },
+  { type: 'spectrum', icon: '↔️' },
+  { type: 'image',    icon: '🖼️' },
+  { type: 'date',     icon: '📅' },
+  { type: 'video',    icon: '🎬' },
+  { type: 'news',     icon: '📰' },
+  { type: 'quote',    icon: '💬' },
+  { type: 'source',   icon: '🔗' },
+  { type: 'legend',   icon: '🔑' },
+  { type: 'person',   icon: '👤' },
+  { type: 'unknown',  icon: '❓' },
+  { type: 'party',    icon: '🏛️' },
+  { type: 'law',      icon: '⚖️' },
 ];
 const DEFAULT_CAROUSEL = CAROUSEL_META.map(m => ({ type: m.type, visible: true }));
 

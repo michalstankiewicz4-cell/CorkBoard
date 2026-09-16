@@ -1247,6 +1247,28 @@ function buildModalHTML(type, d) {
       <div class="modal-field"><label>${t('field.scaleValue')}: <span id="mf-scale-out">${scaleVal}</span>/10</label>
         <input type="range" id="mf-scale" min="0" max="10" step="1" value="${scaleVal}"
           oninput="document.getElementById('mf-scale-out').textContent=this.value"/></div>`;
+  } else if (type==='spectrum') {
+    const specVal = Math.max(0, Math.min(10, Math.round(d?.value ?? 5)));
+    fields=`
+      <div class="modal-field"><label>${t('field.label')} *</label><input id="mf-label" value="${esc(d?.label)}"/></div>
+      <div class="modal-field"><label>${t('field.spectrumValue')}: <span id="mf-spectrum-out">${specVal}</span>/10</label>
+        <input type="range" id="mf-spectrum" min="0" max="10" step="1" value="${specVal}"
+          oninput="document.getElementById('mf-spectrum-out').textContent=this.value"/></div>`;
+  } else if (type==='quote') {
+    fields=`
+      <div class="modal-field"><label>${t('field.quoteText')} *</label><textarea id="mf-text">${esc(d?.text)}</textarea></div>
+      <div class="modal-field"><label>${t('field.quoteAuthor')}</label><input id="mf-author" value="${esc(d?.author)}"/></div>
+      <div class="modal-field"><label>${t('field.quoteContext')}</label><input id="mf-context" placeholder="np. 10:59, wywiad studyjny" value="${esc(d?.context)}"/></div>`;
+  } else if (type==='source') {
+    fields=`
+      <div class="modal-field"><label>${t('field.sourceURL')} *</label><input id="mf-url" placeholder="https://..." value="${esc(d?.url)}"/></div>
+      <div class="modal-field"><label>${t('field.sourceLabel')}</label><input id="mf-label" value="${esc(d?.label)}"/></div>
+      <div class="modal-field"><label>${t('field.sourceNote')}</label><input id="mf-note" value="${esc(d?.note)}"/></div>`;
+  } else if (type==='legend') {
+    fields=`
+      <div class="modal-field"><label>${t('field.legendTitle')}</label><input id="mf-title" value="${esc(d?.title,'Legenda')}"/></div>
+      <div class="modal-field"><label>${t('field.legendText')}</label>
+        <textarea id="mf-text" placeholder="zielony: potwierdzone&#10;czerwony: obalone">${esc(d?.text)}</textarea></div>`;
   }
   if (type==='video') {
     fields=`
@@ -1269,7 +1291,9 @@ function buildModalHTML(type, d) {
     news:    t('modal.news'),    note:    t('modal.note'),
     date:    t('modal.date'),    video:   t('modal.video'),
     image:   t('modal.image'),   yesno:   t('modal.yesno'),
-    scale:   t('modal.scale'),
+    scale:   t('modal.scale'),   spectrum:t('modal.spectrum'),
+    quote:   t('modal.quote'),   source:  t('modal.source'),
+    legend:  t('modal.legend'),
   };
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
@@ -1311,6 +1335,22 @@ function readModalForm(type) {
     const question=v('mf-question'); if(!question) return alert(t('alert.enterQuestion')),null;
     const val = document.getElementById('mf-scale')?.value;
     return { question, value: val != null ? +val : 5 };
+  }
+  if (type==='spectrum') {
+    const label=v('mf-label'); if(!label) return alert(t('alert.enterLabel')),null;
+    const val = document.getElementById('mf-spectrum')?.value;
+    return { label, value: val != null ? +val : 5 };
+  }
+  if (type==='quote') {
+    const text=v('mf-text'); if(!text) return alert(t('alert.enterQuote')),null;
+    return { text, author:v('mf-author'), context:v('mf-context') };
+  }
+  if (type==='source') {
+    const url=v('mf-url'); if(!url) return alert(t('alert.enterSourceURL')),null;
+    return { url, label:v('mf-label'), note:v('mf-note') };
+  }
+  if (type==='legend') {
+    return { title:v('mf-title')||'Legenda', text:v('mf-text') };
   }
   if (type==='video') {
     const url=v('mf-url'); if(!url) return alert(t('alert.enterYTLink')),null;
@@ -1362,6 +1402,40 @@ export function startScaleDrag(e, trackEl) {
   update(e.clientY);
 
   const onMove = ev => update(ev.clientY);
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    save();
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+
+// Drag/click a spectrum card's horizontal track to set its 0-10 value
+// (called from the track's onmousedown in cards.js)
+export function startSpectrumDrag(e, trackEl) {
+  if (e.button !== 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const cardEl = trackEl.closest('.card');
+  if (!cardEl) return;
+  const card = state.cards.find(c => c.id === cardEl.dataset.id);
+  if (!card) return;
+
+  const update = clientX => {
+    const track = cardEl.querySelector('.csp-track');
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const val = Math.round(ratio * 10);
+    if (card.data.value !== val) {
+      card.data.value = val;
+      updateCardElement(cardEl, card);
+    }
+  };
+  update(e.clientX);
+
+  const onMove = ev => update(ev.clientX);
   const onUp = () => {
     window.removeEventListener('mousemove', onMove);
     window.removeEventListener('mouseup', onUp);
