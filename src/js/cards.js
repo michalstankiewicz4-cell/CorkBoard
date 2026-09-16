@@ -114,6 +114,7 @@ function buildCardHTML(card) {
     case 'video':   return buildVideo(d);
     case 'image':   return buildImage(d);
     case 'yesno':   return buildYesNo(d);
+    case 'scale':   return buildScale(d);
     default:        return '<div style="padding:10px;color:#333">?</div>';
   }
 }
@@ -200,6 +201,21 @@ function buildYesNo(d) {
         ${opt('yes', t('yn.yes'), 'M4 13l5 5L20 6')}
         ${opt('no',  t('yn.no'),  'M5 5l14 14M19 5L5 19')}
       </div>
+    </div>`;
+}
+
+function buildScale(d) {
+  const value = Math.max(0, Math.min(10, Math.round(d.value ?? 5)));
+  const emptyPct = (10 - value) * 10;
+  const fillPct  = value * 10;
+  return `
+    <div class="card-scale">
+      <div class="cs-question">${esc(d.question) || t('card.scaleDefault')}</div>
+      <div class="cs-track" onmousedown="App.startScaleDrag(event, this)">
+        <div class="cs-empty" style="height:${emptyPct}%"></div>
+        <div class="cs-marker" style="bottom:${fillPct}%"></div>
+      </div>
+      <div class="cs-value">${value}/10</div>
     </div>`;
 }
 

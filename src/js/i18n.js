@@ -222,6 +222,12 @@ const translations = {
     'yn.yes':                'YES',
     'yn.no':                 'NO',
 
+    // scale (0-10 credibility meter) card
+    'modal.scale':           'Credibility scale',
+    'ci.scale':              'Scale',
+    'field.scaleValue':      'Value',
+    'card.scaleDefault':     'Question?',
+
     // import notes overlay
     'file.importNotes':  '📷 Import Notes',
     'in.title':          'Import Notes — select areas',
@@ -434,6 +440,12 @@ const translations = {
     'card.yesnoDefault':     'Pytanie?',
     'yn.yes':                'TAK',
     'yn.no':                 'NIE',
+
+    // karta skali wiarygodności (0-10)
+    'modal.scale':           'Skala wiarygodności',
+    'ci.scale':              'Skala',
+    'field.scaleValue':      'Wartość',
+    'card.scaleDefault':     'Pytanie?',
 
     'file.importNotes':  '📷 Importuj notatki',
     'in.title':          'Importuj notatki — zaznacz obszary',

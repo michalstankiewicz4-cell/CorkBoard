@@ -1240,6 +1240,13 @@ function buildModalHTML(type, d) {
   } else if (type==='yesno') {
     fields=`
       <div class="modal-field"><label>${t('field.question')} *</label><input id="mf-question" value="${esc(d?.question)}"/></div>`;
+  } else if (type==='scale') {
+    const scaleVal = Math.max(0, Math.min(10, Math.round(d?.value ?? 5)));
+    fields=`
+      <div class="modal-field"><label>${t('field.question')} *</label><input id="mf-question" value="${esc(d?.question)}"/></div>
+      <div class="modal-field"><label>${t('field.scaleValue')}: <span id="mf-scale-out">${scaleVal}</span>/10</label>
+        <input type="range" id="mf-scale" min="0" max="10" step="1" value="${scaleVal}"
+          oninput="document.getElementById('mf-scale-out').textContent=this.value"/></div>`;
   }
   if (type==='video') {
     fields=`
@@ -1262,6 +1269,7 @@ function buildModalHTML(type, d) {
     news:    t('modal.news'),    note:    t('modal.note'),
     date:    t('modal.date'),    video:   t('modal.video'),
     image:   t('modal.image'),   yesno:   t('modal.yesno'),
+    scale:   t('modal.scale'),
   };
   return `<h3>${titles[type]||type}</h3>${fields}
     <div class="modal-btns">
@@ -1299,6 +1307,11 @@ function readModalForm(type) {
     const existing = editingId ? state.cards.find(c => c.id === editingId)?.data : null;
     return { question, answer: existing?.answer ?? null };
   }
+  if (type==='scale') {
+    const question=v('mf-question'); if(!question) return alert(t('alert.enterQuestion')),null;
+    const val = document.getElementById('mf-scale')?.value;
+    return { question, value: val != null ? +val : 5 };
+  }
   if (type==='video') {
     const url=v('mf-url'); if(!url) return alert(t('alert.enterYTLink')),null;
     return { url, title:v('mf-title') };
@@ -1320,6 +1333,42 @@ export function toggleYesNo(el) {
   card.data.answer = card.data.answer === val ? null : val;
   updateCardElement(cardEl, card);
   save();
+}
+
+// Drag/click a scale card's vertical track to set its 0-10 value
+// (called from the track's onmousedown in cards.js)
+export function startScaleDrag(e, trackEl) {
+  if (e.button !== 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const cardEl = trackEl.closest('.card');
+  if (!cardEl) return;
+  const card = state.cards.find(c => c.id === cardEl.dataset.id);
+  if (!card) return;
+
+  const update = clientY => {
+    // Re-query each time: updateCardElement replaces the card's innerHTML,
+    // so any earlier reference to the track node goes stale after the first tick.
+    const track = cardEl.querySelector('.cs-track');
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, 1 - (clientY - rect.top) / rect.height));
+    const val = Math.round(ratio * 10);
+    if (card.data.value !== val) {
+      card.data.value = val;
+      updateCardElement(cardEl, card);
+    }
+  };
+  update(e.clientY);
+
+  const onMove = ev => update(ev.clientY);
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    save();
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
 }
 
 // ── Export / Import ───────────────────────────────────────

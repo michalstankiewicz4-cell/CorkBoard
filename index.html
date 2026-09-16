@@ -59,6 +59,10 @@
       data-template='{"question":"Pytanie?","answer":null}'>
       <span class="ci-ico">☑️</span><span class="ci-lbl" data-i18n="ci.yesno">Yes/No</span>
     </div>
+    <div class="ci-bubble" draggable="true" data-type="scale"
+      data-template='{"question":"Pytanie?","value":5}'>
+      <span class="ci-ico">📊</span><span class="ci-lbl" data-i18n="ci.scale">Scale</span>
+    </div>
     <div class="ci-bubble" draggable="true" data-type="image"
       data-template='{"url":"","caption":""}'>
       <span class="ci-ico">🖼️</span><span class="ci-lbl" data-i18n="ci.image">Image</span>
@@ -454,6 +458,7 @@ const CAROUSEL_KEY = 'corkboard_carousel_v1';
 const CAROUSEL_META = [
   { type: 'note',    icon: '📝' },
   { type: 'yesno',   icon: '☑️' },
+  { type: 'scale',   icon: '📊' },
   { type: 'image',   icon: '🖼️' },
   { type: 'date',    icon: '📅' },
   { type: 'video',   icon: '🎬' },
