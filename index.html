@@ -10,7 +10,7 @@
 <meta property="og:url"          content="https://michalstankiewicz4-cell.github.io/CorkBoard/"/>
 <meta property="og:title"        content="CorkBoard — Cyfrowa Tablica Korkowa / Digital Corkboard"/>
 <meta property="og:description"  content="Przypinaj karty, łącz nitkami, udostępniaj tablice śledcze. Pin cards, draw threads, share your investigation board. Runs entirely in the browser."/>
-<meta property="og:image"        content="https://michalstankiewicz4-cell.github.io/CorkBoard/corktab.png"/>
+<meta property="og:image"        content="https://michalstankiewicz4-cell.github.io/CorkBoard/assets/corktab.png"/>
 <meta property="og:image:width"  content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:locale"       content="pl_PL"/>
@@ -18,10 +18,10 @@
 <meta name="twitter:card"        content="summary_large_image"/>
 <meta name="twitter:title"       content="CorkBoard — Cyfrowa Tablica Korkowa / Digital Corkboard"/>
 <meta name="twitter:description" content="Przypinaj karty, łącz nitkami, udostępniaj tablice śledcze. Pin cards, draw threads, share your investigation board."/>
-<meta name="twitter:image"       content="https://michalstankiewicz4-cell.github.io/CorkBoard/corktab.png"/>
-<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<meta name="twitter:image"       content="https://michalstankiewicz4-cell.github.io/CorkBoard/assets/corktab.png"/>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="src/css/style.css"/>
 </head>
 <body>
 
@@ -255,8 +255,8 @@
 <div id="modal-overlay"><div id="modal"></div></div>
 
 <script type="module">
-import * as AppModule from './app.js';
-import { t, setLang, initLang } from './i18n.js';
+import * as AppModule from './src/js/app.js';
+import { t, setLang, initLang } from './src/js/i18n.js';
 
 // Init language FIRST – must run before any t() call
 initLang();

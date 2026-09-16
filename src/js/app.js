@@ -4,7 +4,7 @@ import { createCardElement, updateCardElement, renderPinSvg, PIN_COLORS, NOTE_CO
 import { renderAllThreads, drawTempThread, removeTempThread, buildPinMap } from './threads.js';
 import { computeViewPositions } from './views.js';
 import { saveState, loadState } from './storage.js';
-import { SAMPLE_DATA } from './data-sample.js';
+import { SAMPLE_DATA } from './data/sample-board.js';
 import { Minimap } from './minimap.js';
 import { exportJSON, importJSON, exportPNG, importPNG, saveToHash, loadFromHash } from './export.js';
 import { t } from './i18n.js';

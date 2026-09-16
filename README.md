@@ -204,16 +204,25 @@ Board state is automatically saved to the browser's `localStorage`.
 
 ```
 corkboard/
-├── index.html       # HTML structure, left panel, carousel, bootstrap script
-├── style.css        # all styles
-├── app.js           # main logic: events, state, undo/redo, tools, modals
-├── cards.js         # card rendering, colors, pin SVGs
-├── threads.js       # SVG thread drawing (bezier, stripes, labels)
-├── views.js         # view algorithms (parties, timeline, law, force-directed)
-├── minimap.js       # board thumbnail in the bottom-left corner
-├── export.js        # JSON/PNG/URL hash export and import
-├── storage.js       # localStorage read/write
-└── data-sample.js   # built-in demo data
+├── index.html            # HTML structure, left panel, carousel, bootstrap script
+├── assets/
+│   ├── favicon.ico
+│   └── corktab.png       # social-preview screenshot
+├── src/
+│   ├── css/
+│   │   └── style.css     # all styles
+│   └── js/
+│       ├── app.js        # main logic: events, state, undo/redo, tools, modals
+│       ├── cards.js      # card rendering, colors, pin SVGs
+│       ├── threads.js    # SVG thread drawing (bezier, stripes, labels)
+│       ├── views.js      # view algorithms (parties, timeline, law, force-directed)
+│       ├── minimap.js    # board thumbnail in the bottom-left corner
+│       ├── export.js     # JSON/PNG/URL hash export and import
+│       ├── storage.js    # localStorage read/write
+│       ├── i18n.js       # EN/PL translations
+│       └── data/
+│           └── sample-board.js  # built-in demo data
+└── tablice/              # exported/saved board JSON files
 ```
 
 ---
@@ -466,16 +475,25 @@ Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
 
 ```
 corkboard/
-├── index.html       # struktura HTML, lewy panel, karuzela, skrypt bootstrap
-├── style.css        # wszystkie style
-├── app.js           # główna logika: eventy, stan, undo/redo, narzędzia, modale
-├── cards.js         # renderowanie kart, kolory, SVG pinezek
-├── threads.js       # rysowanie nitek SVG (bezier, paski, etykiety)
-├── views.js         # algorytmy widoków (partie, czas, prawo, force-directed)
-├── minimap.js       # miniaturka tablicy w lewym dolnym rogu
-├── export.js        # eksport/import JSON, PNG, URL hash
-├── storage.js       # zapis/odczyt localStorage
-└── data-sample.js   # przykładowe dane demonstracyjne
+├── index.html            # struktura HTML, lewy panel, karuzela, skrypt bootstrap
+├── assets/
+│   ├── favicon.ico
+│   └── corktab.png       # zrzut ekranu do podglądu w social media
+├── src/
+│   ├── css/
+│   │   └── style.css     # wszystkie style
+│   └── js/
+│       ├── app.js        # główna logika: eventy, stan, undo/redo, narzędzia, modale
+│       ├── cards.js      # renderowanie kart, kolory, SVG pinezek
+│       ├── threads.js    # rysowanie nitek SVG (bezier, paski, etykiety)
+│       ├── views.js      # algorytmy widoków (partie, czas, prawo, force-directed)
+│       ├── minimap.js    # miniaturka tablicy w lewym dolnym rogu
+│       ├── export.js     # eksport/import JSON, PNG, URL hash
+│       ├── storage.js    # zapis/odczyt localStorage
+│       ├── i18n.js       # tłumaczenia EN/PL
+│       └── data/
+│           └── sample-board.js  # przykładowe dane demonstracyjne
+└── tablice/               # wyeksportowane/zapisane pliki JSON tablic
 ```
 
 ---

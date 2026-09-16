@@ -1,4 +1,4 @@
-// data-sample.js – Afera Rywina 2002–2004
+// data/sample-board.js – Afera Rywina 2002–2004
 // Prawdziwa historia: korupcja przy nowelizacji ustawy medialnej,
 // "grupa trzymająca władzę", media zmieniające temat gdy działo się coś ważnego
 
