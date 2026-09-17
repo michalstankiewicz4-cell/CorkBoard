@@ -204,26 +204,51 @@ Board state is automatically saved to the browser's `localStorage`.
 
 ```
 corkboard/
-├── index.html            # HTML structure, left panel, carousel, bootstrap script
+├── index.html                 # HTML structure, left panel, carousel bootstrap
 ├── assets/
 │   ├── favicon.ico
-│   └── corktab.png       # social-preview screenshot
+│   └── corktab.png            # social-preview screenshot
 ├── src/
 │   ├── css/
-│   │   └── style.css     # all styles
+│   │   └── style.css          # all styles
 │   └── js/
-│       ├── app.js        # main logic: events, state, undo/redo, tools, modals
-│       ├── cards.js      # card rendering, colors, pin SVGs
-│       ├── threads.js    # SVG thread drawing (bezier, stripes, labels)
-│       ├── views.js      # view algorithms (parties, timeline, law, force-directed)
-│       ├── minimap.js    # board thumbnail in the bottom-left corner
-│       ├── export.js     # JSON/PNG/URL hash export and import
-│       ├── storage.js    # localStorage read/write
-│       ├── i18n.js       # EN/PL translations
+│       ├── app.js             # composition root: init() + the public API (window.App)
+│       ├── state.js           # the one shared mutable board state object
+│       ├── dom.js              # shared DOM element references, looked up once
+│       ├── history.js          # undo/redo snapshot stack
+│       ├── persist.js          # localStorage save wrapper
+│       ├── viewport.js         # pan/zoom, fit-to-content, minimap scheduling
+│       ├── tools.js            # current tool (select/pin/thread/delete)
+│       ├── board-render.js     # full-board (re)render + connection filter
+│       ├── board-events.js     # mouse/keyboard/wheel input handling
+│       ├── card-actions.js     # add/delete/select cards
+│       ├── pin-actions.js      # add/delete pins
+│       ├── thread-actions.js   # add/delete threads + the thread edit modal
+│       ├── color-pickers.js    # pin/thread color-picker popups
+│       ├── context-menu.js     # right-click menu
+│       ├── modal.js            # generic add/edit modal (driven by cards/registry.js)
+│       ├── import-notes.js     # "Import Notes" OCR overlay
+│       ├── png-export-dom.js   # DOM prep around export.js's PNG export
+│       ├── print.js            # print layout (beforeprint/afterprint)
+│       ├── cards.js            # per-type card rendering (the buildXxx() functions)
+│       ├── cards/
+│       │   ├── registry.js     # ★ one entry per card type — see below
+│       │   ├── field-form.js   # generic modal-field render/read, driven by the registry
+│       │   └── interactions.js # Yes/No, Scale, Spectrum on-card controls
+│       ├── threads.js          # SVG thread drawing (bezier, stripes, labels)
+│       ├── views.js            # view algorithms (parties, timeline, law, force-directed)
+│       ├── minimap.js          # board thumbnail in the bottom-left corner
+│       ├── export.js           # JSON/PNG/URL hash export and import
+│       ├── storage.js          # localStorage read/write
+│       ├── i18n.js             # EN/PL translations
 │       └── data/
-│           └── sample-board.js  # built-in demo data
-└── tablice/              # exported/saved board JSON files
+│           └── sample-board.js # built-in demo data
+├── tablice/                    # exported/saved board JSON files
+├── package.json                 # dev-only: Vitest test tooling (`npm test`) — never shipped to the site
+└── vitest.config.js
 ```
+
+**Adding a new card type** only means adding one entry to `src/js/cards/registry.js` (icon, default data, and its add/edit-modal fields) plus its `buildXxx()` render function in `cards.js` — the carousel bubble, the Options→Objects list, and the modal are all generated from that one registry.
 
 ---
 
@@ -475,26 +500,51 @@ Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
 
 ```
 corkboard/
-├── index.html            # struktura HTML, lewy panel, karuzela, skrypt bootstrap
+├── index.html                 # struktura HTML, lewy panel, karuzela, skrypt bootstrap
 ├── assets/
 │   ├── favicon.ico
-│   └── corktab.png       # zrzut ekranu do podglądu w social media
+│   └── corktab.png            # zrzut ekranu do podglądu w social media
 ├── src/
 │   ├── css/
-│   │   └── style.css     # wszystkie style
+│   │   └── style.css          # wszystkie style
 │   └── js/
-│       ├── app.js        # główna logika: eventy, stan, undo/redo, narzędzia, modale
-│       ├── cards.js      # renderowanie kart, kolory, SVG pinezek
-│       ├── threads.js    # rysowanie nitek SVG (bezier, paski, etykiety)
-│       ├── views.js      # algorytmy widoków (partie, czas, prawo, force-directed)
-│       ├── minimap.js    # miniaturka tablicy w lewym dolnym rogu
-│       ├── export.js     # eksport/import JSON, PNG, URL hash
-│       ├── storage.js    # zapis/odczyt localStorage
-│       ├── i18n.js       # tłumaczenia EN/PL
+│       ├── app.js             # rdzeń kompozycyjny: init() + publiczne API (window.App)
+│       ├── state.js           # jeden współdzielony, mutowalny obiekt stanu tablicy
+│       ├── dom.js              # współdzielone referencje do elementów DOM, pobrane raz
+│       ├── history.js          # stos undo/redo (snapshoty)
+│       ├── persist.js          # wrapper na zapis do localStorage
+│       ├── viewport.js         # pan/zoom, dopasowanie widoku, odświeżanie minimapy
+│       ├── tools.js            # aktualne narzędzie (select/pin/thread/delete)
+│       ├── board-render.js     # pełne (re)renderowanie tablicy + filtr powiązań
+│       ├── board-events.js     # obsługa myszy/klawiatury/scrolla
+│       ├── card-actions.js     # dodawanie/usuwanie/zaznaczanie kart
+│       ├── pin-actions.js      # dodawanie/usuwanie pinezek
+│       ├── thread-actions.js   # dodawanie/usuwanie nitek + okno edycji nitki
+│       ├── color-pickers.js    # okienka wyboru koloru pinezki/nitki
+│       ├── context-menu.js     # menu kontekstowe (prawy klik)
+│       ├── modal.js            # generyczne okno dodawania/edycji (na bazie cards/registry.js)
+│       ├── import-notes.js     # nakładka „Importuj notatki" (OCR)
+│       ├── png-export-dom.js   # przygotowanie DOM do eksportu PNG (export.js)
+│       ├── print.js            # układ do druku (beforeprint/afterprint)
+│       ├── cards.js            # renderowanie poszczególnych typów kart (funkcje buildXxx())
+│       ├── cards/
+│       │   ├── registry.js     # ★ jeden wpis na typ karty — patrz niżej
+│       │   ├── field-form.js   # generyczne renderowanie/odczyt pól formularza modala
+│       │   └── interactions.js # interakcje na kartach Tak/Nie, Skala, Spektrum
+│       ├── threads.js          # rysowanie nitek SVG (bezier, paski, etykiety)
+│       ├── views.js            # algorytmy widoków (partie, czas, prawo, force-directed)
+│       ├── minimap.js          # miniaturka tablicy w lewym dolnym rogu
+│       ├── export.js           # eksport/import JSON, PNG, URL hash
+│       ├── storage.js          # zapis/odczyt localStorage
+│       ├── i18n.js             # tłumaczenia EN/PL
 │       └── data/
-│           └── sample-board.js  # przykładowe dane demonstracyjne
-└── tablice/               # wyeksportowane/zapisane pliki JSON tablic
+│           └── sample-board.js # przykładowe dane demonstracyjne
+├── tablice/                     # wyeksportowane/zapisane pliki JSON tablic
+├── package.json                  # tylko dev: narzędzia testowe Vitest (`npm test`) — nigdy nie trafia na stronę
+└── vitest.config.js
 ```
+
+**Dodanie nowego typu karty** to tylko jeden wpis w `src/js/cards/registry.js` (ikona, domyślne dane, pola okna dodawania/edycji) plus funkcja renderująca `buildXxx()` w `cards.js` — dymek w karuzeli, lista w Opcje→Obiekty i okno modalne generują się same na podstawie tego jednego rejestru.
 
 ---
 
