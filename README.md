@@ -1,6 +1,6 @@
 # 📋 CorkBoard
 
-Created by vibecoding · [Live demo](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.6.0
+Created by vibecoding · [Live demo](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.7.0
 
 <img width="1278" height="798" alt="image" src="https://github.com/user-attachments/assets/9afd58d5-bd36-4f1d-8f8f-2b6db8cedc37" />
 
@@ -44,17 +44,30 @@ Each card represents an element of the investigation. Available types:
 | **Date** | Event with a date on a colored background |
 | **YouTube** | Embedded YouTube video player |
 | **Image** | Photo or graphic file (PNG, JPEG, etc.) pinned to the board |
+| **Yes/No** | A question with two clickable boxes — click to mark it confirmed (green ✓) or false (red ✗) |
+| **Scale** | A question with a 0–10 credibility meter (red → green) — drag the track to set the value |
+| **Spectrum** | A label with a 0–10 horizontal position meter (e.g. left–right) — drag the track to set the value |
+| **Quote** | A verbatim quote, with an author and optional context (timestamp, situation) |
+| **Source** | A citation chip — paste a URL and the domain + favicon are fetched automatically |
+| **Legend** | A key explaining a board's color conventions — lines like `green: confirmed` get an automatic colored dot |
 
 ### Adding cards
 
 - **Drag** an icon from the right carousel onto the board
 - **Click** an icon in the carousel — opens a form, card lands in the center
-- After dropping, the card editor opens immediately
+- After dropping, the card editor opens immediately (except Note and Date, which use sensible defaults)
 
 ### Editing and deleting
 
 - **Double-click** a card — opens the edit form
 - **Right-click** a card — context menu (edit / pin / filter / delete)
+
+### Interactive cards
+
+Yes/No, Scale and Spectrum cards can also be set **directly on the card**, without opening the edit form:
+
+- **Yes/No** — click a box to select it; click the same box again to clear it
+- **Scale / Spectrum** — click or drag anywhere along the track to set the 0–10 value; the same value can also be set precisely via the edit form's slider
 
 ---
 
@@ -192,9 +205,9 @@ Board state is automatically saved to the browser's `localStorage`.
 | Shortcut | Action |
 |---|---|
 | `Ctrl+Z` | Undo |
-| `Ctrl+Y` | Redo |
+| `Ctrl+Y` / `Ctrl+Shift+Z` | Redo |
 | `Ctrl+0` | Reset view |
-| `Delete` | Delete selected cards |
+| `Delete` / `Backspace` | Delete selected card(s) |
 | `Shift+Click` | Multi-select cards |
 | `Esc` | Cancel selection / close filter / close menus |
 
@@ -294,11 +307,25 @@ Requires a browser with ES module support (Chrome 61+, Firefox 60+, Safari 11+, 
 
 ---
 
+## Development — tests
+
+The site itself has zero dependencies, but the repo includes a small **dev-only** [Vitest](https://vitest.dev/) suite for the pure/extractable logic (card-type field validation, drag-to-set math, undo/redo history, etc.) — none of this is bundled or shipped with the site.
+
+```bash
+npm install
+npm test           # run once
+npm run test:watch # re-run on file changes
+```
+
+See the [File structure](#file-structure) section above for how the modules fit together, and its note on what adding a new card type actually touches.
+
+---
+
 ---
 
 # 📋 Tablica Korkowa
 
-Stworzona metodą vibecoding · [Demo online](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.6.0
+Stworzona metodą vibecoding · [Demo online](https://michalstankiewicz4-cell.github.io/CorkBoard/) · v1.7.0
 
 Interaktywna tablica śledcza w stylu detektywistycznym — budowana w czystym JavaScript (ES modules), bez frameworków i narzędzi budowania. Otwórz `index.html` w przeglądarce i gotowe.
 
@@ -340,17 +367,30 @@ Każda karta reprezentuje element śledztwa. Dostępne typy:
 | **Data** | Zdarzenie z datą na kolorowym tle |
 | **Film YT** | Odtwarzacz wideo YouTube osadzony na karcie |
 | **Obrazek** | Zdjęcie lub plik graficzny (PNG, JPEG itp.) przypięty do tablicy |
+| **Tak/Nie** | Pytanie z dwoma klikalnymi polami — kliknij, aby oznaczyć jako potwierdzone (zielony ✓) lub fałszywe (czerwony ✗) |
+| **Skala** | Pytanie z miernikiem wiarygodności 0–10 (czerwony → zielony) — przeciągnij słupek, aby ustawić wartość |
+| **Spektrum** | Etykieta z poziomym miernikiem pozycji 0–10 (np. lewica–prawica) — przeciągnij słupek, aby ustawić wartość |
+| **Cytat** | Dosłowny cytat z autorem i opcjonalnym kontekstem (timestamp, sytuacja) |
+| **Źródło** | Wizytówka z linkiem — wklej URL, a domena i favicon pobierają się automatycznie |
+| **Legenda** | Klucz tłumaczący konwencje kolorów na tablicy — wiersze typu `zielony: potwierdzone` dostają automatyczną kolorową kropkę |
 
 ### Dodawanie kart
 
 - **Przeciągnij** ikonę z prawej karuzeli na tablicę
 - **Kliknij** ikonę w karuzeli — otwiera formularz, karta trafia na środek
-- Po upuszczeniu od razu otwiera się edytor karty
+- Po upuszczeniu od razu otwiera się edytor karty (poza Notatką i Datą, które mają sensowne wartości domyślne)
 
 ### Edycja i usuwanie
 
 - **Dwuklik** na kartę — otwiera formularz edycji
 - **Prawy klik** na kartę — menu kontekstowe (edytuj / wbij pinezkę / filtruj / usuń)
+
+### Karty interaktywne
+
+Karty Tak/Nie, Skala i Spektrum można ustawiać **bezpośrednio na karcie**, bez otwierania formularza edycji:
+
+- **Tak/Nie** — kliknij pole, aby je wybrać; kliknij to samo pole ponownie, aby odznaczyć
+- **Skala / Spektrum** — kliknij lub przeciągnij w dowolnym miejscu słupka, aby ustawić wartość 0–10; tę samą wartość można też precyzyjnie ustawić suwakiem w formularzu edycji
 
 ---
 
@@ -488,9 +528,9 @@ Stan tablicy jest automatycznie zapisywany w `localStorage` przeglądarki.
 | Skrót | Akcja |
 |---|---|
 | `Ctrl+Z` | Cofnij |
-| `Ctrl+Y` | Ponów |
+| `Ctrl+Y` / `Ctrl+Shift+Z` | Ponów |
 | `Ctrl+0` | Resetuj widok |
-| `Delete` | Usuń zaznaczone karty |
+| `Delete` / `Backspace` | Usuń zaznaczone karty |
 | `Shift+Klik` | Zaznacz wiele kart |
 | `Esc` | Anuluj wybór / zamknij filtr / zamknij menu |
 
@@ -587,3 +627,17 @@ python -m http.server 8080
 ```
 
 Wymaga przeglądarki z obsługą ES modules (Chrome 61+, Firefox 60+, Safari 11+, Edge 79+).
+
+---
+
+## Programowanie — testy
+
+Sama strona ma zero zależności, ale repo zawiera mały, **tylko-deweloperski** zestaw testów [Vitest](https://vitest.dev/) dla czystej/wydzielonej logiki (walidacja pól kart, matematyka przeciągania suwaków, stos undo/redo itd.) — nic z tego nie trafia na stronę ani nie jest do niej dołączane.
+
+```bash
+npm install
+npm test           # uruchom raz
+npm run test:watch # uruchamiaj przy każdej zmianie pliku
+```
+
+Zobacz sekcję [Struktura plików](#struktura-plików) wyżej — opisuje jak moduły się ze sobą łączą oraz co właściwie trzeba zmienić, żeby dodać nowy typ karty.
