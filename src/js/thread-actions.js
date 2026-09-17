@@ -7,6 +7,7 @@ import { t } from './i18n.js';
 import { pushHistory } from './history.js';
 import { save } from './persist.js';
 import { renderVisibleThreadsNow, setThreadClickHandler } from './board-render.js';
+import { hideModal } from './modal.js';
 
 export function addThread(fromPinId, toPinId) {
   const dup = state.threads.find(th =>
@@ -34,9 +35,8 @@ export function deleteThread(threadId) {
   save();
 }
 
-function hideModal() { modalOverlay.classList.remove('visible'); }
+// Referenced by the thread-edit modal's inline onclick="hideModalUI()" below.
 window.hideModalUI = hideModal;
-window.deleteThreadUI = (id) => { deleteThread(id); hideModal(); };
 
 export function openThreadEditModal(threadId) {
   const thd = state.threads.find(th => th.id === threadId);

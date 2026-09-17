@@ -8,8 +8,7 @@
 // add/edit modal, color pickers, Import Notes/OCR, PNG export, print).
 
 import { state, replaceState } from './state.js';
-import { canvas, threadSvg } from './dom.js';
-import { renderAllThreads } from './threads.js';
+import { canvas } from './dom.js';
 import { computeViewPositions } from './views.js';
 import { loadState } from './storage.js';
 import { SAMPLE_DATA } from './data/sample-board.js';
@@ -17,7 +16,7 @@ import { exportJSON, importJSON, importPNG, saveToHash, loadFromHash } from './e
 import { save } from './persist.js';
 import { t } from './i18n.js';
 
-import { renderAll, getVisibleThreads } from './board-render.js';
+import { renderAll, renderVisibleThreadsNow } from './board-render.js';
 import { bindEvents } from './board-events.js';
 import { pushHistory, undo, redo } from './history.js';
 import { resetView, zoomIn, zoomOut, getPanZoom, scheduleMinimap, initViewport } from './viewport.js';
@@ -81,7 +80,7 @@ export async function switchView(view) {
       const pel = canvas.querySelector(`.pin[data-id="${tpin.id}"]`);
       if (pel) { pel.style.left = tpin.x + 'px'; pel.style.top = tpin.y + 'px'; }
     });
-    renderAllThreads(threadSvg, getVisibleThreads(), tempPins, null);
+    renderVisibleThreadsNow(tempPins);
     canvas.querySelectorAll('.card').forEach(el => el.classList.remove('view-transition'));
     scheduleMinimap();
   }, 540);

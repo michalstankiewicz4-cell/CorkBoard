@@ -26,12 +26,16 @@ export function addCard(type, data, x, y) {
   return id;
 }
 
-export function deleteCard(id) {
-  pushHistory();
-  // Inlined equivalent of pin-actions.js's deletePin(pid, false) for each of
-  // this card's pins (no history/save/re-render per pin — deleteCard does
-  // that once at the end) — kept inline rather than imported to avoid a
-  // card-actions.js ↔ pin-actions.js circular import.
+// Removes one card, its pins, and any threads touching those pins — no
+// history push, no save, no re-render. The two exported functions below are
+// the only callers: deleteCard() wraps a single one with pushHistory/
+// save/render, deleteCardsCascade() does the same once for a whole batch
+// (board-events.js's multi-select Delete key). Keeping exactly one
+// implementation of the cascade means fixing it once fixes every caller —
+// this used to be duplicated inline in both places, and the copy here
+// forgot to clear selectedCardId, leaving deleteCard() able to act on an
+// id that no longer existed after a batch delete.
+function removeCardCascade(id) {
   state.pins.filter(p => p.cardId === id).forEach(p => {
     state.threads = state.threads.filter(th => th.fromPin !== p.id && th.toPin !== p.id);
     canvas.querySelector(`.pin[data-id="${p.id}"]`)?.remove();
@@ -41,6 +45,20 @@ export function deleteCard(id) {
   canvas.querySelector(`.card[data-id="${id}"]`)?.remove();
   if (selectedCardId === id) selectedCardId = null;
   if (state.filterCardId === id) state.filterCardId = null;
+}
+
+export function deleteCard(id) {
+  pushHistory();
+  removeCardCascade(id);
+  renderVisibleThreadsNow();
+  save(); scheduleMinimap();
+}
+
+// Batched version for multi-select delete: one history entry and one
+// render/save for the whole set, instead of one per card.
+export function deleteCardsCascade(ids) {
+  pushHistory();
+  ids.forEach(removeCardCascade);
   renderVisibleThreadsNow();
   save(); scheduleMinimap();
 }

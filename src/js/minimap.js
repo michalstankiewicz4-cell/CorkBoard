@@ -34,6 +34,9 @@ export class Minimap {
       person: '#3a7bd5', unknown: '#aaa', party: '#2e7d32',
       law: '#c8a000', news: '#e63946', note: '#f9c811',
       date: '#9c27b0', group: '#ff6b35',
+      video: '#8e44ad', image: '#16a085', yesno: '#607d8b',
+      scale: '#e67e22', spectrum: '#00acc1', quote: '#a1887f',
+      source: '#1565c0', legend: '#c8971c',
     };
 
     cards.forEach(card => {

@@ -10,14 +10,15 @@ import {
 } from './viewport.js';
 import { pushHistory, undo, redo } from './history.js';
 import { save } from './persist.js';
-import { addCard, deleteCard, selectCard, syncPinsOfCard, getSelectedCardId } from './card-actions.js';
+import { addCard, deleteCard, deleteCardsCascade, selectCard, syncPinsOfCard, getSelectedCardId } from './card-actions.js';
 import { addPinToCard, addPinAtPosition, deletePin } from './pin-actions.js';
 import { addThread } from './thread-actions.js';
 import { setTool } from './tools.js';
 import { hidePinColorPicker, hideThreadColorPicker } from './color-pickers.js';
 import { hideModal, openEditModal } from './modal.js';
 import { onContextMenu, hideCtxMenu } from './context-menu.js';
-import { renderVisibleThreadsNow, scheduleThreadRender, clearFilter } from './board-render.js';
+import { ctxMenu } from './dom.js';
+import { scheduleThreadRender, clearFilter } from './board-render.js';
 
 let dragging      = null;
 let threadStart   = null;
@@ -35,7 +36,7 @@ export function bindEvents() {
   boardWrap.addEventListener('contextmenu', onContextMenu);
   boardWrap.addEventListener('dblclick', onDblClick);
   document.addEventListener('click', e => {
-    if (!document.getElementById('ctx-menu').contains(e.target)) hideCtxMenu();
+    if (!ctxMenu.contains(e.target)) hideCtxMenu();
   });
   document.addEventListener('keydown', onKeyDown);
 }
@@ -54,20 +55,8 @@ function onKeyDown(e) {
   if ((e.key === 'Delete' || e.key === 'Backspace')
       && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
     if (multiSelected.size > 0) {
-      pushHistory();
-      [...multiSelected].forEach(id => {
-        state.pins.filter(p => p.cardId === id).forEach(p => {
-          state.threads = state.threads.filter(th => th.fromPin !== p.id && th.toPin !== p.id);
-          document.querySelector(`.pin[data-id="${p.id}"]`)?.remove();
-        });
-        state.pins  = state.pins.filter(p => p.cardId !== id);
-        state.cards = state.cards.filter(c => c.id !== id);
-        document.querySelector(`.card[data-id="${id}"]`)?.remove();
-        if (state.filterCardId === id) state.filterCardId = null;
-      });
+      deleteCardsCascade([...multiSelected]);
       multiSelected.clear();
-      renderVisibleThreadsNow();
-      save(); scheduleMinimap();
     } else if (getSelectedCardId()) {
       deleteCard(getSelectedCardId());
     }
