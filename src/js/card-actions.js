@@ -51,8 +51,6 @@ export function selectCard(id) {
   canvas.querySelector(`.card[data-id="${id}"]`)?.classList.add('selected');
 }
 
-export function clearSelectedCard() { selectedCardId = null; }
-
 export function syncPinsOfCard(cardId, cardData, cardW) {
   // cardData and cardW may come from dragging cache (avoids querySelector/getBoundingClientRect)
   const card = cardData || state.cards.find(c => c.id === cardId);

@@ -11,7 +11,7 @@ import { state, replaceState } from './state.js';
 import { canvas, threadSvg } from './dom.js';
 import { renderAllThreads } from './threads.js';
 import { computeViewPositions } from './views.js';
-import { saveState, loadState } from './storage.js';
+import { loadState } from './storage.js';
 import { SAMPLE_DATA } from './data/sample-board.js';
 import { exportJSON, importJSON, importPNG, saveToHash, loadFromHash } from './export.js';
 import { save } from './persist.js';
@@ -163,8 +163,3 @@ export {
   undo, redo,
   doImportNotes, doExportPNG,
 };
-
-// storage.js's saveState/loadState are re-exported here too, for parity
-// with the pre-refactor module (nothing currently imports them from
-// app.js, but they were part of its public surface).
-export { saveState, loadState };
