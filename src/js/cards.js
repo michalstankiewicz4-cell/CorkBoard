@@ -246,7 +246,7 @@ function buildQuote(d) {
     </div>`;
 }
 
-function domainOf(url) {
+export function domainOf(url) {
   try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; }
 }
 
@@ -279,7 +279,7 @@ const LEGEND_COLORS = {
   różowy: '#e91e63', różowa: '#e91e63', pink: '#e91e63',
 };
 
-function legendLineHTML(line) {
+export function legendLineHTML(line) {
   const m = line.match(/^\s*([a-ząćęłńóśźż]+)\s*[:\-–→]\s*(.+)$/iu);
   const color = m && LEGEND_COLORS[m[1].toLowerCase()];
   if (color) {
