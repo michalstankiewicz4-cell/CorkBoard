@@ -174,7 +174,7 @@ function extractDate(c) {
   return null;
 }
 
-function parsePolishDate(str) {
+export function parsePolishDate(str) {
   const months = ['stycznia','lutego','marca','kwietnia','maja','czerwca',
     'lipca','sierpnia','września','października','listopada','grudnia'];
   const parts = str.trim().split(/\s+/);

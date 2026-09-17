@@ -1,0 +1,13 @@
+{
+  "name": "corkboard",
+  "private": true,
+  "type": "module",
+  "description": "CorkBoard – interactive detective-style investigation board (vanilla JS, no build step for the shipped site).",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
+}
